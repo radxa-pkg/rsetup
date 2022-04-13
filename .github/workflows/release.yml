@@ -1,0 +1,36 @@
+name: Release
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'VERSION'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Install dependency
+        run: |
+          sudo gem i fpm -f
+      - name: Build
+        run: make
+      - name: Generate environmental variables
+        run: |
+          echo "tag_name=$(cat VERSION)" >> $GITHUB_ENV
+          echo "name=$(cat NAME)_$(cat VERSION)" >> $GITHUB_ENV
+      - name: Release
+        id: release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.tag_name }}
+          body_path: README.md
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target_commitish: main
+          draft: false
+          files: |
+            VERSION
+            ${{ env.name }}_*.deb
