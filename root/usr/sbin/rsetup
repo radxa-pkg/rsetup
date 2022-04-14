@@ -7,32 +7,6 @@ RSETUP_INTERACTIVE=0
 source /lib/rsetup/utils.sh
 source /lib/rsetup/block_helpers.sh
 
-_rootfs-setup() {
-    apt clean
-    rm -rf /var/lib/apt/lists/*
-    rm /etc/resolv.conf
-    echo radxa > /etc/hostname
-    useradd -c Radxa -G audio,video,sudo -m -s "$(which bash)" radxa
-    echo "radxa:radxa" | chpasswd
-    cat << EOF > /etc/hosts
-127.0.0.1 localhost
-127.0.1.1 radxa
-
-# The following lines are desirable for IPv6 capable hosts
-#::1     localhost ip6-localhost ip6-loopback
-#fe00::0 ip6-localnet
-#ff00::0 ip6-mcastprefix
-#ff02::1 ip6-allnodes
-#ff02::2 ip6-allrouters
-EOF
-    echo locales locales/default_environment_locale select en_US.UTF-8 | debconf-set-selections
-    echo locales locales/locales_to_be_generated multiselect en_US.UTF-8 UTF-8 | debconf-set-selections
-    rm /etc/locale.gen
-    dpkg-reconfigure --frontend noninteractive locales
-    rm /etc/ssh/ssh_host_*
-    systemctl enable rsetup-first-boot.service
-}
-
 _first-boot() {
     dpkg-reconfigure -f noninteractive openssh-server
 
