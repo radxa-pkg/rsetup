@@ -8,8 +8,11 @@ source /lib/rsetup/utils.sh
 source /lib/rsetup/block_helpers.sh
 
 _first-boot() {
-    # Regenerate SSH hostkey
-    dpkg-reconfigure -f noninteractive openssh-server
+    if ! ls /etc/ssh/ssh_host_* >/dev/null 2>&1
+    then
+        # Regenerate SSH host key
+        dpkg-reconfigure -f noninteractive openssh-server
+    fi
 
     local ROOT_DEV=$(_get_root_dev)
     local FILESYSTEM=$(blkid -s TYPE -o value $ROOT_DEV)
