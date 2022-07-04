@@ -1,0 +1,26 @@
+name: Build
+on:
+  workflow_dispatch:
+  push:
+    paths-ignore:
+      - 'VERSION'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Rebase to main
+        run: |
+          git config --global user.name 'Radxa'
+          git config --global user.email 'dev@radxa.com'
+          git remote add upstream https://github.com/radxa-repo/pkgbase.git
+          git fetch --all
+          git checkout -b upstream upstream/main
+          git switch main
+          git rebase -X theirs upstream
+      - name: Build
+        run: ./build.sh
