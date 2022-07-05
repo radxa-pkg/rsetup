@@ -1,0 +1,8 @@
+[Unit]
+Description=Radxa first boot setup
+Documentation=https://github.com/radxa-pkg/rsetup/
+[Service]
+Type=simple
+ExecStart=/usr/sbin/rsetup _first-boot
+[Install]
+WantedBy=multi-user.target
