@@ -6,4 +6,4 @@ Radxa system setup utilty
 
 ## Usage
 
-Currently an internal tool for [rbuild](https://github.com/radxa-pkg/rbuild). End user facing functionalities will be added later.
+To run local git version, run `root/usr/sbin/rsetup`.
