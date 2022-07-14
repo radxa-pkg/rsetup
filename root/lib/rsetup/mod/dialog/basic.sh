@@ -3,21 +3,21 @@
 RSETUP_DIALOG=${RSETUP_DIALOG:-"whiptail"}
 
 __dialog() {
-    local BOX="$1"
-    local TEXT="$2"
+    local box="$1"
+    local text="$2"
     shift 2
-    local HEIGHT=12
-    local WIDTH=80
-    case $BOX in
+    local height=12
+    local width=80
+    case $box in
         --menu|--checklist|--radiolist)
-            local LISTHEIGHT=$(( $HEIGHT - 8 ))
+            local listheight=$(( $height - 8 ))
             ;;
         *)
-            local LISTHEIGHT=
+            local listheight=
             ;;
     esac
 
-    $RSETUP_DIALOG --title "RSETUP" --backtitle "${RSETUP_SCREEN[*]}" --notags "$BOX" "$TEXT" $HEIGHT $WIDTH $LISTHEIGHT "$@"
+    $RSETUP_DIALOG --title "RSETUP" --backtitle "${RSETUP_SCREEN[*]}" --notags "$box" "$text" $height $width $listheight "$@"
 }
 
 yesno() {

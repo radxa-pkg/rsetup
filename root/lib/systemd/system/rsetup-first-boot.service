@@ -3,6 +3,6 @@ Description=Radxa first boot setup
 Documentation=https://github.com/radxa-pkg/rsetup/
 [Service]
 Type=simple
-ExecStart=/usr/sbin/rsetup __first-boot
+ExecStart=/usr/sbin/rsetup __first_boot
 [Install]
 WantedBy=multi-user.target
