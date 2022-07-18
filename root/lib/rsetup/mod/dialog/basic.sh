@@ -7,8 +7,11 @@ __dialog() {
     local height="$(stty size | cut -d ' ' -f 1)"
     local width="$(stty size | cut -d ' ' -f 2)"
     case $box in
-        --menu|--checklist|--radiolist)
+        --menu)
             local listheight=0
+            ;;
+        --checklist|--radiolist)
+            local listheight=$(( $height - 8 ))
             ;;
         *)
             local listheight=
@@ -21,7 +24,14 @@ __dialog() {
         return 1
     fi
 
-    $RSETUP_DIALOG --title "RSETUP" --backtitle "${RSETUP_SCREEN[*]}" --notags "$box" "$text" $height $width $listheight "$@"
+    if [[ "$DEBUG" == "1" ]]
+    then
+        local backtitle=( "--backtitle" "${RSETUP_SCREEN[*]}" )
+    else
+        local backtitle=()
+    fi
+
+    $RSETUP_DIALOG --title "RSETUP" ${backtitle:+"${backtitle[@]}"} --notags "$box" "$text" $height $width $listheight "$@"
 }
 
 yesno() {
