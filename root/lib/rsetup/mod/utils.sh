@@ -1,5 +1,3 @@
-#!/bin/bash
-
 readonly ERROR_REQUIRE_PARAMETER=-1
 readonly ERROR_TOO_FEW_PARAMETERS=-2
 readonly ERROR_REQUIRE_FILE=-3

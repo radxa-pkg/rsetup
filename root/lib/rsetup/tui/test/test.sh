@@ -1,5 +1,3 @@
-#!/bin/bash
-
 __main_test_yesno() {
     local ITEM
     ITEM=$(yesno "Yes, or No?")

@@ -1,5 +1,3 @@
-#!/bin/bash
-
 source "$ROOT_PATH/lib/rsetup/mod/tui.sh"
 
 source "$ROOT_PATH/lib/rsetup/tui/software/software.sh"

@@ -1,5 +1,3 @@
-#!/bin/bash
-
 __get_root_dev() {
     realpath "$(findmnt --nofsroot --noheadings --output SOURCE /)"
 }

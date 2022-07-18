@@ -1,5 +1,3 @@
-#!/bin/bash
-
 source "$ROOT_PATH/lib/rsetup/mod/dialog/basic.sh"
 
 RSETUP_RADIOLIST=()
