@@ -7,7 +7,7 @@ source "$ROOT_PATH/lib/rsetup/tui/hardware/hardware.sh"
 source "$ROOT_PATH/lib/rsetup/tui/test/test.sh"
 
 __main_about() {
-    msgbox "rsetup\n\nCopyright 2022 Radxa Ltd."
+    msgbox "rsetup\n\nCopyright $(date +%Y) Radxa Ltd."
     
     unregister_screen
 }
