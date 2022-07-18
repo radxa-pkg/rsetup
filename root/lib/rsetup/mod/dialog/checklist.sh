@@ -2,6 +2,10 @@
 
 source "$ROOT_PATH/lib/rsetup/mod/dialog/basic.sh"
 
+RSETUP_CHECKLIST=()
+RSETUP_CHECKLIST_STATE_OLD=()
+RSETUP_CHECKLIST_STATE_NEW=()
+
 checklist_init() {
     __parameter_count_check 0 "$@"
 
@@ -13,17 +17,17 @@ checklist_init() {
 checklist_add() {
     __parameter_count_check 2 "$@"
 
-    local ITEM=$1
-    local STATUS=$2
-    local TAG="$((${#RSETUP_CHECKLIST[@]} / 3))"
+    local item=$1
+    local status=$2
+    local tag="$((${#RSETUP_CHECKLIST[@]} / 3))"
 
-    __parameter_value_check "$STATUS" "ON" "OFF"
+    __parameter_value_check "$status" "ON" "OFF"
 
-    RSETUP_CHECKLIST+=( "$TAG" "$ITEM" "$STATUS" )
+    RSETUP_CHECKLIST+=( "$tag" "$item" "$status" )
 
-    if [[ $STATUS == "ON" ]]
+    if [[ $status == "ON" ]]
     then
-        RSETUP_CHECKLIST_STATE_OLD+=( "$TAG" )
+        RSETUP_CHECKLIST_STATE_OLD+=( "$tag" )
     fi
 }
 

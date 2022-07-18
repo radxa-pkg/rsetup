@@ -2,11 +2,14 @@
 
 source "$ROOT_PATH/lib/rsetup/mod/dialog/basic.sh"
 
+RSETUP_RADIOLIST=()
+RSETUP_RADIOLIST_STATE_OLD=()
+RSETUP_RADIOLIST_STATE_NEW=()
+
 radiolist_init() {
     __parameter_count_check 0 "$@"
 
     RSETUP_RADIOLIST=()
-    RSETUP_RADIOLIST_CALLBACK=()
     RSETUP_RADIOLIST_STATE_OLD=()
     RSETUP_RADIOLIST_STATE_NEW=()
 }
@@ -14,17 +17,17 @@ radiolist_init() {
 radiolist_add() {
     __parameter_count_check 2 "$@"
 
-    local ITEM=$1
-    local STATUS=$2
-    local TAG="$((${#RSETUP_RADIOLIST[@]} / 3))"
+    local item=$1
+    local status=$2
+    local tag="$((${#RSETUP_RADIOLIST[@]} / 3))"
 
-    __parameter_value_check "$STATUS" "ON" "OFF"
+    __parameter_value_check "$status" "ON" "OFF"
 
-    RSETUP_RADIOLIST+=( "$TAG" "$ITEM" "$STATUS" )
+    RSETUP_RADIOLIST+=( "$tag" "$item" "$status" )
 
-    if [[ $STATUS == "ON" ]]
+    if [[ $status == "ON" ]]
     then
-        RSETUP_RADIOLIST_STATE_OLD+=( "$TAG" )
+        RSETUP_RADIOLIST_STATE_OLD+=( "$tag" )
     fi
 }
 
