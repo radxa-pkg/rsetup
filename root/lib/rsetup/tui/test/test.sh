@@ -1,6 +1,6 @@
-__main_test_yesno() {
-    local ITEM
-    ITEM=$(yesno "Yes, or No?")
+__test_yesno() {
+    local item
+    item=$(yesno "Yes, or No?")
     if [ $? = 0 ]
     then
         msgbox "User selected yes."
@@ -11,18 +11,18 @@ __main_test_yesno() {
     unregister_screen
 }
 
-__main_test_msgbox() {
+__test_msgbox() {
     msgbox "A msgbox."
 
     unregister_screen
 }
 
-__main_test_inputbox() {
-    local ITEM
-    ITEM=$(inputbox "Say something." "Like this.")
+__test_inputbox() {
+    local item
+    item=$(inputbox "Say something." "Like this.")
     if [ $? = 0 ]
     then
-        msgbox "User said '$ITEM'."
+        msgbox "User said '$item'."
     else
         msgbox "User cancelled action."
     fi
@@ -30,12 +30,12 @@ __main_test_inputbox() {
     unregister_screen
 }
 
-__main_test_passwordbox() {
-    local ITEM
-    ITEM=$(passwordbox "Tell me a secret.")
+__test_passwordbox() {
+    local item
+    item=$(passwordbox "Tell me a secret.")
     if [ $? = 0 ]
     then
-        msgbox "User said '$ITEM'."
+        msgbox "User said '$item'."
     else
         msgbox "User cancelled action."
     fi
@@ -43,7 +43,7 @@ __main_test_passwordbox() {
     unregister_screen
 }
 
-__main_test_gauge() {
+__test_gauge() {
     for i in {0..5}
     do
         echo $(( i * 20 ))
@@ -53,7 +53,7 @@ __main_test_gauge() {
     unregister_screen
 }
 
-__main_test_checklist() {
+__test_checklist() {
     checklist_init
     checklist_add "Item 1" "OFF"
     checklist_add "Item 2" "ON"
@@ -69,7 +69,7 @@ __main_test_checklist() {
     unregister_screen
 }
 
-__main_test_radiolist() {
+__test_radiolist() {
     radiolist_init
     radiolist_add "Item 1" "OFF"
     radiolist_add "Item 2" "ON"
@@ -85,16 +85,16 @@ __main_test_radiolist() {
     unregister_screen
 }
 
-__main_test() {
+__test() {
     menu_init
-    menu_add __main_test_yesno "yesno"
-    menu_add __main_test_msgbox "msgbox"
-    menu_add __main_test_inputbox "inputbox"
-    menu_add __main_test_passwordbox "passwordbox"
-    menu_add __main_test_gauge "gauge"
+    menu_add __test_yesno "yesno"
+    menu_add __test_msgbox "msgbox"
+    menu_add __test_inputbox "inputbox"
+    menu_add __test_passwordbox "passwordbox"
+    menu_add __test_gauge "gauge"
     menu_add_separator
-    menu_add __main_test_checklist "checklist"
+    menu_add __test_checklist "checklist"
     menu_add_separator
-    menu_add __main_test_radiolist "radiolist"
+    menu_add __test_radiolist "radiolist"
     menu_show "TUI tests"
 }
