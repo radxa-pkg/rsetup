@@ -30,7 +30,7 @@ menu_show() {
 
     local item
     item=$(__dialog --menu "$1" "${RSETUP_MENU[@]}" 3>&1 1>&2 2>&3 3>&-)
-    if [ $? = 0 ]
+    if [ $? == 0 ]
     then
         register_screen ${RSETUP_MENU_CALLBACK[$item]}
     else
