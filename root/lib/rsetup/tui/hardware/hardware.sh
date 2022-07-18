@@ -5,3 +5,4 @@ __main_hardware() {
     menu_add __main_about "About"
     menu_show "Configure Radxa product"
 }
+
