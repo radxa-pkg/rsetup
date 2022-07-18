@@ -14,17 +14,9 @@ fi
 source "$ROOT_PATH/lib/rsetup/cli/main.sh"
 source "$ROOT_PATH/lib/rsetup/tui/main.sh"
 
-main() {
-    register_screen __main
-    while (( ${#RSETUP_SCREEN[@]} != 0 ))
-    do
-        ${RSETUP_SCREEN[-1]}
-    done
-}
-
 if (( $# == 0 )) || [[ $1 == main ]]
 then
-    main
+    tui_start __tui_main
 else
     __parameter_type_check "$1" "function"
 
