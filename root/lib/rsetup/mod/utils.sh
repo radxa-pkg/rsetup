@@ -53,3 +53,15 @@ __parameter_value_check() {
     fi
     set +e
 }
+
+__parameter_type_check() {
+    __parameter_count_check 2 "$@"
+    set -e
+
+    if [[ $(type -t "$1") != "$2" ]]
+    then
+        echo "'${FUNCNAME[1]}' expects '$1' type to be '$2', but it is '$(type -t "$1")'." >&2
+        return $ERROR_ILLEGAL_PARAMETERS
+    fi
+    set +e
+}
