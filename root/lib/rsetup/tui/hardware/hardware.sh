@@ -1,5 +1,5 @@
-__main_hardware() {
+__hardware() {
     menu_init
-    menu_add __main_about "About"
-    menu_show "Configure Radxa product"
+    menu_add __tui_about "About"
+    menu_show "Customize onboard functions"
 }
