@@ -6,16 +6,22 @@ __dialog() {
     local box="$1"
     local text="$2"
     shift 2
-    local height=12
-    local width=80
+    local height="$(stty size | cut -d ' ' -f 1)"
+    local width="$(stty size | cut -d ' ' -f 2)"
     case $box in
         --menu|--checklist|--radiolist)
-            local listheight=$(( $height - 8 ))
+            local listheight=0
             ;;
         *)
             local listheight=
             ;;
     esac
+
+    if (( height < 8 ))
+    then
+        echo "TTY height has to be at least 8 for TUI mode to work, currently $height." >&2
+        return 1
+    fi
 
     $RSETUP_DIALOG --title "RSETUP" --backtitle "${RSETUP_SCREEN[*]}" --notags "$box" "$text" $height $width $listheight "$@"
 }

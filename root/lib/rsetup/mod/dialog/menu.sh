@@ -30,11 +30,15 @@ menu_show() {
     __parameter_count_check 1 "$@"
 
     local item
-    item=$(__dialog --menu "$1" "${RSETUP_MENU[@]}" 3>&1 1>&2 2>&3)
+    item=$(__dialog --menu "$1" "${RSETUP_MENU[@]}" 3>&1 1>&2 2>&3 3>&-)
     if [ $? = 0 ]
     then
         register_screen ${RSETUP_MENU_CALLBACK[$item]}
     else
+        if [[ -n $item ]]
+        then
+            echo "$item"
+        fi
         unregister_screen
     fi
 }
