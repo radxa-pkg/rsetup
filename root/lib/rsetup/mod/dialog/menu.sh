@@ -12,6 +12,7 @@ menu_init() {
 
 menu_add() {
     __parameter_count_check 2 "$@"
+    __parameter_type_check "$1" "function"
 
     local callback=$1
     local item=$2

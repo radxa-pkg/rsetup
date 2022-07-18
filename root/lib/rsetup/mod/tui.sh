@@ -7,6 +7,7 @@ RSETUP_SCREEN=()
 
 register_screen() {
     __parameter_count_check 1 "$@"
+    __parameter_type_check "$1" "function"
 
     RSETUP_SCREEN+=( "$1" )
 }

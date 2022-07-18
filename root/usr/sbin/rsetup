@@ -26,11 +26,8 @@ if (( $# == 0 )) || [[ $1 == main ]]
 then
     main
 else
-    if [[ $(type -t $1) == function ]]
-    then
-        set -e
-        "$@"
-    else
-        echo $1 is not a valid function.
-    fi
+    __parameter_type_check "$1" "function"
+
+    set -e
+    "$@"
 fi
