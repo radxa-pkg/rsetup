@@ -14,8 +14,17 @@ __main_about() {
 
 __main() {
     menu_init
-    menu_add __main_software "Software"
+    menu_add __main_System "System" 
     menu_add __main_hardware "Hardware"
+    
+    
+    menu_add __main_40-pinheader "40-pin header"
+    menu_add __main_Connectivity "Connectivity"
+    menu_add __main_User "User" 
+
+
+    menu_add __main_software "Software"
+   
     menu_add __main_test "Test"
     menu_add __main_about "About"
     menu_show "Please select an option below:"
