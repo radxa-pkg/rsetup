@@ -11,7 +11,7 @@ __local_timezone_check(){
 __local_timezone_change(){
     TIMEZONE=$(cat /etc/timezone)
     local ITEM
-    ITEM=$(yesno "Current time zone: $TIMEZONE, Whether or not to change?")
+    ITEM=$(yesno "Current time zone: $TIMEZONE. Whether or not to change?")
    
     if [ $? = 0 ]
     then
@@ -27,7 +27,7 @@ __local_timezone_change(){
 
 __local_timezone(){
     menu_init
-    menu_add __local_timezone_check      "check  timezone"
-    menu_add __local_timezone_change     "change timezone"
+    menu_add __local_timezone_check      "Check  Timezone"
+    menu_add __local_timezone_change     "Change Timezone"
     menu_show "Please select an option below:"
 }

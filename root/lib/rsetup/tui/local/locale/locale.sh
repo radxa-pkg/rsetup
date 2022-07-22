@@ -21,7 +21,7 @@ __local_locale_checkAll(){
 
 __local_locale(){
     menu_init
-    menu_add __local_locale_checkSetup   "current locale Settings"
-    menu_add __local_locale_checkAll     "All available locales"
+    menu_add __local_locale_checkSetup   "Current Locale Settings"
+    menu_add __local_locale_checkAll     "All Available Locales"
     menu_show "Please select an option below:"
 }

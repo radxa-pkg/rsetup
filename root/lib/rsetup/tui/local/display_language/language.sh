@@ -1,7 +1,7 @@
 #! /bin/bash
 
 __local_display_language(){
-    msgbox "display language."
+    msgbox "Display language."
     
     unregister_screen
 

@@ -11,9 +11,9 @@ __local() {
     menu_init
     menu_add __local_timezone           "Timezone"
     menu_add __local_locale             "Locale"
-    menu_add __local_keyboard_layout    "Keyboard layout"
+    menu_add __local_keyboard_layout    "Keyboard Layout"
     menu_add __local_display_language   "Display Language"
-    menu_add __local_wifi_country       "WiFi country"
+    menu_add __local_wifi_country       "WiFi Country"
     menu_add __local_install_CJKV_fonts "Install CJKV Fonts"
 
     menu_show "Please select an option below:"
