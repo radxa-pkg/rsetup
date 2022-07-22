@@ -4,7 +4,7 @@
 
 __local_locale_checkSetup(){
     CUR_SET=$(locale)
-    msgbox "current locale Settings: $CUR_SET"
+    msgbox "Current locale Settings: $CUR_SET"
     
     unregister_screen
 
