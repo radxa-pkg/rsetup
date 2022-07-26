@@ -1,12 +1,11 @@
 __local_locale_checkSetup(){
-    CUR_SET=$(locale)
-    msgbox "Current locale Settings: $CUR_SET"   
+    local cur_set=$(locale)
+    msgbox "Current locale Settings: $cur_set"   
     unregister_screen
 }
 
 __local_locale_checkAll(){
-    local all
-    all=$(locale -a)
+    local all=$(locale -a)
     msgbox "All available locales. $all"   
     unregister_screen
 }

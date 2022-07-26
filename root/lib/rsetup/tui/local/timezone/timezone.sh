@@ -6,7 +6,7 @@ __local_timezone_check(){
 
 __local_timezone_change(){
     local timezone=$(cat /etc/timezone)
-    local item
+    local item 
     item=$(yesno "Current time zone: $timezone. Whether or not to change?")
     if [ $? = 0 ]
     then
@@ -14,10 +14,6 @@ __local_timezone_change(){
     fi
     unregister_screen 
 }
-
-
-
-
 
 __local_timezone(){
     menu_init
