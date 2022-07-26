@@ -1,22 +1,14 @@
-#! /bin/bash
-
-
-
 __local_locale_checkSetup(){
     CUR_SET=$(locale)
-    msgbox "Current locale Settings: $CUR_SET"
-    
+    msgbox "Current locale Settings: $CUR_SET"   
     unregister_screen
-
 }
 
-
 __local_locale_checkAll(){
-    ALL=$(locale -a)
-    msgbox "All available locales. $ALL"
-    
+    local all
+    all=$(locale -a)
+    msgbox "All available locales. $all"   
     unregister_screen
-
 }
 
 __local_locale(){

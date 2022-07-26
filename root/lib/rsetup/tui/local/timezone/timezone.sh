@@ -1,23 +1,17 @@
-#! /bin/bash
-
-
 __local_timezone_check(){
-    TIMEZONE=$(cat /etc/timezone)
-    msgbox "The current time zone: $TIMEZONE"
+    local timezone=$(cat /etc/timezone)
+    msgbox "The current time zone: $timezone"
     unregister_screen
 }
 
-
 __local_timezone_change(){
-    TIMEZONE=$(cat /etc/timezone)
-    local ITEM
-    ITEM=$(yesno "Current time zone: $TIMEZONE. Whether or not to change?")
-   
+    local timezone=$(cat /etc/timezone)
+    local item
+    item=$(yesno "Current time zone: $timezone. Whether or not to change?")
     if [ $? = 0 ]
     then
-        CHANGE=$(tzselect)
+        local change=$(tzselect)
     fi
-
     unregister_screen 
 }
 
