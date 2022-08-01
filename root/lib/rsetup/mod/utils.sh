@@ -65,3 +65,9 @@ __parameter_type_check() {
     fi
     set +e
 }
+
+__in_array() {
+    local item="$1"
+    shift
+    [[ " $* " =~ " $item " ]]
+}
