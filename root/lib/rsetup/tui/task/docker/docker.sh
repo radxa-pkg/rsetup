@@ -1,11 +1,9 @@
 __task_docker_install(){
     msgbox "Docker: Install/Uninstall now." 
-    unregister_screen   
 }
 
 __task_docker_enable(){
     msgbox "Docker: Enable/Disable now." 
-    unregister_screen       
 }
 
 __task_docker(){

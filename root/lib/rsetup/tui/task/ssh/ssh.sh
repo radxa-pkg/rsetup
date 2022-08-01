@@ -1,11 +1,9 @@
 __task_ssh_install(){
     msgbox "SSH: Install/Uninstall now." 
-    unregister_screen   
 }
 
 __task_ssh_enable(){
     msgbox "SSH: Enable/Disable now." 
-    unregister_screen       
 }
 
 __task_ssh(){

@@ -10,7 +10,10 @@ menu_init() {
 
 menu_add() {
     __parameter_count_check 2 "$@"
-    __parameter_type_check "$1" "function"
+    if [[ "$1" != ":" ]]
+    then
+        __parameter_type_check "$1" "function"
+    fi
 
     local callback=$1
     local item=$2
@@ -20,7 +23,7 @@ menu_add() {
 }
 
 menu_add_separator() {
-    menu_add unregister_screen "========="
+    menu_add : "========="
 }
 
 menu_show() {
@@ -38,4 +41,5 @@ menu_show() {
         fi
         unregister_screen
     fi
+    register_screen "${FUNCNAME[2]}"
 }

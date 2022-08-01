@@ -7,12 +7,10 @@ source "$ROOT_PATH/lib/rsetup/tui/local/install_CJKV_fonts/fonts.sh"
 
 __local_display_language(){
     msgbox "Display language." 
-    unregister_screen
 }
 
 __local_install_CJKV_fonts(){
     msgbox "Install CJKV fonts."    
-    unregister_screen
 }
 
 __local_keyboard_layout(){
@@ -22,12 +20,10 @@ __local_keyboard_layout(){
     then
         msgbox "modify..."
     fi
-    unregister_screen
 }
 
 __local_wifi_country(){
     msgbox "WiFi country."    
-    unregister_screen
 }
 
 __local() {

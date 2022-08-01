@@ -7,14 +7,10 @@ __test_yesno() {
     else
         msgbox "User selected no."
     fi
-
-    unregister_screen
 }
 
 __test_msgbox() {
     msgbox "A msgbox."
-
-    unregister_screen
 }
 
 __test_inputbox() {
@@ -26,8 +22,6 @@ __test_inputbox() {
     else
         msgbox "User cancelled action."
     fi
-
-    unregister_screen
 }
 
 __test_passwordbox() {
@@ -39,8 +33,6 @@ __test_passwordbox() {
     else
         msgbox "User cancelled action."
     fi
-
-    unregister_screen
 }
 
 __test_gauge() {
@@ -49,8 +41,6 @@ __test_gauge() {
         echo $(( i * 20 ))
         sleep 1
     done | gauge "Let's go!" 0
-
-    unregister_screen
 }
 
 __test_checklist() {
@@ -65,8 +55,6 @@ __test_checklist() {
     else
         msgbox "User cancelled action."
     fi
-
-    unregister_screen
 }
 
 __test_radiolist() {
@@ -81,8 +69,6 @@ __test_radiolist() {
     else
         msgbox "User cancelled action."
     fi
-
-    unregister_screen
 }
 
 __test() {

@@ -15,8 +15,6 @@ fi
 
 __tui_about() {
     msgbox "rsetup\n\nCopyright $(date +%Y) Radxa Ltd."
-    
-    unregister_screen
 }
 
 __tui_main() {

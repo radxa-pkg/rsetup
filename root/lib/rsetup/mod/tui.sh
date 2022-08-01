@@ -7,7 +7,10 @@ RSETUP_SCREEN=()
 
 register_screen() {
     __parameter_count_check 1 "$@"
-    __parameter_type_check "$1" "function"
+    if [[ "$1" != ":" ]]
+    then
+        __parameter_type_check "$1" "function"
+    fi
 
     RSETUP_SCREEN+=( "$1" )
 }
@@ -26,5 +29,6 @@ tui_start() {
     while (( ${#RSETUP_SCREEN[@]} != 0 ))
     do
         ${RSETUP_SCREEN[-1]}
+        unregister_screen
     done
 }

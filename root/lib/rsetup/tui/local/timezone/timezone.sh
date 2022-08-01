@@ -1,7 +1,6 @@
 __local_timezone_check(){
     local timezone=$(cat /etc/timezone)
     msgbox "The current time zone: $timezone"
-    unregister_screen
 }
 
 __local_timezone_change(){
@@ -12,7 +11,6 @@ __local_timezone_change(){
     then
         local change=$(tzselect)
     fi
-    unregister_screen 
 }
 
 __local_timezone(){
