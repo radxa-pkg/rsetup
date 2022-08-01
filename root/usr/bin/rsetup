@@ -4,7 +4,7 @@ LC_ALL="C"
 LANG="C"
 LANGUAGE="C"
 
-if git status 1>/dev/null 2>&1 && [[ -f $PWD/root/usr/bin/rsetup ]]
+if git status &>/dev/null && [[ -f "$PWD/root/usr/bin/rsetup" ]]
 then
     ROOT_PATH="${ROOT_PATH:-"$PWD/root"}"
 else
