@@ -1,4 +1,41 @@
+process_config() {
+    while read
+    do
+        set -- $REPLY
+        local cmd="$1"
+        shift
+
+        if [[ "$cmd" == \#* ]]
+        then
+            continue
+        fi
+        
+        if [[ $(type -t "$cmd") == function ]] && __in_array "$cmd" "${ALLOWED_RCONFIG_FUNC[@]}"
+        then
+            echo "Running $cmd with $*..."
+            if [[ "$DEBUG" == "1" ]]
+            then
+                echo "$cmd $@"
+            else
+                $cmd "$@"
+            fi
+        else
+            echo "'$cmd' is not an allowed command."
+        fi
+    done < "$1"
+}
+
 __on_boot() {
     __parameter_count_check 0 "$@"
 
+    local conf_dir="$ROOT_PATH/config"
+
+    for i in "$conf_dir/before.txt" "$conf_dir/config.txt" "$conf_dir/after.txt"
+    do
+        if [[ -e "$i" ]]
+        then
+            process_config "$i"
+        fi
+    done
+    rm -f "$conf_dir/before.txt" "$conf_dir/after.txt"
 }
