@@ -1,5 +1,3 @@
-source "$ROOT_PATH/lib/rsetup/mod/dialog/basic.sh"
-
 RSETUP_RADIOLIST=()
 RSETUP_RADIOLIST_STATE_OLD=()
 RSETUP_RADIOLIST_STATE_NEW=()

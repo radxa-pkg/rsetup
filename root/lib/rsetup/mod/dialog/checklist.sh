@@ -1,5 +1,3 @@
-source "$ROOT_PATH/lib/rsetup/mod/dialog/basic.sh"
-
 RSETUP_CHECKLIST=()
 RSETUP_CHECKLIST_STATE_OLD=()
 RSETUP_CHECKLIST_STATE_NEW=()

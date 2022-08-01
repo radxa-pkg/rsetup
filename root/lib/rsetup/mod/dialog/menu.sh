@@ -1,5 +1,3 @@
-source "$ROOT_PATH/lib/rsetup/mod/dialog/basic.sh"
-
 RSETUP_MENU=()
 RSETUP_MENU_CALLBACK=()
 
