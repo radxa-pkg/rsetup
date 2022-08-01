@@ -14,11 +14,3 @@ __first_boot() {
     systemctl disable rsetup-first-boot.service
 }
 
-update_bootloader() {
-    __parameter_count_check 1 "$@"
-    __assert_f "/usr/lib/u-boot-$1/setup.sh"
-
-    local device=$(__get_block_dev)
-
-    "/usr/lib/u-boot-$1/setup.sh" update_bootloader $device
-}
