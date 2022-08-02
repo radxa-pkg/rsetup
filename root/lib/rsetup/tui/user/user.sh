@@ -5,6 +5,7 @@ __user() {
     menu_add __user_enableautologin "Enable auto login"
     menu_show "User Settings"
 }
+
 __user_changepwd (){
     menu_init
     menu_add __tui_about "Change password"

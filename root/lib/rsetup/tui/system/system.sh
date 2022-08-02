@@ -13,6 +13,7 @@ __system_systemupdate() {
     # sudo apt update && sudo apt full-upgrade
     
 }
+
 __system_updatebootloader() {
     menu_init
     menu_add __tui_about "About"

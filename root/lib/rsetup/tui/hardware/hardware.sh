@@ -3,6 +3,7 @@ __hardware() {
     menu_add __LED "LED"
     menu_show "Customize onboard functions"
 }
+
 __LED() {
     menu_init
     menu_add __listleds "list LEDs"
@@ -14,6 +15,7 @@ __listleds() {
     echo "hello"
     
 }
+
 __changeledtrigger() {
     echo "hello"
 }
