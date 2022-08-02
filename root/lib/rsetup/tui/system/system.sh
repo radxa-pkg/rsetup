@@ -4,13 +4,13 @@ __system_systemupdate() {
     menu_show "Update system"
 
     # sudo apt update && sudo apt full-upgrade
-    
 }
 
 __system_updatebootloader() {
     menu_init
     menu_add __tui_about "About"
     menu_show "update bootloader"
+
     # # get curent board name
     # dtname=output(uname -r)
     # #get root dev

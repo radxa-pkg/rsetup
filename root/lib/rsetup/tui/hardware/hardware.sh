@@ -7,7 +7,6 @@ __LED() {
 
 __listleds() {
     echo "hello"
-    
 }
 
 __changeledtrigger() {
