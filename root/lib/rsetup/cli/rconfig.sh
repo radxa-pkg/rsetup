@@ -5,7 +5,7 @@ process_config() {
         local cmd="$1"
         shift
 
-        if [[ "$cmd" == \#* ]]
+        if [[ "$cmd" == \#* ]] || [[ -z "$cmd" ]]
         then
             continue
         fi
@@ -22,7 +22,7 @@ process_config() {
         else
             echo "'$cmd' is not an allowed command."
         fi
-    done < "$1"
+    done < <(grep "" "$1")
 }
 
 __on_boot() {
