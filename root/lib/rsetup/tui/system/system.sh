@@ -1,10 +1,3 @@
-__system() {
-    menu_init
-    menu_add __system_systemupdate "system update" 
-    menu_add __system_updatebootloader "Update bootloader"
-    menu_show "system maintaince"
-}
-
 __system_systemupdate() { 
     menu_init
     menu_add __tui_about "About"
@@ -28,4 +21,11 @@ __system_updatebootloader() {
 
     # # upload boot loader
     # "$ROOT_PATH/lib/rsetup/cli/main.sh" update_bootloader
+}
+
+__system() {
+    menu_init
+    menu_add __system_systemupdate "system update" 
+    menu_add __system_updatebootloader "Update bootloader"
+    menu_show "system maintaince"
 }

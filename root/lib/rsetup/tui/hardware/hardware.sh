@@ -1,9 +1,3 @@
-__hardware() {
-    menu_init
-    menu_add __LED "LED"
-    menu_show "Customize onboard functions"
-}
-
 __LED() {
     menu_init
     menu_add __listleds "list LEDs"
@@ -18,4 +12,10 @@ __listleds() {
 
 __changeledtrigger() {
     echo "hello"
+}
+
+__hardware() {
+    menu_init
+    menu_add __LED "LED"
+    menu_show "Customize onboard functions"
 }
