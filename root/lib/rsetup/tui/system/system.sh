@@ -1,4 +1,4 @@
-__system_systemupdate() { 
+__system_system_update() { 
     menu_init
     menu_add __tui_about "About"
     menu_show "Update System"
@@ -6,7 +6,7 @@ __system_systemupdate() {
     # sudo apt update && sudo apt full-upgrade
 }
 
-__system_updatebootloader() {
+__system_update_bootloader() {
     menu_init
     menu_add __tui_about "About"
     menu_show "Update Bootloader"
@@ -25,7 +25,7 @@ __system_updatebootloader() {
 
 __system() {
     menu_init
-    menu_add __system_systemupdate "System Update" 
-    menu_add __system_updatebootloader "Update Bootloader"
+    menu_add __system_system_update "System Update" 
+    menu_add __system_update_bootloader "Update Bootloader"
     menu_show "System Maintaince"
 }
