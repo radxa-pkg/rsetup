@@ -1,3 +1,5 @@
+ALLOWED_RCONFIG_FUNC+=("log")
+
 readonly ERROR_REQUIRE_PARAMETER=-1
 readonly ERROR_TOO_FEW_PARAMETERS=-2
 readonly ERROR_REQUIRE_FILE=-3
@@ -70,4 +72,8 @@ __in_array() {
     local item="$1"
     shift
     [[ " $* " =~ " $item " ]]
+}
+
+log() {
+    printf "%s\n" "$*"
 }
