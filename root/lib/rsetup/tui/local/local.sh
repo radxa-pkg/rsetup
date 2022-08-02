@@ -16,7 +16,7 @@ __local_install_CJKV_fonts(){
 __local_keyboard_layout(){
     local item
     item=$(yesno "Do you want to modify the keyboard layout?")
-    if [ $? = 0 ]
+    if [[ $? == 0 ]]
     then
         msgbox "modify..."
     fi

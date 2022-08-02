@@ -7,7 +7,7 @@ __local_timezone_change(){
     local timezone=$(cat /etc/timezone)
     local item 
     item=$(yesno "Current time zone: $timezone. Whether or not to change?")
-    if [ $? = 0 ]
+    if [[ $? == 0 ]]
     then
         local change=$(tzselect)
     fi
