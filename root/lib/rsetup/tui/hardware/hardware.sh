@@ -6,11 +6,11 @@ __hardware_LED() {
 }
 
 __hardware_list_leds() {
-    echo "hello"
+    msgbox "List LEDs"
 }
 
 __hardware_change_led_trigger() {
-    echo "hello"
+    msgbox "Change LED trigger"
 }
 
 __hardware() {

@@ -1,16 +1,13 @@
 __user_change_password (){
-    menu_init
-    menu_add __tui_about "Change Password"
+    msgbox "Change password."
 }
 
 __user_change_hostname (){
-    menu_init
-    menu_add __tui_about "Change Hostname"
+    msgbox "Change Hostname."
 }
 
 __user_enable_auto_login (){
-    menu_init
-    menu_add __tui_about " "
+    msgbox "Enable auto login."
 }
 
 __user() {

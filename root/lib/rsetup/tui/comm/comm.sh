@@ -1,9 +1,9 @@
 __comm_wifi() {
-    echo "hello"
+    msgbox "Configure Wi-Fi"
 }
 
 __comm_bluetooth() {
-    echo "hello"
+    msgbox "Configure Bluetooth"
 }
 
 __comm() {
