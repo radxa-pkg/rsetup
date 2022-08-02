@@ -1,3 +1,11 @@
+ALLOWED_RCONFIG_FUNC+=("request_reboot")
+
+RCONFIG_REBOOT="false"
+
+request_reboot() {
+    RCONFIG_REBOOT="${1:-true}"
+}
+
 process_config() {
     while read
     do
@@ -37,5 +45,11 @@ __on_boot() {
             process_config "$i"
         fi
     done
+
     rm -f "$conf_dir/before.txt" "$conf_dir/after.txt"
+
+    if [[ "$RCONFIG_REBOOT" == "true" ]]
+    then
+        reboot
+    fi
 }
