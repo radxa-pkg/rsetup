@@ -1,7 +1,7 @@
 __system_systemupdate() { 
     menu_init
     menu_add __tui_about "About"
-    menu_show "Update system"
+    menu_show "Update System"
 
     # sudo apt update && sudo apt full-upgrade
 }
@@ -9,7 +9,7 @@ __system_systemupdate() {
 __system_updatebootloader() {
     menu_init
     menu_add __tui_about "About"
-    menu_show "update bootloader"
+    menu_show "Update Bootloader"
 
     # # get curent board name
     # dtname=output(uname -r)
@@ -25,7 +25,7 @@ __system_updatebootloader() {
 
 __system() {
     menu_init
-    menu_add __system_systemupdate "system update" 
-    menu_add __system_updatebootloader "Update bootloader"
-    menu_show "system maintaince"
+    menu_add __system_systemupdate "System Update" 
+    menu_add __system_updatebootloader "Update Bootloader"
+    menu_show "System Maintaince"
 }
