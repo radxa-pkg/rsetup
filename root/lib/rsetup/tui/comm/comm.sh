@@ -1,5 +1,5 @@
 __comm_wifi() {
-    msgbox "Configure Wi-Fi"
+    nmtui
 }
 
 __comm_bluetooth() {
