@@ -1,4 +1,4 @@
-ALLOWED_RCONFIG_FUNC+=("regenerate_machine_id" "update_hostname" "update_locale" "enable_service" "disable_service")
+ALLOWED_RCONFIG_FUNC+=("regenerate_machine_id" "update_hostname" "update_locale" "enable_service" "disable_service" "resize_root")
 
 update_bootloader() {
     __parameter_count_check 1 "$@"
@@ -58,4 +58,23 @@ disable_service() {
     
     local service="$1"
     systemctl disable --now "$service"
+}
+
+resize_root() {
+    local root_dev="$(__get_root_dev)"
+    local filesystem="$(blkid -s TYPE -o value "$root_dev")"
+
+    echo "Resizing root filesystem..."
+    case "$filesystem" in
+        ext4)
+            resize2fs "$root_dev"
+            ;;
+        btrfs)
+            btrfs filesystem resize max /
+            ;;
+        *)
+            echo "Unknown filesystem." >&2
+            return 1
+            ;;
+    esac
 }
