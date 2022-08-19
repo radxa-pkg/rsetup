@@ -19,18 +19,10 @@ uninstall_ssh() {
 
 enable_ssh() {
     __parameter_count_check 0 "$@"
-    if [ -e /var/log/regen_ssh_keys.log ] && ! grep -q "^finished" /var/log/regen_ssh_keys.log
-    then
-        msgbox "Initial ssh key generation still running. Please wait and try again."
-        return 1
-    fi
-    ssh-keygen -A
-    update-rc.d ssh enable    
-    invoke-rc.d ssh start
+    systemctl enable --now ssh
 }
 
 disable_ssh() {
     __parameter_count_check 0 "$@"
-    update-rc.d ssh disable 
-    invoke-rc.d ssh stop 
+    systemctl disable --now ssh
 }
