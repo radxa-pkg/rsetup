@@ -18,7 +18,7 @@ __user_change_password (){
         fi
     done
 
-    if update_password "$(last | head -1 | cut -d ' ' -f1)" "$new_password"
+    if update_password "$(logname)" "$new_password"
     then
         msgbox "Password has been changed."
         return
@@ -47,7 +47,7 @@ Hostname has been set to '$(hostname)'."
 }
 
 __user_enable_auto_login (){
-    local username="$(last | head -1 | cut -d ' ' -f1)"
+    local username="$(logname)"
     scanned_tty_services=$(ls /etc/systemd/system/getty.target.wants | grep 'tty' | grep -v '.d')
     local selected_tty_device
     local parameter
@@ -58,7 +58,7 @@ __user_enable_auto_login (){
         checklist_add "$tty_service" "OFF"
     done
     checklist_show "Please select the interface(s) you want to enable auto login:"
-    
+
     if (( $?!=0 )) || [[ ${#RSETUP_CHECKLIST_STATE_NEW[@]} -le 0 ]]
     then
         return
