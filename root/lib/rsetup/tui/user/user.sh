@@ -1,27 +1,29 @@
 __user_change_password (){
-    local new_passward, new_passward2
-    new_passward=$(passwordbox "Please enter the new password:")
-    if [[ $? == 0 ]]
+    local new_password, new_password2
+    new_password=$(passwordbox "Please enter the new password:")
+    if (( $? != 0 ))
     then
-        new_passward2=$(passwordbox "Please enter the new password again:")
-        while [[ $? == 0 ]] 
-        do
-            if [[ "$new_passward" != "$new_passward2" ]]
-            then
-                msgbox "The passwards are not consistent."
-                new_passward2=$(passwordbox "Please enter the new password again:")
-            else
-                if update_password "$(last | head -1 | cut -d ' ' -f1)" "$new_passward"
-                then
-                    msgbox "Password has been changed."
-                else
-                    msgbox "An error has occured when trying to change password." 
-                fi
-            fi
-        done
+        return
+    fi
+
+    while [[ $? == 0 ]] 
+    do
+        new_password2=$(passwordbox "Please confirm your password:")
+        if [[ "$new_password" != "$new_password2" ]]
+        then
+            msgbox "Passwords don't match. Try again"
+            continue
+        else
+            break
+        fi
+    done
+
+    if update_password "$(last | head -1 | cut -d ' ' -f1)" "$new_password"
+    then
+        msgbox "Password has been changed."
         return
     else
-        return
+        msgbox "An error has occured when trying to change password." 
     fi
 }
 
@@ -45,38 +47,40 @@ Hostname has been set to '$(hostname)'."
 }
 
 __user_enable_auto_login (){
-    username="$(last | head -1 | cut -d ' ' -f1)"
-    scanned_tty_services=$(ls /etc/systemd/system/getty.target.wants | grep 'tty' |grep -v '.d')
+    local username="$(last | head -1 | cut -d ' ' -f1)"
+    scanned_tty_services=$(ls /etc/systemd/system/getty.target.wants | grep 'tty' | grep -v '.d')
     local selected_tty_device
     local parameter
+
     checklist_init
     for tty_service in $scanned_tty_services
     do
         checklist_add "$tty_service" "OFF"
     done
-    checklist_show "Choose the tty device/devices you prefer"
-    if [[ $? == 0 ]] && [[ ${#RSETUP_CHECKLIST_STATE_NEW[@]} -gt 0 ]]
+    checklist_show "Please select the interface(s) you want to enable auto login:"
+    
+    if (( $?!=0 )) || [[ ${#RSETUP_CHECKLIST_STATE_NEW[@]} -le 0 ]]
     then
-        for selected_tty_shrinked_index in ${RSETUP_CHECKLIST_STATE_NEW[@]}
-        do
-            selected_tty_real_index=$((3*${selected_tty_shrinked_index//\"}+1))
-            selected_tty_device=${RSETUP_RADIOLIST[${selected_tty_real_index}]}
-            SYSTEMD_OVERRIDE=/etc/systemd/system/getty.target.wants/$selected_tty_device.d
-            msgbox "Setting up auto login..."
-            mkdir -p $SYSTEMD_OVERRIDE
-            touch $SYSTEMD_OVERRIDE/override.conf
-            cat << EOF | tee $SYSTEMD_OVERRIDE/override.conf >/dev/null
+        return
+    fi
+
+    for selected_tty_shrinked_index in ${RSETUP_CHECKLIST_STATE_NEW[@]}
+    do
+        selected_tty_real_index=$((3*${selected_tty_shrinked_index//\"}+1))
+        selected_tty_device=${RSETUP_RADIOLIST[${selected_tty_real_index}]}
+        SYSTEMD_OVERRIDE=/etc/systemd/system/getty.target.wants/$selected_tty_device.d
+        mkdir -p $SYSTEMD_OVERRIDE
+        touch $SYSTEMD_OVERRIDE/override.conf
+        cat << EOF | tee $SYSTEMD_OVERRIDE/override.conf >/dev/null
 [Service]
 ExecStart=
 EOF
-            parameter="$(grep "ExecStart" /etc/systemd/system/getty.target.wants/$selected_tty_device | cut -d ' ' -f2-)"
-            AUTOLOGIN=""ExecStart=-/sbin/agetty --autologin $username "$parameter"
-            tee -a $SYSTEMD_OVERRIDE/override.conf <<< $AUTOLOGIN >/dev/null
-        done
-        passwd --delete $username >/dev/null
-    else
-        return
-    fi
+        parameter="$(grep "ExecStart" /etc/systemd/system/getty.target.wants/$selected_tty_device | cut -d ' ' -f2-)"
+        AUTOLOGIN=""ExecStart=-/sbin/agetty --autologin $username "$parameter"
+        tee -a $SYSTEMD_OVERRIDE/override.conf <<< $AUTOLOGIN >/dev/null
+    done
+    passwd --delete $username >/dev/null
+
 }
 
 __user() {

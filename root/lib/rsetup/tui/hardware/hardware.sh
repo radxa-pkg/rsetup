@@ -1,10 +1,4 @@
 __hardware_LED() {
-    menu_init
-    menu_add __hardware_list_leds "List LEDs and change trigger"
-    menu_show "Customize LEDs"
-}
-
-__hardware_list_leds() {
     local LEDs_names=$(ls /sys/devices/platform/$(ls "/sys/devices/platform/" |grep leds)/leds/)
     local root_of_leds="/sys/devices/platform/$(ls "/sys/devices/platform/" |grep leds)/leds/"
     checklist_init
