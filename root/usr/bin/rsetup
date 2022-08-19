@@ -2,7 +2,7 @@
 
 if (( $EUID != 0 ))
 then
-    exec sudo "$0" "$@"
+    exec sudo "DEBUG=$DEBUG" "$0" "$@"
 fi
 
 LC_ALL="C"
