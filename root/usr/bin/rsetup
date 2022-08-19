@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if (( $EUID != 0 ))
+then
+    exec sudo "$0" "$@"
+fi
+
 LC_ALL="C"
 LANG="C"
 LANGUAGE="C"

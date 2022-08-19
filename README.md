@@ -6,4 +6,4 @@ Radxa system setup utilty
 
 ## Usage
 
-To run local git version, run `root/usr/sbin/rsetup`.
+To run local git version, run `root/usr/bin/rsetup`.
