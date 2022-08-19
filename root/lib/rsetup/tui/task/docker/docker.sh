@@ -4,7 +4,12 @@ __task_docker_uninstall() {
     if [[ $? == 0 ]]
     then
         uninstall_docker
-        msgbox "Uninstall Docker success."
+        if [[ $? == 0 ]]
+        then
+            msgbox "Uninstall Docker success."
+        else
+            msgbox "Uninstall Docker failure."
+        fi    
     fi
 }
 
@@ -14,12 +19,6 @@ __task_docker_install() {
     if [[ $? == 0 ]]
     then
         install_docker
-        if [[ $? == 0 ]]
-        then
-            msgbox "Install Docker success."
-        else
-            msgbox "Install Docker failure."
-        fi
     fi
 }
 
