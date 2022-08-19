@@ -77,3 +77,23 @@ __in_array() {
 log() {
     printf "%s\n" "$*"
 }
+
+__check_terminal() {
+    local devices=( "/dev/stdin" "/dev/stdout" "/dev/stderr" )
+    local output
+    for i in "${devices[@]}"
+    do
+        local disable_stderr="2>&-"
+        if [[ $i == "/dev/stderr" ]]
+        then
+            unset disable_stderr
+        fi
+        output="$(eval stty size -F "$i" $disable_stderr)"
+        if (( $? == 0 ))
+        then
+            echo "$output"
+            return
+        fi
+    done
+    echo "Unable to get terminal size!" >&2
+}

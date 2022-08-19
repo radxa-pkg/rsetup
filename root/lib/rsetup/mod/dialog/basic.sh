@@ -4,8 +4,8 @@ __dialog() {
     local box="$1"
     local text="$2"
     shift 2
-    local height="$(stty size | cut -d ' ' -f 1)"
-    local width="$(stty size | cut -d ' ' -f 2)"
+    local height="$(__check_terminal | cut -d ' ' -f 1)"
+    local width="$(__check_terminal | cut -d ' ' -f 2)"
     case $box in
         --menu)
             local listheight=0
@@ -20,7 +20,7 @@ __dialog() {
 
     if (( height < 8 ))
     then
-        echo "TTY height has to be at least 8 for TUI mode to work, currently $height." >&2
+        echo "TTY height needs to be at least 8 for TUI mode to work, currently is '$height'." >&2
         return 1
     fi
 
