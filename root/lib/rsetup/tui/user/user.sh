@@ -1,14 +1,17 @@
 __user_change_password (){
     local new_password, new_password2
-    new_password=$(passwordbox "Please enter the new password:")
-    if (( $? != 0 ))
-    then
-        return
-    fi
-
-    while [[ $? == 0 ]] 
+    while (( 1 )) 
     do
+        new_password=$(passwordbox "Please enter the new password:")
+        if (( $? != 0 ))
+        then
+            return
+        fi
         new_password2=$(passwordbox "Please confirm your password:")
+        if (( $? != 0 ))
+        then
+            return
+        fi
         if [[ "$new_password" != "$new_password2" ]]
         then
             msgbox "Passwords don't match. Try again"
@@ -17,11 +20,9 @@ __user_change_password (){
             break
         fi
     done
-
     if update_password "$(logname)" "$new_password"
     then
         msgbox "Password has been changed."
-        return
     else
         msgbox "An error has occured when trying to change password." 
     fi
@@ -48,9 +49,9 @@ Hostname has been set to '$(hostname)'."
 
 __user_enable_auto_login (){
     local username="$(logname)"
-    scanned_tty_services=$(ls /etc/systemd/system/getty.target.wants | grep 'tty' | grep -v '.d')
     local selected_tty_device
     local parameter
+    scanned_tty_services=$(ls /etc/systemd/system/getty.target.wants | grep 'tty' | grep -v '.d')
 
     checklist_init
     for tty_service in $scanned_tty_services
@@ -70,7 +71,6 @@ __user_enable_auto_login (){
         selected_tty_device=${RSETUP_RADIOLIST[${selected_tty_real_index}]}
         SYSTEMD_OVERRIDE=/etc/systemd/system/getty.target.wants/$selected_tty_device.d
         mkdir -p $SYSTEMD_OVERRIDE
-        touch $SYSTEMD_OVERRIDE/override.conf
         cat << EOF | tee $SYSTEMD_OVERRIDE/override.conf >/dev/null
 [Service]
 ExecStart=
@@ -80,7 +80,6 @@ EOF
         tee -a $SYSTEMD_OVERRIDE/override.conf <<< $AUTOLOGIN >/dev/null
     done
     passwd --delete $username >/dev/null
-
 }
 
 __user() {
