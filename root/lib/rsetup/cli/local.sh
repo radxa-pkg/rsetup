@@ -1,16 +1,6 @@
-list_wlan_interfaces() {
-    for dir in /sys/class/net/*/wireless
-    do
-        if [[ -d "$dir" ]]
-        then
-            basename "$(dirname "$dir")"
-        fi
-    done
-}
-
 wifi_country_set() {
     __parameter_count_check 0 "$@"
-    local iface=$(list_wlan_interfaces | head -n 1)
+    local iface=$(iw dev | grep Interface | awk '{print $2}')
     if [[ -z "$iface" ]]
     then
         msgbox "No wireless interface found." 

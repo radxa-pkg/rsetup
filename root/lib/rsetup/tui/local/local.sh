@@ -9,19 +9,34 @@ __local_display_language() {
     msgbox "Current language used by the system: $lg"     
 }
 
-__local_install_CJKV_fonts() {
+__local_install_CJKV_fonts() {   
     local item
     item=$(yesno "Are you sure to install CJKV fonts?")
     if [[ $? == 0 ]]
     then
-        apt-get install fonts-arphic-ukai fonts-arphic-uming fonts-ipafont-mincho fonts-ipafont-gothic fonts-unfonts-core
-        if [[ $? == 0 ]]
+        local fonts=( "fonts-arphic-ukai" "fonts-arphic-uming" "fonts-ipafont-mincho" "fonts-ipafont-gothic" "fonts-unfonts-core" )
+        for(( i=0; i<${#fonts[@]}; i++ ))
+        do  
+            apt-get install -y ${fonts[$i]} 2>/dev/null
+            if [[ $? != 0 ]]
+            then
+                echo $(( (i + 1) * 20 )) 
+                echo $i > "$(pwd)/tmp_file"
+            else
+                echo 0 > "$(pwd)/tmp_file"
+                exit 1
+            fi   
+        done | gauge "Installing..." 0
+        
+        local result=$(cat $(pwd)/tmp_file) 
+        if [[ "$result" != "0" ]]
         then
             msgbox "Install CJKV fonts success."
         else
-            msgbox "Install CJKV fonts failure."    
-        fi 
-    fi    
+            msgbox "Install CJKV fonts failure."
+        fi
+        rm $(pwd)/tmp_file
+    fi 
 }
 
 __local_keyboard_layout() {
@@ -32,7 +47,7 @@ __local_wifi_country() {
     wifi_country_set
     if [[ $? != 0 ]]
     then
-        msgbox "There was an error running option WiFi country." 
+        msgbox "Something went wrong when trying to set Wi-Fi country. Please try again." 
     fi  
 }
 
