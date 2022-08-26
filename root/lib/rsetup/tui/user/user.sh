@@ -1,6 +1,7 @@
 __user_change_password (){
-    local new_password, new_password2
-    while (( 1 )) 
+    local new_password=1
+    local new_password2
+    while [[ $new_password != $new_password2 ]]
     do
         new_password=$(passwordbox "Please enter the new password:")
         if (( $? != 0 ))
@@ -14,15 +15,13 @@ __user_change_password (){
         fi
         if [[ "$new_password" != "$new_password2" ]]
         then
-            msgbox "Passwords don't match. Try again"
-            continue
-        else
-            break
+            msgbox "Passwords do not match. Try again"
         fi
     done
+
     if update_password "$(logname)" "$new_password"
     then
-        msgbox "Password has been changed."
+        msgbox "The password has been changed."
     else
         msgbox "An error has occured when trying to change password." 
     fi
@@ -32,7 +31,7 @@ __user_change_hostname (){
     local cur_name="$(hostname)"
     local item
     item=$(inputbox "Please enter the new hostname:" "$cur_name")
-    if [[ $? != 0 ]] || [[ -z "$item" ]] || [[ "$item" == "$cur_name" ]]
+    if (( $? != 0 )) || [[ -z "$item" ]] || [[ "$item" == "$cur_name" ]]
     then
         msgbox "Hostname is not changed."
     else
@@ -53,19 +52,24 @@ __user_enable_auto_login (){
     local parameter
     scanned_tty_services=$(ls /etc/systemd/system/getty.target.wants | grep 'tty' | grep -v '.d')
 
+    
     checklist_init
     for tty_service in $scanned_tty_services
     do
         checklist_add "$tty_service" "OFF"
     done
-    checklist_show "Please select the interface(s) you want to enable auto login:"
-
-    if (( $?!=0 )) || [[ ${#RSETUP_CHECKLIST_STATE_NEW[@]} -le 0 ]]
+    if ! checklist_show "Please select the interface(s) you want to enable auto login:" || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 0))
     then
         return
     fi
+    
+    if ! yesno "After auto login is enabled, your current password will be deleted and login through SSH will be disabled.
+Are you sure to continue?"
+    then 
+        return
+    fi
 
-    for selected_tty_shrinked_index in ${RSETUP_CHECKLIST_STATE_NEW[@]}
+    for selected_tty_shrinked_index in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
     do
         selected_tty_real_index=$((3*${selected_tty_shrinked_index//\"}+1))
         selected_tty_device=${RSETUP_RADIOLIST[${selected_tty_real_index}]}
@@ -79,7 +83,10 @@ EOF
         AUTOLOGIN=""ExecStart=-/sbin/agetty --autologin $username "$parameter"
         tee -a $SYSTEMD_OVERRIDE/override.conf <<< $AUTOLOGIN >/dev/null
     done
-    passwd --delete $username >/dev/null
+    if passwd --delete $username >/dev/null
+    then 
+        msgbox "Configuration succeeded"
+    fi
 }
 
 __user() {

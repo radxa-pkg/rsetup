@@ -5,11 +5,7 @@ __system_system_update() {
 }
 
 __system_update_bootloader() {
-    local cur_board_name="$(dtname)"
-    local root_dev="$(__get_root_dev)"
-    local mapped_board_name="$(echo "$cur_board_name" | tr , -)"
-    "$ROOT_PATH/lib/rsetup/cli/system.sh" update_bootloader $mapped_board_name
-    if (( $? == 0 ))
+    if "$ROOT_PATH/lib/rsetup/cli/system.sh" update_bootloader $(dtname | tr , -)
     then
         msgbox "The bootloader has been successfully updated."
     else
