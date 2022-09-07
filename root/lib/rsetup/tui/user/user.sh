@@ -52,7 +52,6 @@ __user_enable_auto_login (){
     local parameter
     scanned_tty_services=$(ls /etc/systemd/system/getty.target.wants | grep 'tty' | grep -v '.d')
 
-    
     checklist_init
     for tty_service in $scanned_tty_services
     do
@@ -63,7 +62,7 @@ __user_enable_auto_login (){
         return
     fi
     
-    if ! yesno "After auto login is enabled, your current password will be deleted and login through SSH will be disabled.
+    if ! yesno "After auto login is enabled, your current password will be deleted, and you can only login SSH with public key.
 Are you sure to continue?"
     then 
         return
