@@ -1,26 +1,16 @@
 __system_system_update() { 
-    menu_init
-    menu_add __tui_about "About"
-    menu_show "Update System"
-
-    # sudo apt update && sudo apt full-upgrade
+    apt update
+    apt full-upgrade
+    read -p "Press enter to continue..."
 }
 
 __system_update_bootloader() {
-    menu_init
-    menu_add __tui_about "About"
-    menu_show "Update Bootloader"
-
-    # # get curent board name
-    # dtname=output(uname -r)
-    # #get root dev
-    # arr=($(stat / |grep Device))
-    # root_dev=${arr[1]}
-
-    # # dtname-board name mapping
-
-    # # upload boot loader
-    # "$ROOT_PATH/lib/rsetup/cli/main.sh" update_bootloader
+    if "$ROOT_PATH/lib/rsetup/cli/system.sh" update_bootloader $(dtname | tr , -)
+    then
+        msgbox "The bootloader has been successfully updated."
+    else
+        msgbox "The updating process has failed."
+    fi
 }
 
 __system() {
