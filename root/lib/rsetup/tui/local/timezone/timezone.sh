@@ -1,6 +1,6 @@
 __local_timezone_check() {
     local timezone=$(cat /etc/timezone)
-    msgbox "The current time zone: $timezone" 
+    msgbox "The current time zone: $timezone"
 }
 
 __local_timezone_change() {
