@@ -15,8 +15,8 @@ __local_install_CJKV_fonts() {
         local fonts=( "fonts-arphic-ukai" "fonts-arphic-uming" "fonts-ipafont-mincho" "fonts-ipafont-gothic" "fonts-unfonts-core" )
         for(( i = 0; i < ${#fonts[@]}; i++ ))
         do
-            apt-get install -y ${fonts[$i]} 2>/dev/null
-            if (( $? != 0 ))
+            
+            if apt-get install -y ${fonts[$i]} 2>/dev/null
             then
                 echo $(( (i + 1) * 20 ))
                 echo $i > "$(pwd)/tmp_file"
@@ -42,8 +42,7 @@ __local_keyboard_layout() {
 }
 
 __local_wifi_country() {
-    wifi_country_set
-    if (( $? != 0 ))
+    if wifi_country_set
     then
         msgbox "Something went wrong when trying to set Wi-Fi country. Please try again."
     fi

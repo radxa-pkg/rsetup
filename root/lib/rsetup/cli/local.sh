@@ -24,37 +24,42 @@ wifi_country_set() {
             continue
         fi
         radiolist_add "$REPLY" "$status"
-        local country[$i]="$REPLY"
-        i=$(( i + 1 ))
     done < /usr/share/zoneinfo/iso3166.tab
 
-    if radiolist_show "Select your Wi-Fi country:" && yesno "You selected is ${country[${RSETUP_RADIOLIST_STATE_NEW[*]}]}."
+    if radiolist_show "Select your Wi-Fi country:" && (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} > 0 ))
     then
-        country="${country[${RSETUP_RADIOLIST_STATE_NEW[*]}]}"
-        country=$(echo $country | cut -c 1-2)
+        local only_shrinked_index=${RSETUP_RADIOLIST_STATE_NEW}
+        trimmed_index=${only_shrinked_index//\"}
+        index=$(( 3 * $trimmed_index + 1 ))
+        local country=${RSETUP_RADIOLIST[$index]}
 
-        wpa_cli -i "$iface" set country "$country"
-        wpa_cli -i "$iface" save_config > /dev/null 2>&1
-        iw reg set $country
-
-        local file="/etc/default/crda"
-        if [[ ! -f $file ]]
+        if yesno "You selected is $country"
         then
-            touch $file
-        fi
+            country=$(echo $country | cut -c 1-2)
+            
+            wpa_cli -i "$iface" set country "$country"
+            wpa_cli -i "$iface" save_config > /dev/null 2>&1
+            iw reg set $country
 
-        local keywords=$(cat $file | grep "^REGDOMAIN=")
-        if [[ ! -z $keywords ]]
-        then
-                sed -i '/REGDOMAIN=.*/cREGDOMAIN='$country'' $file
-        else
-                sed -i '$aREGDOMAIN='$country'' $file
-        fi
+            local file="/etc/default/crda"
+            if [[ ! -f $file ]]
+            then
+                touch $file
+            fi
 
-        if command -v rfkill &> /dev/null
-        then
-            rfkill unblock wifi
+            if grep -q "^REGDOMAIN=" "$file"
+            then
+                sed -i "/REGDOMAIN=.*/cREGDOMAIN=$country" $file
+            else
+                sed -i "\$aREGDOMAIN=$country" $file
+            fi
+
+            if command -v rfkill &> /dev/null
+            then
+                rfkill unblock wifi
+            fi
+            msgbox "Wireless LAN country set to $country."
         fi
-        msgbox "Wireless LAN country set to $country."
     fi
+    return 1
 }
