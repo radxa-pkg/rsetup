@@ -14,7 +14,7 @@ install_ssh() {
 
 uninstall_ssh() {
     __parameter_count_check 0 "$@"
-    apt-get remove openssh-server   
+    apt-get remove openssh-server
 }
 
 enable_ssh() {

@@ -1,62 +1,47 @@
 __task_ssh_uninstall() {
-    local item
-    item=$(yesno "Are you sure to uninstall SSH service?")
-    if [[ $? == 0 ]]
+    if yesno "Are you sure to uninstall SSH service?"
     then
         uninstall_ssh
         msgbox "Uninstall SSH success."
-    fi     
+    fi
 }
 
-__task_ssh_install() {   
+__task_ssh_install() {
     local item
     item=$(yesno "Are you sure to install SSH service?")
     if [[ $? == 0 ]]
     then
         install_ssh
-        item=$(ssh localhost)
-        if [[ $? == 0 ]]
-        then
-            msgbox "Install SSH success."
-        else
-            msgbox "Install SSH failure."
-        fi
-    fi    
+    fi
 }
 
 __task_ssh_enable() {
-    local item
-    item=$(yesno "Would you like the SSH server to be enabled?\nCaution: Default and weak passwords are a security risk when SSH is enabled!")
-    if [[ $? == 0 ]]
+    if yesno "Would you like the SSH server to be enabled?\nCaution: Default and weak passwords are a security risk when SSH is enabled!"
     then
-        enable_ssh  
-        if [[ $? == 0 ]]
+        if enable_ssh
         then
             msgbox "Enable SSH success."
         else
-            msgbox "Enable SSH failure."    
-        fi 
-    fi    
+            msgbox "Enable SSH failure."
+        fi
+    fi
 }
 
 __task_ssh_disable() {
-    local item
-    item=$(yesno "Would you like the SSH server to be disabled?")
-    if [[ $? == 0 ]]
+    if yesno "Would you like the SSH server to be disabled?"
     then
-        disable_ssh
-        if [[ $? == 0 ]]
+        if disable_ssh
         then
             msgbox "Disable SSH success."
         else
-            msgbox "Disable SSH failure."    
-        fi 
-    fi    
+            msgbox "Disable SSH failure."
+        fi
+    fi
 }
 
 __task_ssh() {
     menu_init
-    local status            
+    local status
     status=$(systemctl status ssh  | awk 'NR==1 {print $4}')
     if [[ "$status" == "OpenBSD" ]]
     then
@@ -72,6 +57,7 @@ __task_ssh() {
     elif [[ "$status" == "(dead)" ]]
     then
         menu_add __task_ssh_enable      "Enable SSH"
-    fi       
+    fi
+
     menu_show "Please select an option below:"
 }
