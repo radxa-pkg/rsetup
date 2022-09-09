@@ -41,20 +41,19 @@ __task_ssh_disable() {
 
 __task_ssh() {
     menu_init
-    local status
-    status=$(systemctl status ssh  | awk 'NR==1 {print $4}')
-    if [[ "$status" == "OpenBSD" ]]
+    if apt list --installed openssh-server | grep openssh-server
     then
         menu_add __task_ssh_uninstall   "Uninstall SSH"
     else
         menu_add __task_ssh_install     "Install SSH"
     fi
 
-    status=$(systemctl status ssh | grep Active | awk '{print $3}')
-    if [[ "$status" == "(running)" ]]
+    local status
+    status=$(systemctl status ssh | grep Loaded | awk '{print $4}')
+    if [[ "$status" == "enabled;" ]]
     then
         menu_add __task_ssh_disable     "Disable SSH"
-    elif [[ "$status" == "(dead)" ]]
+    elif [[ "$status" == "disabled;" ]]
     then
         menu_add __task_ssh_enable      "Enable SSH"
     fi
