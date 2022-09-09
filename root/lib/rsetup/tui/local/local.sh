@@ -6,37 +6,35 @@ __local_locale() {
 
 __local_display_language() {
     local lg=$(locale | sed -n '1p' | cut -d '=' -f 2)
-    msgbox "Current language used by the system: $lg"     
+    msgbox "Current language used by the system: $lg"
 }
 
-__local_install_CJKV_fonts() {   
-    local item
-    item=$(yesno "Are you sure to install CJKV fonts?")
-    if [[ $? == 0 ]]
+__local_install_CJKV_fonts() {
+    if yesno "Are you sure to install CJKV fonts?"
     then
         local fonts=( "fonts-arphic-ukai" "fonts-arphic-uming" "fonts-ipafont-mincho" "fonts-ipafont-gothic" "fonts-unfonts-core" )
-        for(( i=0; i<${#fonts[@]}; i++ ))
-        do  
+        for(( i = 0; i < ${#fonts[@]}; i++ ))
+        do
             apt-get install -y ${fonts[$i]} 2>/dev/null
-            if [[ $? != 0 ]]
+            if (( $? != 0 ))
             then
-                echo $(( (i + 1) * 20 )) 
+                echo $(( (i + 1) * 20 ))
                 echo $i > "$(pwd)/tmp_file"
             else
                 echo 0 > "$(pwd)/tmp_file"
                 exit 1
-            fi   
+            fi
         done | gauge "Installing..." 0
-        
-        local result=$(cat $(pwd)/tmp_file) 
+
+        local result=$(cat $(pwd)/tmp_file)
         if [[ "$result" != "0" ]]
         then
-            msgbox "Install CJKV fonts success."
+            msgbox "CJKV fonts installed successfully."
         else
-            msgbox "Install CJKV fonts failure."
+            msgbox "Failed to install CJKV fonts."
         fi
         rm $(pwd)/tmp_file
-    fi 
+    fi
 }
 
 __local_keyboard_layout() {
@@ -45,10 +43,10 @@ __local_keyboard_layout() {
 
 __local_wifi_country() {
     wifi_country_set
-    if [[ $? != 0 ]]
+    if (( $? != 0 ))
     then
-        msgbox "Something went wrong when trying to set Wi-Fi country. Please try again." 
-    fi  
+        msgbox "Something went wrong when trying to set Wi-Fi country. Please try again."
+    fi
 }
 
 __local() {
