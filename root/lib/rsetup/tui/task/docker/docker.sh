@@ -1,76 +1,64 @@
 __task_docker_uninstall() {
-    local item
-    item=$(yesno "Are you sure to uninstall Docker?")
-    if [[ $? == 0 ]]
+    if yesno "Are you sure to uninstall Docker?"
     then
-        uninstall_docker
-        if [[ $? == 0 ]]
+        if uninstall_docker
         then
             msgbox "Uninstall Docker success."
         else
             msgbox "Uninstall Docker failure."
-        fi    
+        fi
     fi
 }
 
 __task_docker_install() {
-    local item
-    item=$(yesno "Are you sure to install Docker?")
-    if [[ $? == 0 ]]
+    if yesno "Are you sure to install Docker?"
     then
         install_docker
     fi
 }
 
 __task_docker_enable() {
-    local item
-    item=$(yesno "Are you sure to enable Docker?")
-    if [[ $? == 0 ]]
+    if yesno "Are you sure to enable Docker?"
     then
-        enable_docker
-        if [[ $? == 0 ]]
+        if enable_docker
         then
             msgbox "Enable Docker success."
         else
-            msgbox "Enable Docker failure."    
-        fi 
+            msgbox "Enable Docker failure."
+        fi
     fi
 }
 
 __task_docker_disable() {
-    local item
-    item=$(yesno "Are you sure to disable Docker?")
-    if [[ $? == 0 ]]
+    if yesno "Are you sure to enable Docker?"
     then
-        disable_docker
-        if [[ $? == 0 ]]
+        if disable_docker
         then
             msgbox "Disable Docker success."
         else
-            msgbox "Disable Docker failure."    
-        fi 
+            msgbox "Disable Docker failure."
+        fi
     fi
 }
 
 __task_docker() {
     menu_init
-    local cur_ver
-    cur_ver=$(docker version)
-    if [[ $? == 0 ]]
+    apt list --installed docker.io | grep docker.io
+    if (( $? == 0 ))
     then
         menu_add __task_docker_uninstall   "Uninstall Docker" 
     else 
         menu_add __task_docker_install     "Install Docker"
-    fi 
+    fi
     
     local cur_status
     cur_status=$(systemctl status docker | grep Active: | awk '{print $3}')
     if [[ "$cur_status" == "(running)" ]]
     then
-        menu_add __task_docker_disable    "Disable Docker"      
-    elif [[ "$cur_status" != "" ]]
+        menu_add __task_docker_disable    "Disable Docker"
+    elif [[ "$cur_status" == "(dead)" ]]
     then
-        menu_add __task_docker_enable     "Enable Docker"        
+        menu_add __task_docker_enable     "Enable Docker"
     fi
     menu_show "Please select an option below:"
 }
