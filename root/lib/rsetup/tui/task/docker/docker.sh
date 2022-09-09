@@ -43,8 +43,7 @@ __task_docker_disable() {
 
 __task_docker() {
     menu_init
-    apt list --installed docker.io | grep docker.io
-    if (( $? == 0 ))
+    if apt list --installed docker.io | grep docker.io
     then
         menu_add __task_docker_uninstall   "Uninstall Docker" 
     else 
@@ -52,11 +51,11 @@ __task_docker() {
     fi
     
     local cur_status
-    cur_status=$(systemctl status docker | grep Active: | awk '{print $3}')
-    if [[ "$cur_status" == "(running)" ]]
+    cur_status=$(systemctl status docker | grep Loaded | awk '{print $4}')
+    if [[ "$cur_status" == "enabled;" ]]
     then
         menu_add __task_docker_disable    "Disable Docker"
-    elif [[ "$cur_status" == "(dead)" ]]
+    elif [[ "$cur_status" == "disabled;" ]]
     then
         menu_add __task_docker_enable     "Enable Docker"
     fi
