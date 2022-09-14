@@ -75,16 +75,16 @@ Are you sure to continue?"
         selected_tty_real_index=$((3*${selected_tty_shrinked_index//\"}+1))
         selected_tty_device=${RSETUP_RADIOLIST[${selected_tty_real_index}]}
         SYSTEMD_OVERRIDE=/etc/systemd/system/getty.target.wants/$selected_tty_device.d
-        mkdir -p $SYSTEMD_OVERRIDE
-        cat << EOF | tee $SYSTEMD_OVERRIDE/override.conf >/dev/null
+        mkdir -p "$SYSTEMD_OVERRIDE"
+        cat << EOF > "$SYSTEMD_OVERRIDE/override.conf"
 [Service]
 ExecStart=
 EOF
-        parameter="$(grep "ExecStart" /etc/systemd/system/getty.target.wants/$selected_tty_device | cut -d ' ' -f2-)"
-        AUTOLOGIN=""ExecStart=-/sbin/agetty --autologin $username "$parameter"
-        tee -a $SYSTEMD_OVERRIDE/override.conf <<< $AUTOLOGIN >/dev/null
+        parameter="$(grep "ExecStart" "/etc/systemd/system/getty.target.wants/$selected_tty_device" | cut -d ' ' -f2-)"
+        AUTOLOGIN="ExecStart=-/sbin/agetty --autologin "$username" $parameter"
+        echo "$AUTOLOGIN" >> "$SYSTEMD_OVERRIDE/override.conf"
     done
-    if passwd --delete $username >/dev/null
+    if passwd --delete "$username" >/dev/null
     then 
         msgbox "Configuration succeeded"
     fi

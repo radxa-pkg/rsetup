@@ -8,7 +8,7 @@ update_bootloader() {
 
     local device=$(__get_block_dev)
 
-    "$ROOT_PATH/usr/lib/u-boot-$1/setup.sh" update_bootloader $device
+    "$ROOT_PATH/usr/lib/u-boot-$1/setup.sh" update_bootloader "$device"
 }
 
 regenerate_machine_id() {

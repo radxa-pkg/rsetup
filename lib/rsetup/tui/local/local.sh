@@ -18,10 +18,10 @@ __local_install_CJKV_fonts() {
         for(( i = 0; i < ${#fonts[@]}; i++ ))
         do
             
-            if apt-get install -y ${fonts[$i]} 2>/dev/null
+            if apt-get install -y "${fonts[$i]}" 2>/dev/null
             then
                 echo $(( (i + 1) * 20 ))
-                echo $i > "$(pwd)/tmp_file"
+                echo "$i" > "$(pwd)/tmp_file"
             else
                 echo 0 > "$(pwd)/tmp_file"
                 exit 1

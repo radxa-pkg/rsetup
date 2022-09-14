@@ -11,9 +11,7 @@ request_reboot() {
 process_config() {
     while read
     do
-        set -- $REPLY
-        local cmd="$1"
-        shift
+        local cmd="$(awk '{print $1}' <<< "$REPLY")"
 
         if [[ "$cmd" == \#* ]] || [[ -z "$cmd" ]]
         then
@@ -25,9 +23,9 @@ process_config() {
             echo "Running $cmd with $*..."
             if [[ "$DEBUG" == "1" ]]
             then
-                echo "$cmd $@"
+                echo "$REPLY"
             else
-                $cmd "$@"
+                exec $REPLY
             fi
         else
             echo "'$cmd' is not an allowed command."

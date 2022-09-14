@@ -33,7 +33,7 @@ __dialog() {
         local backtitle=()
     fi
 
-    $RSETUP_DIALOG --title "RSETUP" ${backtitle:+"${backtitle[@]}"} --notags "$box" "$text" $height $width $listheight "$@"
+    $RSETUP_DIALOG --title "RSETUP" ${backtitle:+"${backtitle[@]}"} --notags "$box" "$text" "$height" "$width" "$listheight" "$@"
 }
 
 yesno() {

@@ -4,7 +4,7 @@ __hardware_LED() {
     checklist_init
     for leditem in /sys/class/leds/*
     do  
-        local tmp_trigger=$(sed -E "s/.*\[(.*)\].*/\1/" /sys/class/leds/$leditem/trigger)
+        local tmp_trigger=$(sed -E "s/.*\[(.*)\].*/\1/" "/sys/class/leds/$leditem/trigger")
         checklist_add "$leditem [$tmp_trigger]" "OFF"
     done 
 
@@ -15,14 +15,14 @@ __hardware_LED() {
 
     # collect chosen leds
     local chosen_leds
-    for shrinked_index in ${RSETUP_CHECKLIST_STATE_NEW[@]}
+    for shrinked_index in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
     do
         local trimmed_index=${shrinked_index//\"}
         local index=$(( trimmed_index * 3 + 1))
         chosen_leds+=(${RSETUP_CHECKLIST[$index]% *})
     done
 
-    for trigger in $(sed "s/\[//;s/\]//" /sys/class/leds/$leditem/trigger)
+    for trigger in "$(sed "s/\[//;s/\]//" "/sys/class/leds/$leditem/trigger")"
     do
         radiolist_add "$trigger" "OFF"
     done
@@ -37,7 +37,7 @@ __hardware_LED() {
 
     for leditem in "${chosen_leds[@]}"
     do
-        echo $trigger_to_apply > "/sys/class/leds/$leditem/trigger"
+        echo "$trigger_to_apply" > "/sys/class/leds/$leditem/trigger"
     done
 }
 

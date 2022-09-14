@@ -27,7 +27,7 @@ tui_start() {
     __parameter_count_check 1 "$@"
     __parameter_type_check "$1" "function"
 
-    register_screen $1
+    register_screen "$1"
     while (( ${#RSETUP_SCREEN[@]} != 0 ))
     do
         ${RSETUP_SCREEN[-1]}
