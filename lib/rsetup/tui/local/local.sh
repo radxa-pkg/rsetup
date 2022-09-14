@@ -7,7 +7,8 @@ __local_locale() {
 }
 
 __local_display_language() {
-    local lg=$(locale | sed -n '1p' | cut -d '=' -f 2)
+    local lg
+    lg=$(locale | sed -n '1p' | cut -d '=' -f 2)
     msgbox "Current language used by the system: $lg"
 }
 
@@ -28,7 +29,8 @@ __local_install_CJKV_fonts() {
             fi
         done | gauge "Installing..." 0
 
-        local result=$(cat $(pwd)/tmp_file)
+        local result
+        result=$(cat $(pwd)/tmp_file)
         if [[ "$result" != "0" ]]
         then
             msgbox "CJKV fonts installed successfully."

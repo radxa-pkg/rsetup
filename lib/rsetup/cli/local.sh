@@ -2,7 +2,8 @@
 
 wifi_country_set() {
     __parameter_count_check 0 "$@"
-    local iface=$(iw dev | grep Interface | awk '{print $2}')
+    local iface
+    iface=$(iw dev | grep Interface | awk '{print $2}')
     if [[ -z "$iface" ]]
     then
         msgbox "No wireless interface found."

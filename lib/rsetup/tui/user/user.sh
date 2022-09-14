@@ -30,8 +30,8 @@ __user_change_password (){
 }
 
 __user_change_hostname (){
-    local cur_name="$(hostname)"
-    local item
+    local cur_name item
+    cur_name="$(hostname)"
     item=$(inputbox "Please enter the new hostname:" "$cur_name")
     if (( $? != 0 )) || [[ -z "$item" ]] || [[ "$item" == "$cur_name" ]]
     then
@@ -49,9 +49,8 @@ Hostname has been set to '$(hostname)'."
 }
 
 __user_enable_auto_login (){
-    local username="$(logname)"
-    local selected_tty_device
-    local parameter
+    local username selected_tty_device parameter
+    username="$(logname)"
     scanned_tty_services=$(ls /etc/systemd/system/getty.target.wants | grep 'tty' | grep -v '.d')
 
     checklist_init

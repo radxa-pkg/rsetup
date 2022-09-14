@@ -4,11 +4,12 @@
 # Require parted and gdisk
 __resize_root() {
     echo "Fetching block device info..."
-    local root_dev="$(__get_root_dev)"
-    local filesystem="$(blkid -s TYPE -o value "$root_dev")"
-    local part_entry_number="$(udevadm info --query=property "--name=$root_dev" | grep '^ID_PART_ENTRY_NUMBER=' | cut -d'=' -f2)"
-    local part_table_type="$(udevadm info --query=property "--name=$root_dev" | grep '^ID_PART_TABLE_TYPE=' | cut -d'=' -f2)"
-    local block_dev="$(__get_block_dev)"
+    local root_dev filesystem part_entry_number part_table_type block_devblock_dev
+    root_dev="$(__get_root_dev)"
+    filesystem="$(blkid -s TYPE -o value "$root_dev")"
+    part_entry_number="$(udevadm info --query=property "--name=$root_dev" | grep '^ID_PART_ENTRY_NUMBER=' | cut -d'=' -f2)"
+    part_table_type="$(udevadm info --query=property "--name=$root_dev" | grep '^ID_PART_TABLE_TYPE=' | cut -d'=' -f2)"
+    block_dev="$(__get_block_dev)"
 
     if [[ $part_table_type == "gpt" ]]
     then

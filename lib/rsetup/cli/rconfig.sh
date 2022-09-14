@@ -11,7 +11,8 @@ request_reboot() {
 process_config() {
     while read
     do
-        local cmd="$(awk '{print $1}' <<< "$REPLY")"
+        local cmd
+        cmd="$(awk '{print $1}' <<< "$REPLY")"
 
         if [[ "$cmd" == \#* ]] || [[ -z "$cmd" ]]
         then

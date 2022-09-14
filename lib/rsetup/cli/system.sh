@@ -6,7 +6,8 @@ update_bootloader() {
     __parameter_count_check 1 "$@"
     __assert_f "$ROOT_PATH/usr/lib/u-boot-$1/setup.sh"
 
-    local device=$(__get_block_dev)
+    local device
+    device=$(__get_block_dev)
 
     "$ROOT_PATH/usr/lib/u-boot-$1/setup.sh" update_bootloader "$device"
 }
@@ -63,8 +64,9 @@ disable_service() {
 }
 
 resize_root() {
-    local root_dev="$(__get_root_dev)"
-    local filesystem="$(blkid -s TYPE -o value "$root_dev")"
+    local root_dev filesystem
+    root_dev="$(__get_root_dev)"
+    filesystem="$(blkid -s TYPE -o value "$root_dev")"
 
     echo "Resizing root filesystem..."
     case "$filesystem" in

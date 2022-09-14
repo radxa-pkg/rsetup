@@ -1,7 +1,8 @@
 #!/bin/bash
 
 __local_timezone_check() {
-    local timezone=$(cat /etc/timezone)
+    local timezone
+    timezone=$(cat /etc/timezone)
     msgbox "The current time zone: $timezone"
 }
 

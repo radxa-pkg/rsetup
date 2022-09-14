@@ -3,11 +3,10 @@
 RSETUP_DIALOG=${RSETUP_DIALOG:-"whiptail"}
 
 __dialog() {
-    local box="$1"
-    local text="$2"
+    local box="$1" text="$2" height width
     shift 2
-    local height="$(__check_terminal | cut -d ' ' -f 1)"
-    local width="$(__check_terminal | cut -d ' ' -f 2)"
+    height="$(__check_terminal | cut -d ' ' -f 1)"
+    width="$(__check_terminal | cut -d ' ' -f 2)"
     case $box in
         --menu)
             local listheight=0
