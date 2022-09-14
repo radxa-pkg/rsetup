@@ -14,7 +14,10 @@ jobs:
         with:
           submodules: recursive
       - name: Build
-        run: make all deb
+        run: |
+          sudo apt-get update
+          sudo apt-get build-dep --no-install-recommends -y .
+          make all deb
       - name: Check if 
         run: |
           echo "tag_name=$(dpkg-parsechangelog -S Version)" >> $GITHUB_ENV
