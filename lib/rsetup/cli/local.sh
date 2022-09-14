@@ -18,7 +18,6 @@ wifi_country_set() {
 
     radiolist_init
     local status="OFF"
-    local i=0
 
     while read -r
     do

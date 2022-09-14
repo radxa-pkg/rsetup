@@ -1,16 +1,14 @@
 #!/bin/bash
 
-RSETUP_CHECKLIST=()
-RSETUP_CHECKLIST_STATE_OLD=()
-RSETUP_CHECKLIST_STATE_NEW=()
-
 checklist_init() {
     __parameter_count_check 0 "$@"
 
-    RSETUP_CHECKLIST=()
-    RSETUP_CHECKLIST_STATE_OLD=()
-    RSETUP_CHECKLIST_STATE_NEW=()
+    export RSETUP_CHECKLIST=()
+    export RSETUP_CHECKLIST_STATE_OLD=()
+    export RSETUP_CHECKLIST_STATE_NEW=()
 }
+
+checklist_init
 
 checklist_add() {
     __parameter_count_check 2 "$@"

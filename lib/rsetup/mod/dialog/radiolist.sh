@@ -1,16 +1,14 @@
 #!/bin/bash
 
-RSETUP_RADIOLIST=()
-RSETUP_RADIOLIST_STATE_OLD=()
-RSETUP_RADIOLIST_STATE_NEW=()
-
 radiolist_init() {
     __parameter_count_check 0 "$@"
 
-    RSETUP_RADIOLIST=()
-    RSETUP_RADIOLIST_STATE_OLD=()
-    RSETUP_RADIOLIST_STATE_NEW=()
+    export RSETUP_RADIOLIST=()
+    export RSETUP_RADIOLIST_STATE_OLD=()
+    export RSETUP_RADIOLIST_STATE_NEW=()
 }
+
+radiolist_init
 
 radiolist_add() {
     __parameter_count_check 2 "$@"

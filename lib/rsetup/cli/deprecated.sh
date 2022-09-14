@@ -4,7 +4,7 @@
 # Require parted and gdisk
 __resize_root() {
     echo "Fetching block device info..."
-    local root_dev filesystem part_entry_number part_table_type block_devblock_dev
+    local root_dev filesystem part_entry_number part_table_type block_dev
     root_dev="$(__get_root_dev)"
     filesystem="$(blkid -s TYPE -o value "$root_dev")"
     part_entry_number="$(udevadm info --query=property "--name=$root_dev" | grep '^ID_PART_ENTRY_NUMBER=' | cut -d'=' -f2)"
