@@ -81,7 +81,7 @@ Are you sure to continue?"
 ExecStart=
 EOF
         parameter="$(grep "ExecStart" "/etc/systemd/system/getty.target.wants/$selected_tty_device" | cut -d ' ' -f2-)"
-        AUTOLOGIN="ExecStart=-/sbin/agetty --autologin "$username" $parameter"
+        AUTOLOGIN="ExecStart=-/sbin/agetty --autologin $username $parameter"
         echo "$AUTOLOGIN" >> "$SYSTEMD_OVERRIDE/override.conf"
     done
     if passwd --delete "$username" >/dev/null
