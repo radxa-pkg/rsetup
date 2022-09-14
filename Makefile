@@ -26,6 +26,11 @@ ${DEB}: debian
 run:
 	sudo usr/bin/rsetup
 
+.PHONY: test
+test:
+	shellcheck -x usr/bin/rsetup
+	find lib/ -name '*.sh' -exec shellcheck -x {} +
+
 .PHONY: distclean
 distclean: clean
 
