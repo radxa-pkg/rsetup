@@ -9,7 +9,7 @@ request_reboot() {
 }
 
 process_config() {
-    while read
+    while read -r
     do
         local cmd
         cmd="$(awk '{print $1}' <<< "$REPLY")"

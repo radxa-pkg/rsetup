@@ -3,7 +3,7 @@
 __system_system_update() { 
     apt update
     apt full-upgrade
-    read -p "Press enter to continue..."
+    read -rp "Press enter to continue..."
 }
 
 __system_update_bootloader() {

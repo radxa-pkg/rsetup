@@ -20,7 +20,7 @@ wifi_country_set() {
     local status="OFF"
     local i=0
 
-    while read
+    while read -r
     do
         if grep -q "^#.*" <<< "$REPLY"
         then
