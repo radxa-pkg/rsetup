@@ -2,7 +2,7 @@
 
 __hardware_LED() {
     checklist_init
-    for leditem in $(ls /sys/class/leds)
+    for leditem in /sys/class/leds/*
     do  
         local tmp_trigger=$(sed -E "s/.*\[(.*)\].*/\1/" /sys/class/leds/$leditem/trigger)
         checklist_add "$leditem [$tmp_trigger]" "OFF"
