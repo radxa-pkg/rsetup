@@ -1,4 +1,4 @@
-#!/bin/bash
+# shellcheck shell=bash
 
 ALLOWED_RCONFIG_FUNC+=("log")
 

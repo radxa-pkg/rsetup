@@ -1,4 +1,4 @@
-#!/bin/bash
+# shellcheck shell=bash
 
 uninstall_docker() {
     __parameter_count_check 0 "$@"

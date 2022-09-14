@@ -1,4 +1,4 @@
-#!/bin/bash
+# shellcheck shell=bash
 
 wifi_country_set() {
     __parameter_count_check 0 "$@"

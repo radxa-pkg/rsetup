@@ -1,4 +1,4 @@
-#!/bin/bash
+# shellcheck shell=bash
 
 RSETUP_MENU=()
 RSETUP_MENU_CALLBACK=()

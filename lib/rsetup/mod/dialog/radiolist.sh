@@ -1,4 +1,4 @@
-#!/bin/bash
+# shellcheck shell=bash
 
 # shellcheck disable=SC2120
 radiolist_init() {

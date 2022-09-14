@@ -1,4 +1,4 @@
-#!/bin/bash
+# shellcheck shell=bash
 
 RSETUP_DIALOG=${RSETUP_DIALOG:-"whiptail"}
 

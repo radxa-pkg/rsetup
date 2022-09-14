@@ -1,4 +1,4 @@
-#!/bin/bash
+# shellcheck shell=bash
 
 ALLOWED_RCONFIG_FUNC+=("add_user" "update_password" "user_append_group")
 

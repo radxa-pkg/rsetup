@@ -1,4 +1,4 @@
-#!/bin/bash
+# shellcheck shell=bash
 
 __local_timezone_check() {
     local timezone

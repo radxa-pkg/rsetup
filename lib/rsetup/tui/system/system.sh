@@ -1,4 +1,4 @@
-#!/bin/bash
+# shellcheck shell=bash
 
 __system_system_update() { 
     apt update

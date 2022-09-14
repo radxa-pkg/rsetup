@@ -1,4 +1,4 @@
-#!/bin/bash
+# shellcheck shell=bash
 
 __user_change_password (){
     local new_password=1

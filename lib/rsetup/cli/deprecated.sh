@@ -1,4 +1,4 @@
-#!/bin/bash
+# shellcheck shell=bash
 
 # cloud-initramfs-growroot provides this function
 # Require parted and gdisk

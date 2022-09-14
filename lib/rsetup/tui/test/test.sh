@@ -1,4 +1,4 @@
-#!/bin/bash
+# shellcheck shell=bash
 
 __test_yesno() {
     if yesno "Yes, or No?"
