@@ -15,11 +15,16 @@ ${DEB}: debian
 	rm -rf ${BUILD_DIR}
 	mkdir -p ${BUILD_DIR}/debian
 	cp -ar debian/* ${BUILD_DIR}/debian/
-	cp -ar root ${BUILD_DIR}/
+	cp -ar lib ${BUILD_DIR}/
+	cp -ar usr ${BUILD_DIR}/
 	echo "git clone $(shell git remote get-url origin)\\ngit checkout ${GITVERSION}" > ${BUILD_DIR}/debian/SOURCE
 	pandoc "${BUILD_DIR}/debian/${PACKAGE}.8.md" -o "${BUILD_DIR}/debian/${PACKAGE}.8" --from markdown --to man -s
 	cd ${BUILD_DIR}; dpkg-buildpackage ${DPKG_FLAGS} -b -uc -us
 	lintian ${DEB}
+
+.PHONY: run
+run:
+	sudo usr/bin/rsetup
 
 .PHONY: distclean
 distclean: clean
