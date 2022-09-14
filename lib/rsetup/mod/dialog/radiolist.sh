@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# shellcheck disable=SC2120
 radiolist_init() {
     __parameter_count_check 0 "$@"
 
