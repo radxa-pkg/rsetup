@@ -1,9 +1,7 @@
 #!/bin/bash
 
 __test_yesno() {
-    local item
-    item=$(yesno "Yes, or No?")
-    if [[ $? == 0 ]]
+    if yesno "Yes, or No?"
     then
         msgbox "User selected yes."
     else
@@ -17,8 +15,7 @@ __test_msgbox() {
 
 __test_inputbox() {
     local item
-    item=$(inputbox "Say something." "Like this.")
-    if [[ $? == 0 ]]
+    if item=$(inputbox "Say something." "Like this.")
     then
         msgbox "User said '$item'."
     else
@@ -28,8 +25,7 @@ __test_inputbox() {
 
 __test_passwordbox() {
     local item
-    item=$(passwordbox "Tell me a secret.")
-    if [[ $? == 0 ]]
+    if item=$(passwordbox "Tell me a secret.")
     then
         msgbox "User said '$item'."
     else
@@ -50,8 +46,7 @@ __test_checklist() {
     checklist_add "Item 1" "OFF"
     checklist_add "Item 2" "ON"
     checklist_add "Item 3" "OFF"
-    checklist_show "Checklist"
-    if [[ $? == 0 ]]
+    if checklist_show "Checklist"
     then
         msgbox "Offered '${RSETUP_CHECKLIST_STATE_OLD[*]}', selected '${RSETUP_CHECKLIST_STATE_NEW[*]}'."
     else
@@ -64,8 +59,7 @@ __test_radiolist() {
     radiolist_add "Item 1" "OFF"
     radiolist_add "Item 2" "ON"
     radiolist_add "Item 3" "OFF"
-    radiolist_show "Radiolist"
-    if [[ $? == 0 ]]
+    if radiolist_show "Radiolist"
     then
         msgbox "Offered '${RSETUP_RADIOLIST_STATE_OLD[*]}', selected '${RSETUP_RADIOLIST_STATE_NEW[*]}'."
     else

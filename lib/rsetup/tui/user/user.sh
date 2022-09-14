@@ -5,16 +5,16 @@ __user_change_password (){
     local new_password2
     while [[ $new_password != $new_password2 ]]
     do
-        new_password=$(passwordbox "Please enter the new password:")
-        if (( $? != 0 ))
+        if ! new_password=$(passwordbox "Please enter the new password:")
         then
             return
         fi
-        new_password2=$(passwordbox "Please confirm your password:")
-        if (( $? != 0 ))
+        
+        if ! new_password2=$(passwordbox "Please confirm your password:")
         then
             return
         fi
+
         if [[ "$new_password" != "$new_password2" ]]
         then
             msgbox "Passwords do not match. Try again"
@@ -32,8 +32,9 @@ __user_change_password (){
 __user_change_hostname (){
     local cur_name item
     cur_name="$(hostname)"
-    item=$(inputbox "Please enter the new hostname:" "$cur_name")
-    if (( $? != 0 )) || [[ -z "$item" ]] || [[ "$item" == "$cur_name" ]]
+    if ! item=$(inputbox "Please enter the new hostname:" "$cur_name") || \
+       [[ -z "$item" ]] || \
+       [[ "$item" == "$cur_name" ]]
     then
         msgbox "Hostname is not changed."
     else

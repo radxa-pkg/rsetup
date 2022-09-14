@@ -9,9 +9,7 @@ __task_ssh_uninstall() {
 }
 
 __task_ssh_install() {
-    local item
-    item=$(yesno "Are you sure to install SSH service?")
-    if [[ $? == 0 ]]
+    if yesno "Are you sure to install SSH service?"
     then
         install_ssh
     fi

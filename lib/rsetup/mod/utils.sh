@@ -90,8 +90,8 @@ __check_terminal() {
         then
             unset disable_stderr
         fi
-        output="$(eval stty size -F "$i" $disable_stderr)"
-        if (( $? == 0 ))
+        
+        if output="$(eval stty size -F "$i" $disable_stderr)"
         then
             echo "$output"
             return
