@@ -20,7 +20,7 @@ register_screen() {
 unregister_screen() {
     __parameter_count_check 0 "$@"
 
-    RSETUP_SCREEN=( ${RSETUP_SCREEN[@]:0:$(( ${#RSETUP_SCREEN[@]} - 1 ))} )
+    RSETUP_SCREEN=( "${RSETUP_SCREEN[@]:0:$(( ${#RSETUP_SCREEN[@]} - 1 ))}" )
 }
 
 tui_start() {

@@ -20,7 +20,7 @@ __hardware_LED() {
     do
         local trimmed_index=${shrinked_index//\"}
         local index=$(( trimmed_index * 3 + 1))
-        chosen_leds+=(${RSETUP_CHECKLIST[$index]% *})
+        chosen_leds+=( "${RSETUP_CHECKLIST[$index]% *}" )
     done
 
     for trigger in "$(sed "s/\[//;s/\]//" "/sys/class/leds/$leditem/trigger")"
