@@ -52,12 +52,11 @@ Hostname has been set to '$(hostname)'."
 __user_enable_auto_login (){
     local username selected_tty_device parameter
     username="$(logname)"
-    scanned_tty_services=$(ls /etc/systemd/system/getty.target.wants | grep 'tty' | grep -v '.d')
 
     checklist_init
-    for tty_service in $scanned_tty_services
+    for i in /etc/systemd/system/getty.target.wants/*tty*.service
     do
-        checklist_add "$tty_service" "OFF"
+        checklist_add "$(basename "$i")" "OFF"
     done
     if ! checklist_show "Please select the interface(s) you want to enable auto login:" || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 0))
     then
