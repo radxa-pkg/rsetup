@@ -24,7 +24,7 @@ ${DEB}: debian
 
 .PHONY: run
 run:
-	sudo usr/bin/rsetup
+	sudo DEBUG=${DEBUG} usr/bin/rsetup
 
 .PHONY: test
 test:
