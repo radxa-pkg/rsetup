@@ -16,7 +16,7 @@ ${DEB}: debian
 	cp -ar usr ${BUILD_DIR}/
 	echo "git clone $(shell git remote get-url origin)\\ngit checkout $(shell git rev-parse HEAD)" > ${BUILD_DIR}/debian/SOURCE
 	pandoc "${BUILD_DIR}/debian/${PACKAGE}.8.md" -o "${BUILD_DIR}/debian/${PACKAGE}.8" --from markdown --to man -s
-	cd ${BUILD_DIR}; dpkg-buildpackage ${DPKG_FLAGS} -b -uc -us
+	cd ${BUILD_DIR}; dpkg-buildpackage ${DPKG_BUILDPACKAGE_OPTS} -b -uc -us
 	lintian ${DEB}
 
 .PHONY: run
