@@ -3,6 +3,7 @@
 RSETUP_MENU=()
 RSETUP_MENU_CALLBACK=()
 
+# shellcheck disable=SC2120
 menu_init() {
     __parameter_count_check 0 "$@"
 

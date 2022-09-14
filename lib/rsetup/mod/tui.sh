@@ -17,6 +17,7 @@ register_screen() {
     RSETUP_SCREEN+=( "$1" )
 }
 
+# shellcheck disable=SC2120
 unregister_screen() {
     __parameter_count_check 0 "$@"
 
