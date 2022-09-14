@@ -1,0 +1,19 @@
+Source: rsetup
+Maintainer: "Radxa Computer Co., Ltd" <dev@radxa.com>
+Section: admin
+Priority: standard
+Build-Depends: debhelper (>=12~),
+               lintian,
+               pandoc,
+
+Package: rsetup
+Architecture: all
+Section: admin
+Priority: standard
+Depends: gdisk,
+         parted,
+         whiptail,
+Description: Radxa system setup utility
+ Radxa system setup utility (rsetup) provides an user friendly menu to
+ perform many essential system configuration tasks. It also provides
+ an on-boot configuration service to allow customization.

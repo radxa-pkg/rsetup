@@ -1,0 +1,25 @@
+#!/usr/bin/make -f
+
+#export DH_VERBOSE=1
+
+install:
+	dh_install
+	dh_installdocs
+	dh_lintian
+	dh_installchangelogs
+	dh_installman
+	dh_strip_nondeterminism
+	dh_compress
+	dh_fixperms
+
+binary: install
+	dh_strip
+	dh_makeshlibs
+	dh_shlibdeps
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+.PHONY: build clean
+build clean:
