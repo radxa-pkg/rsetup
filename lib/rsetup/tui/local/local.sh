@@ -15,29 +15,28 @@ __local_display_language() {
 __local_install_CJKV_fonts() {
     if yesno "Are you sure to install CJKV fonts?"
     then
-        local fonts=( "fonts-arphic-ukai" "fonts-arphic-uming" "fonts-ipafont-mincho" "fonts-ipafont-gothic" "fonts-unfonts-core" )
+        local tmp fonts=( "fonts-arphic-ukai" "fonts-arphic-uming" "fonts-ipafont-mincho" "fonts-ipafont-gothic" "fonts-unfonts-core" )
+        tmp=$(mktemp)
         for(( i = 0; i < ${#fonts[@]}; i++ ))
         do
             
             if apt-get install -y "${fonts[$i]}" 2>/dev/null
             then
                 echo $(( (i + 1) * 20 ))
-                echo "$i" > "$(pwd)/tmp_file"
+                echo "$i" > "$tmp"
             else
-                echo 0 > "$(pwd)/tmp_file"
+                echo 0 > "$tmp"
                 exit 1
             fi
         done | gauge "Installing..." 0
 
-        local result
-        result=$(cat $(pwd)/tmp_file)
-        if [[ "$result" != "0" ]]
+        if [[ "$(cat "$tmp")" != "0" ]]
         then
             msgbox "CJKV fonts installed successfully."
         else
             msgbox "Failed to install CJKV fonts."
         fi
-        rm $(pwd)/tmp_file
+        rm "$tmp"
     fi
 }
 
