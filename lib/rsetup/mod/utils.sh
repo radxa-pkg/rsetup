@@ -51,7 +51,7 @@ __parameter_value_check() {
     local option=$1
     shift 1
     local options=( "$@" )
-    if [[ ! " ${options[*]} " =~ " $option " ]]; then
+    if [[ ! "${options[*]}" == *"$option"* ]]; then
         echo "'${FUNCNAME[1]}' expects one of '${options[*]}', got '$option'" >&2
         return $ERROR_ILLEGAL_PARAMETERS
     fi
@@ -73,7 +73,7 @@ __parameter_type_check() {
 __in_array() {
     local item="$1"
     shift
-    [[ " $* " =~ " $item " ]]
+    [[ "$*" == *"$item"* ]]
 }
 
 log() {
