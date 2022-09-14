@@ -2,7 +2,7 @@
 
 source "$ROOT_PATH/lib/rsetup/mod/tui.sh"
 
-source "$ROOT_PATH/lib/rsetup/tui/40pin/40pin.sh"
+source "$ROOT_PATH/lib/rsetup/tui/overlay/overlay.sh"
 source "$ROOT_PATH/lib/rsetup/tui/comm/comm.sh"
 source "$ROOT_PATH/lib/rsetup/tui/hardware/hardware.sh"
 source "$ROOT_PATH/lib/rsetup/tui/local/local.sh"
@@ -23,7 +23,7 @@ __tui_main() {
     menu_init
     menu_add __system "System Maintaince"
     menu_add __hardware "Onboard Functions"
-    menu_add __40pin "40-pin Header"
+    menu_add __overlay "Overlay Management"
     menu_add __comm "Connectivity"
     menu_add __user "User Settings"
     menu_add __local "Localization"
