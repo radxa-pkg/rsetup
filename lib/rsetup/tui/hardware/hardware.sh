@@ -23,10 +23,10 @@ __hardware_LED() {
         chosen_leds+=( "${RSETUP_CHECKLIST[$index]% *}" )
     done
 
-    for trigger in $(sed "s/\[//;s/\]//" "/sys/class/leds/$leditem/trigger")
+    while read -r trigger 
     do
         radiolist_add "$trigger" "OFF"
-    done
+    done <<< "$(sed "s/\[//;s/\]//" "/sys/class/leds/$leditem/trigger" | tr ' ' '\n')"
 
     if radiolist_show "Change triggers"  && (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} > 0 ))
     then
