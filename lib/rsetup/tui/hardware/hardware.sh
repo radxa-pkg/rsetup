@@ -23,7 +23,7 @@ __hardware_LED() {
         chosen_leds+=( "${RSETUP_CHECKLIST[$index]% *}" )
     done
 
-    for trigger in "$(sed "s/\[//;s/\]//" "/sys/class/leds/$leditem/trigger")"
+    for trigger in $(sed "s/\[//;s/\]//" "/sys/class/leds/$leditem/trigger")
     do
         radiolist_add "$trigger" "OFF"
     done
