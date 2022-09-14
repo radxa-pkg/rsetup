@@ -1,3 +1,5 @@
+#!/bin/bash
+
 __system_system_update() { 
     apt update
     apt full-upgrade

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 source "$ROOT_PATH/lib/rsetup/mod/dialog/basic.sh"
 source "$ROOT_PATH/lib/rsetup/mod/dialog/menu.sh"
 source "$ROOT_PATH/lib/rsetup/mod/dialog/checklist.sh"

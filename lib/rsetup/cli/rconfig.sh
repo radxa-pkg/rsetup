@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ALLOWED_RCONFIG_FUNC+=("request_reboot")
 
 RCONFIG_REBOOT="false"

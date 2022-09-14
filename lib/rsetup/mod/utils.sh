@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ALLOWED_RCONFIG_FUNC+=("log")
 
 readonly ERROR_REQUIRE_PARAMETER=-1

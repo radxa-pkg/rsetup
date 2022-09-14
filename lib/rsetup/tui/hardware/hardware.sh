@@ -1,3 +1,5 @@
+#!/bin/bash
+
 __hardware_LED() {
     checklist_init
     for leditem in $(ls /sys/class/leds)

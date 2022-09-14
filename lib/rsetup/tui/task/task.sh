@@ -1,3 +1,5 @@
+#!/bin/bash
+
 source "$ROOT_PATH/lib/rsetup/tui/task/docker/docker.sh"
 source "$ROOT_PATH/lib/rsetup/tui/task/ssh/ssh.sh"
 

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 __task_ssh_uninstall() {
     if yesno "Are you sure to uninstall SSH service?"
     then

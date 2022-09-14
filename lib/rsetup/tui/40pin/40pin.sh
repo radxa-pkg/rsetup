@@ -1,3 +1,5 @@
+#!/bin/bash
+
 __40pin() {
     menu_init
     menu_add __tui_about "About"

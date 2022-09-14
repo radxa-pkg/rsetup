@@ -1,3 +1,5 @@
+#!/bin/bash
+
 __task_docker_uninstall() {
     if yesno "Are you sure to uninstall Docker?"
     then

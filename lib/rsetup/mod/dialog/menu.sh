@@ -1,3 +1,5 @@
+#!/bin/bash
+
 RSETUP_MENU=()
 RSETUP_MENU_CALLBACK=()
 

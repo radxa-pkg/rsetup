@@ -1,3 +1,5 @@
+#!/bin/bash
+
 RSETUP_DIALOG=${RSETUP_DIALOG:-"whiptail"}
 
 __dialog() {

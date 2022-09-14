@@ -1,3 +1,5 @@
+#!/bin/bash
+
 uninstall_docker() {
     __parameter_count_check 0 "$@"
     apt-get remove docker.io

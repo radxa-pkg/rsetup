@@ -1,3 +1,5 @@
+#!/bin/bash
+
 __user_change_password (){
     local new_password=1
     local new_password2

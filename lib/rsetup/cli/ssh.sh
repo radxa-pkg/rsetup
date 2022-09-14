@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ALLOWED_RCONFIG_FUNC+=("regenerate_ssh_hostkey")
 
 regenerate_ssh_hostkey() {

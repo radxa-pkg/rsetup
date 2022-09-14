@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # cloud-initramfs-growroot provides this function
 # Require parted and gdisk
 __resize_root() {

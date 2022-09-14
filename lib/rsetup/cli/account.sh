@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ALLOWED_RCONFIG_FUNC+=("add_user" "update_password" "user_append_group")
 
 add_user() {

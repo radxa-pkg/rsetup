@@ -1,3 +1,5 @@
+#!/bin/bash
+
 source "$ROOT_PATH/lib/rsetup/tui/local/timezone/timezone.sh"
 
 __local_locale() {

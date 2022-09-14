@@ -1,3 +1,5 @@
+#!/bin/bash
+
 __comm_wifi() {
     nmtui
 }

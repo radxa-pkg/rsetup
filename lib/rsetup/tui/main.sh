@@ -1,3 +1,5 @@
+#!/bin/bash
+
 source "$ROOT_PATH/lib/rsetup/mod/tui.sh"
 
 source "$ROOT_PATH/lib/rsetup/tui/40pin/40pin.sh"
