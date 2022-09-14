@@ -3,7 +3,7 @@
 __user_change_password (){
     local new_password=1
     local new_password2
-    while [[ $new_password != $new_password2 ]]
+    while [[ "$new_password" != "$new_password2" ]]
     do
         if ! new_password=$(passwordbox "Please enter the new password:")
         then
