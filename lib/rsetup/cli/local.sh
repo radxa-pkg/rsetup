@@ -32,7 +32,7 @@ wifi_country_set() {
     then
         local only_shrinked_index=${RSETUP_RADIOLIST_STATE_NEW}
         trimmed_index=${only_shrinked_index//\"}
-        index=$(( 3 * $trimmed_index + 1 ))
+        index=$(( 3 * trimmed_index + 1 ))
         local country=${RSETUP_RADIOLIST[$index]}
 
         if yesno "You selected is $country"

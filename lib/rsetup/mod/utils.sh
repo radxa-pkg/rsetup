@@ -24,7 +24,7 @@ __parameter_count_check() {
     
     local expected=$1
     shift 1
-    if (( $# != $expected ))
+    if (( $# != expected ))
     then
         echo "'${FUNCNAME[1]}' expects '$expected' parameters while getting $#: '$@'" >&2
         return $ERROR_TOO_FEW_PARAMETERS

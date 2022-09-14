@@ -13,7 +13,7 @@ __dialog() {
             local listheight=0
             ;;
         --checklist|--radiolist)
-            local listheight=$(( $height - 8 ))
+            local listheight=$(( height - 8 ))
             ;;
         *)
             local listheight=

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if (( $EUID != 0 ))
+if (( EUID != 0 ))
 then
     exec sudo "DEBUG=$DEBUG" "$0" "$@"
 fi

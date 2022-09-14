@@ -18,7 +18,7 @@ __hardware_LED() {
     for shrinked_index in ${RSETUP_CHECKLIST_STATE_NEW[@]}
     do
         local trimmed_index=${shrinked_index//\"}
-        local index=$(($trimmed_index*3+1))
+        local index=$(( trimmed_index * 3 + 1))
         chosen_leds+=(${RSETUP_CHECKLIST[$index]% *})
     done
 
@@ -31,7 +31,7 @@ __hardware_LED() {
     then
         local only_shrinked_index=${RSETUP_RADIOLIST_STATE_NEW}
         trimmed_index=${only_shrinked_index//\"}
-        index=$((3*$trimmed_index+1))
+        index=$(( trimmed_index * 3 + 1))
         local trigger_to_apply=${RSETUP_RADIOLIST[$index]}
     fi
 
