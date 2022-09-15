@@ -24,7 +24,7 @@ jobs:
           echo "distro='$(dpkg-parsechangelog -S Distribution)'" >> $GITHUB_ENV
           echo "version='$(dpkg-parsechangelog -S Version)'" >> $GITHUB_ENV
       - name: Release
-        if: env.distro != "UNRELEASED"
+        if: env.distro != 'UNRELEASED'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.version }}
