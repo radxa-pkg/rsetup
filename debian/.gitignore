@@ -1,0 +1,9 @@
+/.debhelper
+/debhelper-build-stamp
+/files
+/rsetup
+/rsetup.8
+/rsetup.debhelper.log
+/rsetup.postrm.debhelper
+/rsetup.substvars
+/SOURCE

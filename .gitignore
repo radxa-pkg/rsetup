@@ -1,5 +1,1 @@
-*.deb
-*.buildinfo
-*.changes
-/build
 /.vscode

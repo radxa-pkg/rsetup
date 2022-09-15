@@ -1,9 +1,7 @@
-name: Release
+name: Build & Release
 on:
   workflow_dispatch:
   push:
-    paths:
-      - debian/changelog
 
 jobs:
   release:
@@ -21,17 +19,18 @@ jobs:
           sudo apt-get update
           sudo apt-get build-dep --no-install-recommends -y .
           make all deb
-      - name: Check if 
+      - name: Check if the latest version is releasable
         run: |
-          echo "tag_name=$(dpkg-parsechangelog -S Version)" >> $GITHUB_ENV
+          echo "distro='$(dpkg-parsechangelog -S Distribution)'" >> $GITHUB_ENV
+          echo "version='$(dpkg-parsechangelog -S Version)'" >> $GITHUB_ENV
       - name: Release
-        id: release
+        if: env.distro != "UNRELEASED"
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ env.tag_name }}
+          tag_name: ${{ env.version }}
           body_path: README.md
           token: ${{ secrets.GITHUB_TOKEN }}
           target_commitish: main
           draft: false
           files: |
-            *.deb
+            ../*.deb

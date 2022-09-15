@@ -1,23 +1,12 @@
 include /usr/share/dpkg/pkg-info.mk
 include /usr/share/dpkg/architecture.mk
 
-PACKAGE		:=	rsetup
-DEB			:=	${PACKAGE}_${DEB_VERSION_UPSTREAM_REVISION}_all.deb
-BUILD_DIR	:=	build
+.PHONY: all
+all:
 
-all: deb
-deb: ${DEB}
-
-${DEB}: debian
-	rm -rf ${BUILD_DIR}
-	mkdir -p ${BUILD_DIR}/debian
-	cp -ar debian/* ${BUILD_DIR}/debian/
-	cp -ar lib ${BUILD_DIR}/
-	cp -ar usr ${BUILD_DIR}/
-	echo "git clone $(shell git remote get-url origin)\\ngit checkout $(shell git rev-parse HEAD)" > ${BUILD_DIR}/debian/SOURCE
-	pandoc "${BUILD_DIR}/debian/${PACKAGE}.8.md" -o "${BUILD_DIR}/debian/${PACKAGE}.8" --from markdown --to man -s
-	cd ${BUILD_DIR}; dpkg-buildpackage ${DPKG_BUILDPACKAGE_OPTS} -b -uc -us
-	lintian ${DEB}
+.PHONY: deb
+deb: debian
+	debuild
 
 .PHONY: run
 run:
@@ -33,4 +22,4 @@ distclean: clean
 
 .PHONY: clean
 clean:
-	rm -rf ${BUILD_DIR} *.deb *.dsc *.changes *.buildinfo
+	rm -rf debian/.debhelper debian/${DEB_SOURCE} debian/debhelper-build-stamp debian/files debian/${DEB_SOURCE}.8 debian/${DEB_SOURCE}.debhelper.log debian/${DEB_SOURCE}.postrm.debhelper debian/${DEB_SOURCE}.substvars debian/SOURCE

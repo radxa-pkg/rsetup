@@ -1,25 +1,15 @@
 #!/usr/bin/make -f
 
-#export DH_VERBOSE=1
+include /usr/share/dpkg/pkg-info.mk
+include /usr/share/dpkg/architecture.mk
 
-install:
-	dh_install
+%:
+	dh $@
+
+override_dh_installdocs:
+	echo "git clone $(shell git remote get-url origin)\\ngit checkout $(shell git rev-parse HEAD)" > debian/SOURCE
 	dh_installdocs
-	dh_lintian
-	dh_installchangelogs
+
+override_dh_installman:
+	pandoc "debian/${DEB_SOURCE}.8.md" -o "debian/${DEB_SOURCE}.8" --from markdown --to man -s
 	dh_installman
-	dh_strip_nondeterminism
-	dh_compress
-	dh_fixperms
-
-binary: install
-	dh_strip
-	dh_makeshlibs
-	dh_shlibdeps
-	dh_installdeb
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
-
-.PHONY: build clean
-build clean:
