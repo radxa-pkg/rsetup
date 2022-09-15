@@ -6,7 +6,7 @@ all:
 
 .PHONY: deb
 deb: debian
-	debuild
+	debuild --no-sign
 
 .PHONY: run
 run:
