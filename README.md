@@ -6,19 +6,18 @@ Radxa system setup utility
 
 ## Development dependencies
 
-Packages listed below are incomplete. This is currently a place holder.
-
 Arch
 
-```
-yay -Syu apt dpkg devscripts lintian
+```bash
+sudo tee -a /etc/devscripts.conf <<< 'DEBUILD_DPKG_BUILDPACKAGE_OPTS="-d"'
+yay -Syu apt dpkg devscripts lintian pandoc shellcheck
 ```
 
 Debian
 
-```
-sudo apt update
-sudo apt full-upgrade -y lintian devscripts
+```bash
+sudo apt-get update
+sudo apt-get build-dep --no-install-recommends .
 ```
 
 ## Usage
