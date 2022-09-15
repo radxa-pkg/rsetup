@@ -21,8 +21,8 @@ jobs:
           make all deb
       - name: Check if the latest version is releasable
         run: |
-          echo "distro='$(dpkg-parsechangelog -S Distribution)'" >> $GITHUB_ENV
-          echo "version='$(dpkg-parsechangelog -S Version)'" >> $GITHUB_ENV
+          echo "distro=$(dpkg-parsechangelog -S Distribution)" >> $GITHUB_ENV
+          echo "version=$(dpkg-parsechangelog -S Version)" >> $GITHUB_ENV
       - name: Release
         if: env.distro != 'UNRELEASED'
         uses: softprops/action-gh-release@v1
