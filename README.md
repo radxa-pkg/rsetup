@@ -18,7 +18,7 @@ Debian
 
 ```
 sudo apt update
-sudo apt full-upgrade -y lintian
+sudo apt full-upgrade -y lintian devscripts
 ```
 
 ## Usage
