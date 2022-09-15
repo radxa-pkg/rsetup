@@ -11,9 +11,7 @@ LANGUAGE="C"
 
 if git status &>/dev/null && [[ -f "$PWD/usr/bin/rsetup" ]]
 then
-    ROOT_PATH="${ROOT_PATH:-"$PWD/"}"
-else
-    ROOT_PATH="${ROOT_PATH:-"/"}"
+    ROOT_PATH="${ROOT_PATH:-"$PWD"}"
 fi
 
 source "$ROOT_PATH/lib/rsetup/cli/main.sh"
