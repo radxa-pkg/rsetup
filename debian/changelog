@@ -1,4 +1,4 @@
-rsetup (0.2.0) UNRELEASED; urgency=medium
+rsetup (0.2.0) stable; urgency=medium
 
   * Switching to Debian release formmat. Closes: #8
 
