@@ -10,7 +10,7 @@ Arch
 
 ```bash
 sudo tee -a /etc/devscripts.conf <<< 'DEBUILD_DPKG_BUILDPACKAGE_OPTS="-d"'
-yay -Syu apt dpkg devscripts lintian pandoc shellcheck
+yay -Syu apt dpkg devscripts lintian pandoc shellcheck git-buildpackage
 ```
 
 Debian
@@ -18,6 +18,7 @@ Debian
 ```bash
 sudo apt-get update
 sudo apt-get build-dep --no-install-recommends .
+sudo apt-get install git-buildpackage
 ```
 
 ## Usage
