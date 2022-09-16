@@ -24,6 +24,13 @@ unregister_screen() {
     RSETUP_SCREEN=( "${RSETUP_SCREEN[@]:0:$(( ${#RSETUP_SCREEN[@]} - 1 ))}" )
 }
 
+push_screen() {
+    __parameter_count_check 1 "$@"
+
+    register_screen "$1"
+    register_screen ":"
+}
+
 tui_start() {
     __parameter_count_check 1 "$@"
     __parameter_type_check "$1" "function"
