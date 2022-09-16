@@ -2,7 +2,19 @@ include /usr/share/dpkg/pkg-info.mk
 include /usr/share/dpkg/architecture.mk
 
 .PHONY: all
-all:
+all: build
+
+.PHONY: build
+build: build-man
+
+SRC-MAN		:=	man
+SRCS-MAN	:=	$(wildcard $(SRC-MAN)/*.md)
+MANS		:=	$(SRCS-MAN:.md=)
+.PHONY: build-man
+build-man: $(MANS)
+
+$(SRC-MAN)/%: $(SRC-MAN)/%.md
+	pandoc "$<" -o "$@" --from markdown --to man -s
 
 .PHONY: deb
 deb: debian
@@ -21,5 +33,9 @@ test:
 distclean: clean
 
 .PHONY: clean
-clean:
-	rm -rf debian/.debhelper debian/${DEB_SOURCE} debian/debhelper-build-stamp debian/files debian/${DEB_SOURCE}.8 debian/${DEB_SOURCE}.debhelper.log debian/${DEB_SOURCE}.postrm.debhelper debian/${DEB_SOURCE}.substvars debian/SOURCE
+clean: clean-man
+	rm -rf debian/.debhelper debian/${DEB_SOURCE} debian/debhelper-build-stamp debian/files debian/${DEB_SOURCE}.debhelper.log debian/${DEB_SOURCE}.postrm.debhelper debian/${DEB_SOURCE}.substvars debian/SOURCE
+
+.PHONY: clean-man
+clean-man:
+	find $(SRC-MAN) -mindepth 1 ! -name '*.md' ! -name '.gitignore' -delete

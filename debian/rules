@@ -9,7 +9,3 @@ include /usr/share/dpkg/architecture.mk
 override_dh_installdocs:
 	echo "git clone $(shell git remote get-url origin)\\ngit checkout $(shell git rev-parse HEAD)" > debian/SOURCE
 	dh_installdocs
-
-override_dh_installman:
-	pandoc "debian/${DEB_SOURCE}.8.md" -o "debian/${DEB_SOURCE}.8" --from markdown --to man -s
-	dh_installman
