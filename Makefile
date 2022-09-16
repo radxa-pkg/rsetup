@@ -4,6 +4,16 @@ include /usr/share/dpkg/architecture.mk
 .PHONY: all
 all: build
 
+#
+# Development
+#
+.PHONY: run
+run:
+	sudo DEBUG=${DEBUG} usr/bin/rsetup
+
+#
+# Build
+#
 .PHONY: build
 build: build-man
 
@@ -16,19 +26,21 @@ build-man: $(MANS)
 $(SRC-MAN)/%: $(SRC-MAN)/%.md
 	pandoc "$<" -o "$@" --from markdown --to man -s
 
-.PHONY: deb
-deb: debian
-	debuild --no-sign
-
-.PHONY: run
-run:
-	sudo DEBUG=${DEBUG} usr/bin/rsetup
-
+#
+# Test
+#
 .PHONY: test
 test:
 	shellcheck -x usr/bin/rsetup
 	find lib/ -name '*.sh' -exec shellcheck -x {} +
 
+#
+# Install
+#
+
+#
+# Clean
+#
 .PHONY: distclean
 distclean: clean
 
@@ -39,3 +51,10 @@ clean: clean-man
 .PHONY: clean-man
 clean-man:
 	find $(SRC-MAN) -mindepth 1 ! -name '*.md' ! -name '.gitignore' -delete
+
+#
+# Release
+#
+.PHONY: deb
+deb: debian
+	debuild --no-sign
