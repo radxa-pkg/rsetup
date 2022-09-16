@@ -5,6 +5,9 @@ then
     exec sudo "DEBUG=$DEBUG" "$0" "$@"
 fi
 
+set -euo pipefail
+shopt -s nullglob
+
 LC_ALL="C"
 LANG="C"
 LANGUAGE="C"
@@ -23,6 +26,5 @@ then
 else
     __parameter_type_check "$1" "function"
 
-    set -e
     "$@"
 fi
