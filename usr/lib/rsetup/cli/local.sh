@@ -38,7 +38,7 @@ wifi_country_set() {
         if yesno "You selected is $country"
         then
             country=$(echo "$country" | cut -c 1-2)
-            
+
             wpa_cli -i "$iface" set country "$country"
             wpa_cli -i "$iface" save_config > /dev/null 2>&1
             iw reg set "$country"

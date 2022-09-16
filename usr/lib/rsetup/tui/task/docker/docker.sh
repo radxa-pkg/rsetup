@@ -47,11 +47,11 @@ __task_docker() {
     menu_init
     if apt list --installed docker.io | grep docker.io
     then
-        menu_add __task_docker_uninstall   "Uninstall Docker" 
-    else 
+        menu_add __task_docker_uninstall   "Uninstall Docker"
+    else
         menu_add __task_docker_install     "Install Docker"
     fi
-    
+
     local cur_status
     cur_status=$(systemctl status docker | grep Loaded | awk '{print $4}')
     if [[ "$cur_status" == "enabled;" ]]

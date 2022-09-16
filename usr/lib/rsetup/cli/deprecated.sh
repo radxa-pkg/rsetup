@@ -20,7 +20,7 @@ __resize_root() {
 
     echo "Resizing root partition..."
     cat << EOF | parted ---pretend-input-tty "$block_dev"
-resizepart ${part_entry_number} 
+resizepart ${part_entry_number}
 yes
 100%
 EOF

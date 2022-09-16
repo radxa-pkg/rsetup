@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-source "$ROOT_PATH/lib/rsetup/tui/local/timezone/timezone.sh"
+source "$ROOT_PATH/usr/lib/rsetup/tui/local/timezone/timezone.sh"
 
 __local_locale() {
     dpkg-reconfigure locales
@@ -19,7 +19,7 @@ __local_install_CJKV_fonts() {
         tmp=$(mktemp)
         for(( i = 0; i < ${#fonts[@]}; i++ ))
         do
-            
+
             if apt-get install -y "${fonts[$i]}" 2>/dev/null
             then
                 echo $(( (i + 1) * 20 ))

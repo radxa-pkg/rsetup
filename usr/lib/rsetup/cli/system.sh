@@ -22,7 +22,7 @@ regenerate_machine_id() {
 
 update_hostname() {
     __parameter_count_check 1 "$@"
-    
+
     local hostname="$1"
 
     echo "$hostname" > "$ROOT_PATH/etc/hostname"
@@ -58,7 +58,7 @@ enable_service() {
 
 disable_service() {
     __parameter_count_check 1 "$@"
-    
+
     local service="$1"
     systemctl disable --now "$service"
 }

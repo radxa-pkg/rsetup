@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
-source "$ROOT_PATH/lib/rsetup/tui/task/docker/docker.sh"
-source "$ROOT_PATH/lib/rsetup/tui/task/ssh/ssh.sh"
+source "$ROOT_PATH/usr/lib/rsetup/tui/task/docker/docker.sh"
+source "$ROOT_PATH/usr/lib/rsetup/tui/task/ssh/ssh.sh"
 
 __task() {
     menu_init

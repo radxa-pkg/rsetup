@@ -1,6 +1,11 @@
 include /usr/share/dpkg/pkg-info.mk
 include /usr/share/dpkg/architecture.mk
 
+PREFIX ?= /usr
+BINDIR ?= $(PREFIX)/bin
+LIBDIR ?= $(PREFIX)/lib
+MANDIR ?= $(PREFIX)/share/man
+
 .PHONY: all
 all: build
 
@@ -42,12 +47,27 @@ $(SRC-DOC)/SOURCE: $(SRC-DOC)
 #
 .PHONY: test
 test:
-	shellcheck -x usr/bin/rsetup
-	find lib/ -name '*.sh' -exec shellcheck -x {} +
+	find usr -type f \( -name "*.sh" -o -name "rsetup" \) -exec shellcheck -x {} +
 
 #
 # Install
 #
+.PHONY: install
+install: install-man
+	install -d $(DESTDIR)$(LIBDIR)/rsetup
+	cp -R usr/lib/rsetup/. $(DESTDIR)$(LIBDIR)/rsetup
+	find $(DESTDIR)$(LIBDIR)/rsetup -type f -exec chmod 644 {} +
+
+	install -d $(DESTDIR)$(LIBDIR)/systemd/system
+	install -m 644 usr/lib/systemd/system/rsetup.service $(DESTDIR)$(LIBDIR)/systemd/system
+
+	install -d $(DESTDIR)$(BINDIR)
+	install -m 755 usr/bin/rsetup $(DESTDIR)$(BINDIR)/rsetup
+
+.PHONY: install-man
+install-man: build-man
+	install -d $(DESTDIR)$(MANDIR)/man8
+	install -m 644 $(SRC-MAN)/*.8 $(DESTDIR)$(MANDIR)/man8/
 
 #
 # Clean

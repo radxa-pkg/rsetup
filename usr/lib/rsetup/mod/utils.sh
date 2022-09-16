@@ -9,7 +9,7 @@ readonly ERROR_ILLEGAL_PARAMETERS=-4
 
 __require_parameter_check() {
     set -e
-    
+
     if (( $# == 0 ))
     then
         echo "Incorrect usage of ${FUNCNAME[1]} from ${FUNCNAME[2]}: ${FUNCNAME[1]} requires parameter" >&2
@@ -21,7 +21,7 @@ __require_parameter_check() {
 __parameter_count_check() {
     __require_parameter_check "$@"
     set -e
-    
+
     local expected=$1
     shift 1
     if (( $# != expected ))
@@ -47,7 +47,7 @@ __assert_f() {
 __parameter_value_check() {
     __require_parameter_check "$@"
     set -e
-    
+
     local option=$1
     shift 1
     local options=( "$@" )
@@ -90,7 +90,7 @@ __check_terminal() {
         then
             unset disable_stderr
         fi
-        
+
         if output="$(eval stty size -F "$i" $disable_stderr)"
         then
             echo "$output"

@@ -14,11 +14,11 @@ then
     ROOT_PATH="${ROOT_PATH:-"$PWD"}"
 fi
 
-source "$ROOT_PATH/lib/rsetup/cli/main.sh"
+source "$ROOT_PATH/usr/lib/rsetup/cli/main.sh"
 
 if (( $# == 0 )) || [[ $1 == main ]]
 then
-    source "$ROOT_PATH/lib/rsetup/tui/main.sh"
+    source "$ROOT_PATH/usr/lib/rsetup/tui/main.sh"
     tui_start __tui_main
 else
     __parameter_type_check "$1" "function"

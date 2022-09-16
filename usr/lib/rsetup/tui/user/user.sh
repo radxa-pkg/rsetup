@@ -9,7 +9,7 @@ __user_change_password (){
         then
             return
         fi
-        
+
         if ! new_password2=$(passwordbox "Please confirm your password:")
         then
             return
@@ -25,7 +25,7 @@ __user_change_password (){
     then
         msgbox "The password has been changed."
     else
-        msgbox "An error has occured when trying to change password." 
+        msgbox "An error has occured when trying to change password."
     fi
 }
 
@@ -62,10 +62,10 @@ __user_enable_auto_login (){
     then
         return
     fi
-    
+
     if ! yesno "After auto login is enabled, your current password will be deleted, and you can only login SSH with public key.
 Are you sure to continue?"
-    then 
+    then
         return
     fi
 
@@ -84,7 +84,7 @@ EOF
         echo "$AUTOLOGIN" >> "$SYSTEMD_OVERRIDE/override.conf"
     done
     if passwd --delete "$username" >/dev/null
-    then 
+    then
         msgbox "Configuration succeeded"
     fi
 }
