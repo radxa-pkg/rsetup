@@ -9,3 +9,8 @@ source "$ROOT_PATH/usr/lib/rsetup/cli/system.sh"
 source "$ROOT_PATH/usr/lib/rsetup/cli/account.sh"
 source "$ROOT_PATH/usr/lib/rsetup/cli/docker.sh"
 source "$ROOT_PATH/usr/lib/rsetup/cli/local.sh"
+
+if $DEBUG
+then
+    source "$ROOT_PATH/usr/lib/rsetup/mod/debug_utils.sh"
+fi
