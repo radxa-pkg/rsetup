@@ -9,8 +9,6 @@ checklist_init() {
     export RSETUP_CHECKLIST_STATE_NEW=()
 }
 
-checklist_init
-
 checklist_add() {
     __parameter_count_check 2 "$@"
 

@@ -8,8 +8,6 @@ menu_init() {
     export RSETUP_MENU_CALLBACK=()
 }
 
-menu_init
-
 menu_add() {
     __parameter_count_check 2 "$@"
     if [[ "$1" != ":" ]]

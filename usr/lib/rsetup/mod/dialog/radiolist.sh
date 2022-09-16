@@ -9,8 +9,6 @@ radiolist_init() {
     export RSETUP_RADIOLIST_STATE_NEW=()
 }
 
-radiolist_init
-
 radiolist_add() {
     __parameter_count_check 2 "$@"
 
