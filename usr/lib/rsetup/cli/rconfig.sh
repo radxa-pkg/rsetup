@@ -22,7 +22,7 @@ process_config() {
         if [[ $(type -t "$cmd") == function ]] && __in_array "$cmd" "${ALLOWED_RCONFIG_FUNC[@]}"
         then
             echo "Running $cmd with $*..."
-            if [[ "$DEBUG" == "1" ]]
+            if $DEBUG
             then
                 echo "$REPLY"
             else

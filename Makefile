@@ -12,8 +12,11 @@ all: build
 #
 .PHONY: run
 run:
-	sudo DEBUG=${DEBUG} usr/bin/rsetup
+	usr/bin/rsetup
 
+.PHONY: debug
+debug:
+	sudo DEBUG=true bash -x usr/bin/rsetup
 #
 # Test
 #

@@ -10,7 +10,7 @@ source "$ROOT_PATH/usr/lib/rsetup/tui/system/system.sh"
 source "$ROOT_PATH/usr/lib/rsetup/tui/task/task.sh"
 source "$ROOT_PATH/usr/lib/rsetup/tui/user/user.sh"
 
-if [[ "$DEBUG" == "1" ]]
+if $DEBUG
 then
     source "$ROOT_PATH/usr/lib/rsetup/tui/test/test.sh"
 fi
@@ -28,7 +28,7 @@ __tui_main() {
     menu_add __user "User Settings"
     menu_add __local "Localization"
     menu_add __task "Common Tasks"
-    if [[ "$DEBUG" == "1" ]]
+    if $DEBUG
     then
         menu_add __test "TUI Test"
     fi

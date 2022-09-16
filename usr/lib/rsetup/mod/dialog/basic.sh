@@ -25,7 +25,7 @@ __dialog() {
         return 1
     fi
 
-    if [[ "$DEBUG" == "1" ]]
+    if $DEBUG
     then
         local backtitle=( "--backtitle" "${RSETUP_SCREEN[*]}" )
     else
