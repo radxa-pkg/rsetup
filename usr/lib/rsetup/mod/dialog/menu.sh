@@ -1,15 +1,14 @@
 # shellcheck shell=bash
 
-RSETUP_MENU=()
-RSETUP_MENU_CALLBACK=()
-
 # shellcheck disable=SC2120
 menu_init() {
     __parameter_count_check 0 "$@"
 
-    RSETUP_MENU=()
-    RSETUP_MENU_CALLBACK=()
+    export RSETUP_MENU=()
+    export RSETUP_MENU_CALLBACK=()
 }
+
+menu_init
 
 menu_add() {
     __parameter_count_check 2 "$@"
@@ -36,10 +35,5 @@ menu_show() {
     if item=$(__dialog --menu "$1" "${RSETUP_MENU[@]}" 3>&1 1>&2 2>&3 3>&-)
     then
         push_screen "${RSETUP_MENU_CALLBACK[$item]}"
-    else
-        if [[ -n $item ]]
-        then
-            echo "$item"
-        fi
     fi
 }
