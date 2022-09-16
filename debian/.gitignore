@@ -2,7 +2,6 @@
 /debhelper-build-stamp
 /files
 /rsetup
-/rsetup.debhelper.log
-/rsetup.postrm.debhelper
-/rsetup.substvars
-/SOURCE
+/*.debhelper.log
+/*.postrm.debhelper
+/*.substvars

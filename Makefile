@@ -15,7 +15,7 @@ run:
 # Build
 #
 .PHONY: build
-build: build-man
+build: build-man build-doc
 
 SRC-MAN		:=	man
 SRCS-MAN	:=	$(wildcard $(SRC-MAN)/*.md)
@@ -25,6 +25,17 @@ build-man: $(MANS)
 
 $(SRC-MAN)/%: $(SRC-MAN)/%.md
 	pandoc "$<" -o "$@" --from markdown --to man -s
+
+SRC-DOC		:=	.
+DOCS		:=	$(SRC-DOC)/SOURCE
+build-doc: $(DOCS)
+
+$(SRC-DOC):
+	mkdir -p $(SRC-DOC)
+
+.PHONY: $(SRC-DOC)/SOURCE
+$(SRC-DOC)/SOURCE: $(SRC-DOC)
+	echo -e "git clone $(shell git remote get-url origin)\ngit checkout $(shell git rev-parse HEAD)" > "$@"
 
 #
 # Test
@@ -45,12 +56,16 @@ test:
 distclean: clean
 
 .PHONY: clean
-clean: clean-man
-	rm -rf debian/.debhelper debian/${DEB_SOURCE} debian/debhelper-build-stamp debian/files debian/${DEB_SOURCE}.debhelper.log debian/${DEB_SOURCE}.postrm.debhelper debian/${DEB_SOURCE}.substvars debian/SOURCE
+clean: clean-man clean-doc
+	rm -rf debian/.debhelper debian/${DEB_SOURCE} debian/debhelper-build-stamp debian/files debian/*.debhelper.log debian/*.postrm.debhelper debian/*.substvars
 
 .PHONY: clean-man
 clean-man:
-	find $(SRC-MAN) -mindepth 1 ! -name '*.md' ! -name '.gitignore' -delete
+	rm -rf $(MANS)
+
+.PHONY: clean-doc
+clean-doc:
+	rm -rf $(DOCS)
 
 #
 # Release

@@ -5,7 +5,3 @@ include /usr/share/dpkg/architecture.mk
 
 %:
 	dh $@
-
-override_dh_installdocs:
-	echo "git clone $(shell git remote get-url origin)\\ngit checkout $(shell git rev-parse HEAD)" > debian/SOURCE
-	dh_installdocs
