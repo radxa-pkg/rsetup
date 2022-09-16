@@ -1,6 +1,4 @@
-include /usr/share/dpkg/pkg-info.mk
-include /usr/share/dpkg/architecture.mk
-
+PROJECT ?= rsetup
 PREFIX ?= /usr
 BINDIR ?= $(PREFIX)/bin
 LIBDIR ?= $(PREFIX)/lib
@@ -76,8 +74,7 @@ install-man: build-man
 distclean: clean
 
 .PHONY: clean
-clean: clean-man clean-doc
-	rm -rf debian/.debhelper debian/${DEB_SOURCE} debian/debhelper-build-stamp debian/files debian/*.debhelper.log debian/*.postrm.debhelper debian/*.substvars
+clean: clean-man clean-doc clean-deb
 
 .PHONY: clean-man
 clean-man:
@@ -86,6 +83,10 @@ clean-man:
 .PHONY: clean-doc
 clean-doc:
 	rm -rf $(DOCS)
+
+.PHONY: clean-deb
+clean-deb:
+	rm -rf debian/.debhelper debian/${PROJECT} debian/debhelper-build-stamp debian/files debian/*.debhelper.log debian/*.postrm.debhelper debian/*.substvars
 
 #
 # Release
