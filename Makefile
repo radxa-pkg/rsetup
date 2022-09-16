@@ -17,6 +17,13 @@ run:
 	sudo DEBUG=${DEBUG} usr/bin/rsetup
 
 #
+# Test
+#
+.PHONY: test
+test:
+	find usr -type f \( -name "*.sh" -o -name "rsetup" \) -exec shellcheck -x {} +
+
+#
 # Build
 #
 .PHONY: build
@@ -41,13 +48,6 @@ $(SRC-DOC):
 .PHONY: $(SRC-DOC)/SOURCE
 $(SRC-DOC)/SOURCE: $(SRC-DOC)
 	echo -e "git clone $(shell git remote get-url origin)\ngit checkout $(shell git rev-parse HEAD)" > "$@"
-
-#
-# Test
-#
-.PHONY: test
-test:
-	find usr -type f \( -name "*.sh" -o -name "rsetup" \) -exec shellcheck -x {} +
 
 #
 # Install
