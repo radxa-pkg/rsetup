@@ -31,7 +31,10 @@ __hardware_leds() {
     checklist_init
     for i in /sys/class/leds/*
     do
-        checklist_add "$(basename "$i") [$(sed -E "s/.*\[(.*)\].*/\1/" "$i/trigger")]" "OFF"
+        if [[ -f "$i/trigger" ]]
+        then
+            checklist_add "$(basename "$i") [$(sed -E "s/.*\[(.*)\].*/\1/" "$i/trigger")]" "OFF"
+        fi
     done
     checklist_emptymsg "No supported devices is detected.\n\nPlease make sure they are enabled first."
     if ! checklist_show "Below are the available LEDs and their triggers.\nSelect any to update their trigger." || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 0 ))
