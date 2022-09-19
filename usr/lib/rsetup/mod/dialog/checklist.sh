@@ -29,6 +29,11 @@ checklist_add() {
 checklist_show() {
     __parameter_count_check 1 "$@"
 
+    if (( ${#RSETUP_CHECKLIST[@]} == 0))
+    then
+        return 2
+    fi
+
     local output
     if output="$(__dialog --checklist "$1" "${RSETUP_CHECKLIST[@]}" 3>&1 1>&2 2>&3 3>&-)"
     then

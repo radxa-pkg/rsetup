@@ -29,6 +29,11 @@ radiolist_add() {
 radiolist_show() {
     __parameter_count_check 1 "$@"
 
+    if (( ${#RSETUP_RADIOLIST[@]} == 0))
+    then
+        return 2
+    fi
+
     local output
     if output="$(__dialog --radiolist "$1" "${RSETUP_RADIOLIST[@]}" 3>&1 1>&2 2>&3 3>&-)"
     then
