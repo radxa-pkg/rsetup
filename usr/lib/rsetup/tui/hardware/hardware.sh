@@ -23,6 +23,7 @@ __hardware_video() {
     do
         menu_add __hardware_gstreamer_test "$(basename "$i")"
     done
+    menu_emptymsg "No supported devices is detected.\n\nPlease make sure they are enabled first."
     menu_show "Take a test image with the selected video capture device:"
 }
 
@@ -32,6 +33,7 @@ __hardware_leds() {
     do
         checklist_add "$(basename "$i") [$(sed -E "s/.*\[(.*)\].*/\1/" "$i/trigger")]" "OFF"
     done
+    checklist_emptymsg "No supported devices is detected.\n\nPlease make sure they are enabled first."
     if ! checklist_show "Below are the available LEDs and their triggers.\nSelect any to update their trigger." || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 0 ))
     then
         return
