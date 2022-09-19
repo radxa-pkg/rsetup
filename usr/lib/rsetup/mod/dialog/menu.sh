@@ -6,6 +6,7 @@ menu_init() {
 
     export RSETUP_MENU=()
     export RSETUP_MENU_CALLBACK=()
+    export RSETUP_MENU_SELECTED=
 }
 
 menu_add() {
@@ -38,12 +39,19 @@ menu_emptymsg() {
     fi
 }
 
+menu_getitem() {
+    __parameter_count_check 1 "$@"
+
+    echo "${RSETUP_MENU[$(( ${1//\"} * 2 + 1))]}"
+}
+
 menu_show() {
     __parameter_count_check 1 "$@"
 
     local item
     if item=$(__dialog --menu "$1" "${RSETUP_MENU[@]}" 3>&1 1>&2 2>&3 3>&-)
     then
+        RSETUP_MENU_SELECTED="$(menu_getitem "$item")"
         push_screen "${RSETUP_MENU_CALLBACK[$item]}"
     fi
 }
