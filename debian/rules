@@ -5,3 +5,6 @@ include /usr/share/dpkg/architecture.mk
 
 %:
 	dh $@
+
+override_dh_builddeb:
+	dh_builddeb -- -Zxz
