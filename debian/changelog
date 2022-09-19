@@ -1,3 +1,14 @@
+rsetup (0.2.1) stable; urgency=high
+
+  * Fix CI generated package is not usable in Debian system issue
+  * Many updates to the build system
+  * TUI library bug fixes and addition of some helper functions
+  * Properly fix ShellCheck warning SC2207 in TUI library
+  * Clean up LED config function
+  * Add basic gstreamer test on video capture devices. Closes: #6-OKDO
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Mon, 19 Sep 2022 18:47:18 +0800
+
 rsetup (0.2.0) stable; urgency=medium
 
   * Switching to Debian release format. Closes: #8
