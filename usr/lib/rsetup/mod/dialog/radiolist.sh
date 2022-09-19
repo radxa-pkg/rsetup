@@ -43,3 +43,12 @@ radiolist_getitem() {
 
     echo "${RSETUP_RADIOLIST[$(( ${1//\"} * 3 + 1))]}"
 }
+
+radiolist_emptymsg() {
+    __parameter_count_check 1 "$@"
+
+    if (( ${#RSETUP_RADIOLIST[@]} == 0))
+    then
+        msgbox "$1"
+    fi
+}

@@ -43,3 +43,12 @@ checklist_getitem() {
 
     echo "${RSETUP_CHECKLIST[$(( ${1//\"} * 3 + 1))]}"
 }
+
+checklist_emptymsg() {
+    __parameter_count_check 1 "$@"
+
+    if (( ${#RSETUP_CHECKLIST[@]} == 0))
+    then
+        msgbox "$1"
+    fi
+}

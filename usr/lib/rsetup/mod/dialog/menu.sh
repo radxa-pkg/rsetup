@@ -22,8 +22,20 @@ menu_add() {
     RSETUP_MENU_CALLBACK+=( "$callback" )
 }
 
+# shellcheck disable=SC2120
 menu_add_separator() {
+    __parameter_count_check 0 "$@"
+
     menu_add : "========="
+}
+
+menu_emptymsg() {
+    __parameter_count_check 1 "$@"
+
+    if (( ${#RSETUP_MENU_CALLBACK[@]} == 0))
+    then
+        msgbox "$1"
+    fi
 }
 
 menu_show() {
