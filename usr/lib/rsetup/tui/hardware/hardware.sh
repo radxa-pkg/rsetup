@@ -16,7 +16,7 @@ __hardware_leds() {
     fi
 
     local triggers
-    read -r -a triggers <<< "$(sed "s/\[//;s/\]//" "$i/trigger")"
+    read -r -a triggers <<< "$(sed "s/\[//;s/\]//" "$(find -L /sys/class/leds/ -mindepth 2 -maxdepth 2 -name 'trigger' 2> /dev/null | head -1)")"
 
     radiolist_init
     for i in "${triggers[@]}"
@@ -35,10 +35,7 @@ __hardware_leds() {
 
 __hardware() {
     menu_init
-    menu_add __hardware_camera "Camera"
-    if ls /sys/class/leds/*/trigger &> /dev/null
-    then
-        menu_add __hardware_leds "LEDs"
-    fi
+    menu_add __hardware_camera "Video capture devices"
+    menu_add __hardware_leds "LEDs"
     menu_show "Manage on-board hardware"
 }
