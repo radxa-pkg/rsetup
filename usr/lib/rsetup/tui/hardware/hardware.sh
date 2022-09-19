@@ -6,44 +6,31 @@ __hardware_camera() {
 
 __hardware_leds() {
     checklist_init
-    for leditem in /sys/class/leds/*
+    for i in /sys/class/leds/*
     do
-        local tmp_trigger
-        tmp_trigger=$(sed -E "s/.*\[(.*)\].*/\1/" "/sys/class/leds/$leditem/trigger")
-        checklist_add "$leditem [$tmp_trigger]" "OFF"
+        checklist_add "$(basename "$i") [$(sed -E "s/.*\[(.*)\].*/\1/" "$i/trigger")]" "OFF"
     done
-
-    if ! checklist_show "Below are the currently available LEDs.\nSelect any to update their trigger."
+    if ! checklist_show "Below are the available LEDs and their triggers.\nSelect any to update their trigger." || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 0 ))
     then
         return
     fi
 
-    # collect chosen leds
-    local chosen_leds
-    for shrinked_index in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
+    local triggers
+    read -r -a triggers <<< "$(sed "s/\[//;s/\]//" "$i/trigger")"
+
+    radiolist_init
+    for i in "${triggers[@]}"
     do
-        local trimmed_index=${shrinked_index//\"}
-        local index=$(( trimmed_index * 3 + 1))
-        chosen_leds+=( "${RSETUP_CHECKLIST[$index]% *}" )
+        radiolist_add "$i" "OFF"
     done
-
-    while read -r trigger
-    do
-        radiolist_add "$trigger" "OFF"
-    done <<< "$(sed "s/\[//;s/\]//" "/sys/class/leds/$leditem/trigger" | tr ' ' '\n')"
-
-    if radiolist_show "Please select the new trigger:"  && (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} > 0 ))
+    if radiolist_show "Please select the new trigger:" && (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} > 0 ))
     then
-        local only_shrinked_index=${RSETUP_RADIOLIST_STATE_NEW}
-        trimmed_index=${only_shrinked_index//\"}
-        index=$(( trimmed_index * 3 + 1))
-        local trigger_to_apply=${RSETUP_RADIOLIST[$index]}
+        for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
+        do
+            read -r -a i <<< "$(checklist_getitem "$i")"
+            radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}" > "/sys/class/leds/${i[0]}/trigger"
+        done
     fi
-
-    for leditem in "${chosen_leds[@]}"
-    do
-        echo "$trigger_to_apply" > "/sys/class/leds/$leditem/trigger"
-    done
 }
 
 __hardware() {
