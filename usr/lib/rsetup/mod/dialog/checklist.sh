@@ -29,5 +29,11 @@ checklist_add() {
 checklist_show() {
     __parameter_count_check 1 "$@"
 
-    RSETUP_CHECKLIST_STATE_NEW=( "$(__dialog --checklist "$1" "${RSETUP_CHECKLIST[@]}" 3>&1 1>&2 2>&3 3>&-)" )
+    local output
+    if output="$(__dialog --checklist "$1" "${RSETUP_CHECKLIST[@]}" 3>&1 1>&2 2>&3 3>&-)"
+    then
+        read -r -a RSETUP_CHECKLIST_STATE_NEW <<< "$output"
+    else
+        return 1
+    fi
 }
