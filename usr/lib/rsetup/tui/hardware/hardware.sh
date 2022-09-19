@@ -1,6 +1,10 @@
 # shellcheck shell=bash
 
-__hardware_LED() {
+__hardware_camera() {
+    :
+}
+
+__hardware_leds() {
     checklist_init
     for leditem in /sys/class/leds/*
     do
@@ -9,7 +13,7 @@ __hardware_LED() {
         checklist_add "$leditem [$tmp_trigger]" "OFF"
     done
 
-    if ! checklist_show "LEDs with current trigger"
+    if ! checklist_show "Below are the currently available LEDs.\nSelect any to update their trigger."
     then
         return
     fi
@@ -28,7 +32,7 @@ __hardware_LED() {
         radiolist_add "$trigger" "OFF"
     done <<< "$(sed "s/\[//;s/\]//" "/sys/class/leds/$leditem/trigger" | tr ' ' '\n')"
 
-    if radiolist_show "Change triggers"  && (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} > 0 ))
+    if radiolist_show "Please select the new trigger:"  && (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} > 0 ))
     then
         local only_shrinked_index=${RSETUP_RADIOLIST_STATE_NEW}
         trimmed_index=${only_shrinked_index//\"}
@@ -44,11 +48,10 @@ __hardware_LED() {
 
 __hardware() {
     menu_init
+    menu_add __hardware_camera "Camera"
     if ls /sys/class/leds/*/trigger &> /dev/null
     then
-        menu_add __hardware_LED "LED"
-    else
-        menu_add __tui_about "about"
+        menu_add __hardware_leds "LEDs"
     fi
-    menu_show "Customize On-board Functions"
+    menu_show "Manage on-board hardware"
 }
