@@ -1,7 +1,29 @@
 # shellcheck shell=bash
 
-__hardware_camera() {
-    :
+__hardware_gstreamer_test() {
+    local temp
+    temp="$(mktemp tmp.XXXXXXXXXX.jpg)"
+
+    if gst-launch-1.0 v4l2src "device=/dev/$RSETUP_MENU_SELECTED" io-mode=4 ! \
+                      videoconvert ! \
+                      video/x-raw,format=UYVY,width=1920,height=1080 ! \
+                      jpegenc ! \
+                      multifilesink "location=$temp"
+    then
+        msgbox "Test image is saved at $temp."
+    else
+        rm -f "$temp"
+        msgbox "Unable to capture an image with $RSETUP_MENU_SELECTED device.\nPlease check if you have the required libraries installed."
+    fi
+}
+
+__hardware_video() {
+    menu_init
+    for i in /dev/video*
+    do
+        menu_add __hardware_gstreamer_test "$(basename "$i")"
+    done
+    menu_show "Take a test image with the selected video capture device:"
 }
 
 __hardware_leds() {
@@ -35,7 +57,7 @@ __hardware_leds() {
 
 __hardware() {
     menu_init
-    menu_add __hardware_camera "Video capture devices"
+    menu_add __hardware_video "Video capture devices"
     menu_add __hardware_leds "LEDs"
     menu_show "Manage on-board hardware"
 }
