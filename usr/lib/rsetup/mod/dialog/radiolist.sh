@@ -37,3 +37,9 @@ radiolist_show() {
         return 1
     fi
 }
+
+radiolist_getitem() {
+    __parameter_count_check 1 "$@"
+
+    echo "${RSETUP_RADIOLIST[$(( ${1//\"} * 3 + 1))]}"
+}

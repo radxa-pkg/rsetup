@@ -37,3 +37,9 @@ checklist_show() {
         return 1
     fi
 }
+
+checklist_getitem() {
+    __parameter_count_check 1 "$@"
+
+    echo "${RSETUP_CHECKLIST[$(( ${1//\"} * 3 + 1))]}"
+}
