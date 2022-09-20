@@ -70,17 +70,16 @@ log() {
 }
 
 __check_terminal() {
-    local devices=( "/dev/stdin" "/dev/stdout" "/dev/stderr" )
-    local output
+    local devices=( "/dev/stdin" "/dev/stdout" "/dev/stderr" ) output disable_stderr
     for i in "${devices[@]}"
     do
-        local disable_stderr="2>&-"
+        disable_stderr="2>&-"
         if [[ $i == "/dev/stderr" ]]
         then
-            unset disable_stderr
+            disable_stderr=
         fi
 
-        if output="$(eval stty size -F "$i" $disable_stderr)"
+        if output="$(eval "stty size -F '$i' $disable_stderr")"
         then
             echo "$output"
             return
