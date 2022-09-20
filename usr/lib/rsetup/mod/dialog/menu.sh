@@ -55,3 +55,16 @@ menu_show() {
         push_screen "${RSETUP_MENU_CALLBACK[$item]}"
     fi
 }
+
+menu_call() {
+    __parameter_count_check 1 "$@"
+
+    local item
+    if item=$(__dialog --menu "$1" "${RSETUP_MENU[@]}" 3>&1 1>&2 2>&3 3>&-)
+    then
+        RSETUP_MENU_SELECTED="$(menu_getitem "$item")"
+        ${RSETUP_MENU_CALLBACK[$item]}
+    else
+        return 1
+    fi
+}
