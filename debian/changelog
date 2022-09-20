@@ -1,3 +1,12 @@
+rsetup (0.2.2) stable; urgency=high
+
+  * Fix "ROOT_PATH: unbound variable" error that breaks rbuild
+  * Fix "disable_stderr: unbound variable" error that breaks gauge function
+  * Fix "make debug" command cannot access any sub-feature error
+  * Add "make dch" to ease release process
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Tue, 20 Sep 2022 15:01:29 +0800
+
 rsetup (0.2.1) stable; urgency=high
 
   * Fix CI generated package is not usable in Debian system issue
