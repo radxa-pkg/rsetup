@@ -4,6 +4,7 @@ source "$ROOT_PATH/usr/lib/rsetup/mod/dialog/basic.sh"
 source "$ROOT_PATH/usr/lib/rsetup/mod/dialog/menu.sh"
 source "$ROOT_PATH/usr/lib/rsetup/mod/dialog/checklist.sh"
 source "$ROOT_PATH/usr/lib/rsetup/mod/dialog/radiolist.sh"
+source "$ROOT_PATH/usr/lib/rsetup/mod/dialog/select.sh"
 
 RSETUP_SCREEN=()
 

@@ -67,6 +67,26 @@ __test_radiolist() {
     fi
 }
 
+__test_fselect() {
+    local item
+    if item=$(fselect "$PWD")
+    then
+        msgbox "User selected file '$item'."
+    else
+        msgbox "User cancelled action."
+    fi
+}
+
+__test_dselect() {
+    local item
+    if item=$(dselect "$PWD")
+    then
+        msgbox "User selected folder '$item'."
+    else
+        msgbox "User cancelled action."
+    fi
+}
+
 __test() {
     menu_init
     menu_add __test_yesno "yesno"
@@ -78,5 +98,8 @@ __test() {
     menu_add __test_checklist "checklist"
     menu_add_separator
     menu_add __test_radiolist "radiolist"
+    menu_add_separator
+    menu_add __test_fselect "fselect"
+    menu_add __test_dselect "dselect"
     menu_show "TUI tests"
 }
