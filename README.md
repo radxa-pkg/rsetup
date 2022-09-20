@@ -25,7 +25,7 @@ sudo apt-get install git-buildpackage
 
 `make run`: run local version of rsetup
 
-`make DEBUG=1 run`: run local version of rsetup in debug mode
+`make debug`: run local version of rsetup in debug mode
 
 `make test`: run ShellCheck
 
