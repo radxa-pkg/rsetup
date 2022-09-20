@@ -16,7 +16,7 @@ run:
 
 .PHONY: debug
 debug:
-	sudo DEBUG=true bash -x usr/bin/rsetup
+	sudo DEBUG=true bash usr/bin/rsetup
 #
 # Test
 #
