@@ -29,4 +29,6 @@ sudo apt-get install git-buildpackage
 
 `make test`: run ShellCheck
 
+`make dch`: generate changelog from git log
+
 `make deb`: create Debian package

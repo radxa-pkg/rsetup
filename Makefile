@@ -94,6 +94,10 @@ clean-deb:
 #
 # Release
 #
+.PHONY: dch
+dch: debian/changelog
+	gbp dch --debian-branch=main
+
 .PHONY: deb
 deb: debian
 	debuild --no-sign
