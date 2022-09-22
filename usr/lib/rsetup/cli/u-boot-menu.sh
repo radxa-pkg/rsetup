@@ -8,6 +8,7 @@ load_u-boot_setting() {
         touch "$ROOT_PATH/etc/default/u-boot"
     fi
 
+    # shellcheck source=/dev/null
     source "$ROOT_PATH/etc/default/u-boot"
 
     if [[ -z "${U_BOOT_TIMEOUT:-}" ]]
@@ -27,6 +28,7 @@ load_u-boot_setting() {
         sed -i "s|^U_BOOT_PARAMETERS=.*|U_BOOT_PARAMETERS=\"\$(cat /etc/kernel/cmdline)\"|g" "$ROOT_PATH/etc/default/u-boot"
     fi
 
+    # shellcheck source=/dev/null
     source "$ROOT_PATH/etc/default/u-boot"
 
     if [[ -z "${U_BOOT_FDT_OVERLAYS_DIR:-}" ]]
