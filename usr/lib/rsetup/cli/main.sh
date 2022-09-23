@@ -7,7 +7,6 @@ source "$ROOT_PATH/usr/lib/rsetup/cli/ssh.sh"
 source "$ROOT_PATH/usr/lib/rsetup/cli/system.sh"
 source "$ROOT_PATH/usr/lib/rsetup/cli/account.sh"
 source "$ROOT_PATH/usr/lib/rsetup/cli/docker.sh"
-source "$ROOT_PATH/usr/lib/rsetup/cli/local.sh"
 source "$ROOT_PATH/usr/lib/rsetup/cli/u-boot-menu.sh"
 source "$ROOT_PATH/usr/lib/rsetup/cli/wi-fi.sh"
 
