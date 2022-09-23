@@ -37,3 +37,12 @@ load_u-boot_setting() {
         U_BOOT_FDT_OVERLAYS_DIR="${ROOT_PATH}${U_BOOT_FDT_OVERLAYS_DIR}"
     fi
 }
+
+disable_overlays() {
+    load_u-boot_setting
+
+    for i in "$U_BOOT_FDT_OVERLAYS_DIR"/*.dtbo
+    do
+        mv -- "$i" "${i}.disabled"
+    done
+}

@@ -10,3 +10,7 @@ which() {
             ;;
     esac
 }
+
+u-boot-update() {
+    echo "Running u-boot-update..."
+}
