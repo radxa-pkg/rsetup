@@ -1,17 +1,20 @@
 # shellcheck shell=bash
 
 source "$ROOT_PATH/usr/lib/rsetup/mod/block_helpers.sh"
+source "$ROOT_PATH/usr/lib/rsetup/mod/hwid.sh"
 
 ALLOWED_RCONFIG_FUNC+=("regenerate_machine_id" "update_hostname" "update_locale" "enable_service" "disable_service" "resize_root")
 
 update_bootloader() {
-    __parameter_count_check 1 "$@"
-    __assert_f "$ROOT_PATH/usr/lib/u-boot-$1/setup.sh"
+    __parameter_count_check 0 "$@"
+    local pid
+    pid="$(get_product_id)"
+    __assert_f "$ROOT_PATH/usr/lib/u-boot-$pid/setup.sh"
 
     local device
     device=$(__get_block_dev)
 
-    "$ROOT_PATH/usr/lib/u-boot-$1/setup.sh" update_bootloader "$device"
+    "$ROOT_PATH/usr/lib/u-boot-$pid/setup.sh" update_bootloader "$device"
 }
 
 regenerate_machine_id() {

@@ -7,7 +7,7 @@ __system_system_update() {
 }
 
 __system_update_bootloader() {
-    if "$ROOT_PATH/usr/lib/rsetup/cli/system.sh" update_bootloader "$(dtname | tr , -)"
+    if update_bootloader
     then
         msgbox "The bootloader has been successfully updated."
     else
