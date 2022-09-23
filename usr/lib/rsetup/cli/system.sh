@@ -1,5 +1,7 @@
 # shellcheck shell=bash
 
+source "$ROOT_PATH/usr/lib/rsetup/mod/block_helpers.sh"
+
 ALLOWED_RCONFIG_FUNC+=("regenerate_machine_id" "update_hostname" "update_locale" "enable_service" "disable_service" "resize_root")
 
 update_bootloader() {
