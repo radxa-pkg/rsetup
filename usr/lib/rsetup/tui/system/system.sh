@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 
 __system_system_update() {
+    echo -e "\n======================="
     apt update
     apt full-upgrade
     read -rp "Press enter to continue..."

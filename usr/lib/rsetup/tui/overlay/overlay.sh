@@ -61,6 +61,7 @@ __overlay_rebuild() {
     do
         :
     done
+    echo -e "\n======================="
     u-boot-update
     echo "Rebuilding boot configuration completed."
     read -rp "Press enter to continue..."
