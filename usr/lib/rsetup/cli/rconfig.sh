@@ -26,7 +26,7 @@ process_config() {
             then
                 echo "$REPLY"
             else
-                exec $REPLY
+                eval "$REPLY"
             fi
         else
             echo "'$cmd' is not an allowed command."
