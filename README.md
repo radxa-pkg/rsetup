@@ -4,9 +4,14 @@
 
 Radxa system setup utility
 
+## Usage
+
+Run `rsetup` to launch the user interface.
+
 ## Development dependencies
 
-Arch
+<details>
+<summary>Arch</summary>
 
 ```bash
 yay -Syu devscripts dh-autoreconf dh-strip-nondeterminism git-buildpackage pandoc shellcheck
@@ -40,16 +45,19 @@ yay -Syu perl-data-validate-uri perl-list-someutils perl-moox-aliases perl-names
 # Copy profile for Arch
 sudo cp -r /usr/share/lintian/profiles/debian/. /usr/share/lintian/profiles/archlinux/
 ```
+</details>
 
-Debian
+<details>
+<summary>Debian</summary>
 
 ```bash
 sudo apt-get update
 sudo apt-get build-dep --no-install-recommends .
 sudo apt-get install git-buildpackage
 ```
+</details>
 
-## Usage
+## Developer commands
 
 `make run`: run local version of rsetup
 
