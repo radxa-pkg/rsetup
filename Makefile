@@ -41,6 +41,7 @@ $(SRC-MAN)/%: $(SRC-MAN)/%.md
 
 SRC-DOC		:=	.
 DOCS		:=	$(SRC-DOC)/SOURCE
+.PHONY: build-doc
 build-doc: $(DOCS)
 
 $(SRC-DOC):
