@@ -59,9 +59,6 @@ install: install-man
 	cp -R usr/lib/rsetup/. $(DESTDIR)$(LIBDIR)/rsetup
 	find $(DESTDIR)$(LIBDIR)/rsetup -type f -exec chmod 644 {} +
 
-	install -d $(DESTDIR)$(LIBDIR)/systemd/system
-	install -m 644 usr/lib/systemd/system/rsetup.service $(DESTDIR)$(LIBDIR)/systemd/system
-
 	install -d $(DESTDIR)$(BINDIR)
 	install -m 755 usr/bin/rsetup $(DESTDIR)$(BINDIR)/rsetup
 
