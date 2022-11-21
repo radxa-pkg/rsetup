@@ -36,7 +36,7 @@ jobs:
           fi
       - name: Release
         if: env.distro != 'UNRELEASED'
-        uses: softprops/action-gh-release@cd28b0f5ee8571b76cfdaa62a30d51d752317477
+        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
         with:
           tag_name: ${{ env.version }}
           body_path: README.md
@@ -47,7 +47,7 @@ jobs:
             ../*.deb
       - name: Append changelog
         if: env.distro != 'UNRELEASED'
-        uses: softprops/action-gh-release@cd28b0f5ee8571b76cfdaa62a30d51d752317477
+        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
         with:
           tag_name: ${{ env.version }}
           body: |
