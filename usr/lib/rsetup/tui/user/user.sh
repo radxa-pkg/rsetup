@@ -72,7 +72,7 @@ Are you sure to continue?"
     for selected_tty_shrinked_index in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
     do
         selected_tty_real_index=$((3*${selected_tty_shrinked_index//\"}+1))
-        selected_tty_device=${RSETUP_RADIOLIST[${selected_tty_real_index}]}
+        selected_tty_device=${RSETUP_CHECKLIST[${selected_tty_real_index}]}
         SYSTEMD_OVERRIDE=/etc/systemd/system/getty.target.wants/$selected_tty_device.d
         mkdir -p "$SYSTEMD_OVERRIDE"
         cat << EOF > "$SYSTEMD_OVERRIDE/override.conf"
