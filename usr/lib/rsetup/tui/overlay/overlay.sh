@@ -37,6 +37,7 @@ __overlay_manage() {
         fi
     done
 
+    checklist_emptymsg "Unable to find any installed overlay under $U_BOOT_FDT_OVERLAYS_DIR."
     if ! checklist_show "Please select overlays you want to enable on boot:"
     then
         return
