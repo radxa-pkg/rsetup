@@ -27,9 +27,10 @@ __hardware_video() {
     menu_show "Take a test image with the selected video capture device:"
 }
 
-__hardware_leds() {
+__hardware_gpio_leds() {
     checklist_init
-    for i in /sys/class/leds/*
+
+    for i in /sys/bus/platform/drivers/leds-gpio/leds/leds/*
     do
         if [[ -f "$i/trigger" ]]
         then
@@ -43,7 +44,7 @@ __hardware_leds() {
     fi
 
     local triggers
-    read -r -a triggers <<< "$(sed "s/\[//;s/\]//" "$(find -L /sys/class/leds/ -mindepth 2 -maxdepth 2 -name 'trigger' 2> /dev/null | head -1)")"
+    read -r -a triggers <<< "$(sed "s/\[//;s/\]//" "$(find -L /sys/bus/platform/drivers/leds-gpio/leds/leds/ -mindepth 2 -maxdepth 2 -name 'trigger' 2> /dev/null | head -1)")"
 
     radiolist_init
     for i in "${triggers[@]}"
@@ -55,7 +56,7 @@ __hardware_leds() {
         for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
         do
             read -r -a i <<< "$(checklist_getitem "$i")"
-            radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}" > "/sys/class/leds/${i[0]}/trigger"
+            radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}" > "/sys/bus/platform/drivers/leds-gpio/leds/leds/${i[0]}/trigger"
         done
     fi
 }
@@ -63,6 +64,6 @@ __hardware_leds() {
 __hardware() {
     menu_init
     menu_add __hardware_video "Video capture devices"
-    menu_add __hardware_leds "LEDs"
+    menu_add __hardware_gpio_leds "GPIO LEDs"
     menu_show "Manage on-board hardware"
 }
