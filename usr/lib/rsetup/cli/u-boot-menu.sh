@@ -34,7 +34,7 @@ load_u-boot_setting() {
     if [[ -z "${U_BOOT_FDT_OVERLAYS_DIR:-}" ]]
     then
         eval "$(grep "^U_BOOT_FDT_OVERLAYS_DIR" "$(which u-boot-update)")"
-        U_BOOT_FDT_OVERLAYS_DIR="${ROOT_PATH}${U_BOOT_FDT_OVERLAYS_DIR}"
+        U_BOOT_FDT_OVERLAYS_DIR="${ROOT_PATH}${U_BOOT_FDT_OVERLAYS_DIR:-}"
     fi
 }
 
