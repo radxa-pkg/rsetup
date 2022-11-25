@@ -16,7 +16,7 @@ __local_install_CJKV_fonts() {
     if yesno "Are you sure to install CJKV fonts?"
     then
         local tmp fonts=( "fonts-arphic-ukai" "fonts-arphic-uming" "fonts-ipafont-mincho" "fonts-ipafont-gothic" "fonts-unfonts-core" )
-        tmp=$(mktemp)
+        tmp="$(mktemp)"
         for(( i = 0; i < ${#fonts[@]}; i++ ))
         do
 
@@ -36,7 +36,7 @@ __local_install_CJKV_fonts() {
         else
             msgbox "Failed to install CJKV fonts."
         fi
-        rm "$tmp"
+        rm -f "$tmp"
     fi
 }
 
