@@ -2,6 +2,32 @@
 
 source "$ROOT_PATH/usr/lib/rsetup/mod/hwid.sh"
 
+__overlay_parse_dtbo() {
+    dtc -I dtb -O dts "$1" 2>/dev/null | dtc -I dts -O yaml 2>/dev/null | yq -r ".[0].metadata.$2"
+}
+
+__overlay_is_compatible() {
+    local overlay="$1" dtbo_compatible
+
+    if ! dtbo_compatible="$(__overlay_parse_dtbo "$overlay" "compatible[0]" | xargs -0)"
+    then
+        return 1
+    fi
+
+    for d in $dtbo_compatible
+    do
+        for p in $(xargs -0 < /sys/firmware/devicetree/base/compatible)
+        do
+            if [[ "$d" == "$p" ]]
+            then
+                return
+            fi
+        done
+    done
+
+    return 1
+}
+
 __overlay_install() {
     local item basename
     if ! item="$(fselect "$PWD")"
@@ -22,22 +48,48 @@ __overlay_install() {
     __overlay_rebuild
 }
 
+__overlay_filter() {
+    local overlay="$1" temp="$2"
+
+    if ! __overlay_is_compatible "$overlay"
+    then
+        return
+    fi
+
+    exec 100>> "$temp"
+    flock 100
+
+    if [[ "$i" == *.dtbo ]]
+    then
+        echo "$(basename "$overlay") ON" >&100
+    elif [[ "$i" == *.dtbo.disabled ]]
+    then
+        echo "$(basename "$overlay" | sed -E "s/(.*\.dtbo).*/\1/") OFF" >&100
+    fi
+}
+
 __overlay_manage() {
+    echo "Fetching available overlays may take a while, please wait..." >&2
     load_u-boot_setting
     checklist_init
 
+    local temp
+    temp="$(mktemp)"
+    trap 'rm -f $temp' RETURN EXIT
     for i in "$U_BOOT_FDT_OVERLAYS_DIR"/*.dtbo*
     do
-        if [[ "$i" == *.dtbo ]]
-        then
-            checklist_add "$(basename "$i")" "ON"
-        elif [[ "$i" == *.dtbo.disabled ]]
-        then
-            checklist_add "$(basename "$i" | sed -E "s/(.*\.dtbo).*/\1/")" "OFF"
-        fi
+        __overlay_filter "$i" "$temp" &
     done
 
-    checklist_emptymsg "Unable to find any installed overlay under $U_BOOT_FDT_OVERLAYS_DIR."
+    wait
+
+    local item=()
+    while read -ra item
+    do
+        checklist_add "${item[@]}"
+    done < <(sort "$temp")
+
+    checklist_emptymsg "Unable to find any compatible overlay under $U_BOOT_FDT_OVERLAYS_DIR."
     if ! checklist_show "Please select overlays you want to enable on boot:"
     then
         return

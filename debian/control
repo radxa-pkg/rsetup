@@ -13,9 +13,11 @@ Package: rsetup
 Architecture: all
 Section: admin
 Priority: standard
-Depends: gdisk,
+Depends: device-tree-compiler,
+         gdisk,
          parted,
          whiptail,
+         yq,
          ${misc:Depends},
 Description: Radxa system setup utility
  Radxa system setup utility (rsetup) provides an user friendly menu to
