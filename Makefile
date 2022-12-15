@@ -10,19 +10,33 @@ all: build
 #
 # Development
 #
+
+.PHONY: overlay
+overlay:
+	$(eval OVERLAY_DIR := $(shell mktemp -d))
+	sudo mount -t overlay overlay -o lowerdir=/:./src:./overlay $(OVERLAY_DIR)
+	sudo systemd-nspawn --link-journal no -D $(OVERLAY_DIR) $(OVERLAY_CMD) || true
+	sudo umount $(OVERLAY_DIR)
+	rmdir $(OVERLAY_DIR)
+
 .PHONY: run
-run:
-	usr/bin/rsetup
+run: OVERLAY_CMD := rsetup
+run: overlay
 
 .PHONY: debug
-debug:
-	sudo DEBUG=true bash usr/bin/rsetup
+debug: OVERLAY_CMD := bash -c "DEBUG=true /usr/bin/rsetup"
+debug: overlay
+
+.PHONY: shell
+shell: OVERLAY_CMD := bash
+shell: overlay
+
 #
 # Test
 #
 .PHONY: test
 test:
-	find usr -type f \( -name "*.sh" -o -name "rsetup" \) -exec shellcheck -x {} +
+	find src -type f \( -name "*.sh" -o -name "rsetup" \) -exec shellcheck --source-path=./src --external-sources {} +
 
 #
 # Build
@@ -30,7 +44,7 @@ test:
 .PHONY: build
 build: build-man build-doc
 
-SRC-MAN		:=	man
+SRC-MAN		:=	src/usr/share/man/man8
 SRCS-MAN	:=	$(wildcard $(SRC-MAN)/*.md)
 MANS		:=	$(SRCS-MAN:.md=)
 .PHONY: build-man
@@ -39,7 +53,7 @@ build-man: $(MANS)
 $(SRC-MAN)/%: $(SRC-MAN)/%.md
 	pandoc "$<" -o "$@" --from markdown --to man -s
 
-SRC-DOC		:=	.
+SRC-DOC		:=	src
 DOCS		:=	$(SRC-DOC)/SOURCE
 .PHONY: build-doc
 build-doc: $(DOCS)
@@ -57,11 +71,11 @@ $(SRC-DOC)/SOURCE: $(SRC-DOC)
 .PHONY: install
 install: install-man
 	install -d $(DESTDIR)$(LIBDIR)/rsetup
-	cp -R usr/lib/rsetup/. $(DESTDIR)$(LIBDIR)/rsetup
+	cp -R src/usr/lib/rsetup/. $(DESTDIR)$(LIBDIR)/rsetup
 	find $(DESTDIR)$(LIBDIR)/rsetup -type f -exec chmod 644 {} +
 
 	install -d $(DESTDIR)$(BINDIR)
-	install -m 755 usr/bin/rsetup $(DESTDIR)$(BINDIR)/rsetup
+	install -m 755 src/usr/bin/rsetup $(DESTDIR)$(BINDIR)/rsetup
 
 .PHONY: install-man
 install-man: build-man

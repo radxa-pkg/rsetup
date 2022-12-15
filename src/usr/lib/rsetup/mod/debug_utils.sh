@@ -3,7 +3,7 @@
 which() {
     case $1 in
         u-boot-update)
-            echo "$ROOT_PATH/usr/sbin/u-boot-update"
+            echo "/usr/sbin/u-boot-update"
             ;;
         *)
             command which "$@"

@@ -61,9 +61,14 @@ __hardware_gpio_leds() {
     fi
 }
 
+__hardware_rgb_leds() {
+    :
+}
+
 __hardware() {
     menu_init
     menu_add __hardware_video "Video capture devices"
     menu_add __hardware_gpio_leds "GPIO LEDs"
+    menu_add __hardware_rgb_leds "RGB LEDs"
     menu_show "Manage on-board hardware"
 }

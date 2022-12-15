@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
-source "$ROOT_PATH/usr/lib/rsetup/mod/block_helpers.sh"
-source "$ROOT_PATH/usr/lib/rsetup/mod/hwid.sh"
+source "/usr/lib/rsetup/mod/block_helpers.sh"
+source "/usr/lib/rsetup/mod/hwid.sh"
 
 ALLOWED_RCONFIG_FUNC+=("regenerate_machine_id" "update_hostname" "update_locale" "enable_service" "disable_service" "resize_root")
 
@@ -9,19 +9,19 @@ update_bootloader() {
     __parameter_count_check 0 "$@"
     local pid
     pid="$(get_product_id)"
-    __assert_f "$ROOT_PATH/usr/lib/u-boot-$pid/setup.sh"
+    __assert_f "/usr/lib/u-boot-$pid/setup.sh"
 
     local device
     device=$(__get_block_dev)
 
-    "$ROOT_PATH/usr/lib/u-boot-$pid/setup.sh" update_bootloader "$device"
+    "/usr/lib/u-boot-$pid/setup.sh" update_bootloader "$device"
 }
 
 regenerate_machine_id() {
     echo "Remove existing machine ids..."
-    rm -f "$ROOT_PATH/etc/machine-id" "$ROOT_PATH/var/lib/dbus/machine-id"
+    rm -f "/etc/machine-id" "/var/lib/dbus/machine-id"
     echo "Regenerating machine ids..."
-    dbus-uuidgen --ensure="$ROOT_PATH/etc/machine-id"
+    dbus-uuidgen --ensure="/etc/machine-id"
     dbus-uuidgen --ensure
 }
 
@@ -30,8 +30,8 @@ update_hostname() {
 
     local hostname="$1"
 
-    echo "$hostname" > "$ROOT_PATH/etc/hostname"
-    cat << EOF > "$ROOT_PATH/etc/hosts"
+    echo "$hostname" > "/etc/hostname"
+    cat << EOF > "/etc/hosts"
 127.0.0.1 localhost
 127.0.1.1 $hostname
 
@@ -50,7 +50,7 @@ update_locale() {
     local locale="$1"
     echo "locales locales/default_environment_locale select $locale" | debconf-set-selections
     echo "locales locales/locales_to_be_generated multiselect $locale UTF-8" | debconf-set-selections
-    rm "$ROOT_PATH/etc/locale.gen"
+    rm "/etc/locale.gen"
     dpkg-reconfigure --frontend noninteractive locales
 }
 

@@ -14,18 +14,11 @@ LANGUAGE="C"
 
 DEBUG="${DEBUG:-false}"
 
-if git status &>/dev/null && [[ -f "$PWD/usr/bin/rsetup" ]]
-then
-    ROOT_PATH="${ROOT_PATH:-"$PWD"}"
-else
-    ROOT_PATH="${ROOT_PATH:-}"
-fi
-
-source "$ROOT_PATH/usr/lib/rsetup/cli/main.sh"
+source "/usr/lib/rsetup/cli/main.sh"
 
 if (( $# == 0 )) || [[ $1 == main ]]
 then
-    source "$ROOT_PATH/usr/lib/rsetup/tui/main.sh"
+    source "/usr/lib/rsetup/tui/main.sh"
     tui_start __tui_main
 else
     __parameter_type_check "$1" "function"

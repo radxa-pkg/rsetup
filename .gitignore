@@ -1,5 +1,2 @@
 /.vscode*
-SOURCE
-/boot
-/config
-/etc
+/overlay

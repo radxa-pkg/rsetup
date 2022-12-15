@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-source "$ROOT_PATH/usr/lib/rsetup/mod/hwid.sh"
+source "/usr/lib/rsetup/mod/hwid.sh"
 
 __overlay_parse_dtbo() {
     dtc -I dtb -O dts "$1" 2>/dev/null | dtc -I dts -O yaml 2>/dev/null | yq -r ".[0].metadata.$2"
@@ -133,7 +133,7 @@ __overlay() {
     if [[ -n "${U_BOOT_FDT_OVERLAYS:-}" ]]
     then
         msgbox \
-"Detected 'U_BOOT_FDT_OVERLAYS' in '$ROOT_PATH/etc/default/u-boot'.
+"Detected 'U_BOOT_FDT_OVERLAYS' in '/etc/default/u-boot'.
 This usually happens when you want to customize your boot process.
 To avoid potential conflicts, overlay feature is temporarily disabled until such customization is reverted."
         return

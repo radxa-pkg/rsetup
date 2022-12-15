@@ -37,7 +37,7 @@ process_config() {
 __on_boot() {
     __parameter_count_check 0 "$@"
 
-    local conf_dir="$ROOT_PATH/config"
+    local conf_dir="/config"
 
     for i in "$conf_dir/before.txt" "$conf_dir/config.txt" "$conf_dir/after.txt"
     do

@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-source "$ROOT_PATH/usr/lib/rsetup/tui/local/timezone/timezone.sh"
+source "/usr/lib/rsetup/tui/local/timezone/timezone.sh"
 
 __local_locale() {
     dpkg-reconfigure locales
