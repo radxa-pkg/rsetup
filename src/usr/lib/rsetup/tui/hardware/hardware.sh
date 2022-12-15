@@ -13,7 +13,8 @@ __hardware_gstreamer_test() {
         msgbox "Test image is saved at $temp."
     else
         rm -f "$temp"
-        msgbox "Unable to capture an image with $RSETUP_MENU_SELECTED device.\nPlease check if you have the required libraries installed."
+        msgbox "Unable to capture an image with $RSETUP_MENU_SELECTED device.
+Please check if you have the required libraries installed."
     fi
 }
 
@@ -23,7 +24,9 @@ __hardware_video() {
     do
         menu_add __hardware_gstreamer_test "$(basename "$i")"
     done
-    menu_emptymsg "No supported devices is detected.\n\nPlease make sure they are enabled first."
+    menu_emptymsg "No supported devices is detected.
+
+Please make sure they are enabled first."
     menu_show "Take a test image with the selected video capture device:"
 }
 
@@ -37,8 +40,11 @@ __hardware_gpio_leds() {
             checklist_add "$(basename "$i") [$(sed -E "s/.*\[(.*)\].*/\1/" "$i/trigger")]" "OFF"
         fi
     done
-    checklist_emptymsg "No supported devices is detected.\n\nPlease make sure they are enabled first."
-    if ! checklist_show "Below are the available LEDs and their triggers.\nSelect any to update their trigger." || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 0 ))
+    checklist_emptymsg "No supported devices is detected.
+
+Please make sure they are enabled first."
+    if ! checklist_show "Below are the available LEDs and their triggers.
+Select any to update their trigger." || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 0 ))
     then
         return
     fi

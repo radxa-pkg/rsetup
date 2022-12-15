@@ -43,7 +43,8 @@ __select_dialog() {
         done < <(find "$SELECT_TARGET_DIR/." -maxdepth 1 "${FIND_FILTER[@]}" \( -type d \( -name '.' -printf ".\n" , ! -name '.' -printf "%P/\n" \) , ! -type d -printf "%P\n" \) | cat - <(echo "..") | sort -V)
         if $SELECT_FOLDER_ONLY
         then
-            local msg="Please navigate to a folder under $SELECT_TARGET_DIR\nOr choose . entry to select current folder."
+            local msg="Please navigate to a folder under $SELECT_TARGET_DIR
+Or choose . entry to select current folder."
         else
             local msg="Please select a file from $SELECT_TARGET_DIR"
         fi

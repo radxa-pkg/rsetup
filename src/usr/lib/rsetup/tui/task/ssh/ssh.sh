@@ -16,7 +16,8 @@ __task_ssh_install() {
 }
 
 __task_ssh_enable() {
-    if yesno "Would you like the SSH server to be enabled?\nCaution: Default and weak passwords are a security risk when SSH is enabled!"
+    if yesno "Would you like the SSH server to be enabled?
+Caution: Default and weak passwords are a security risk when SSH is enabled!"
     then
         if enable_ssh
         then

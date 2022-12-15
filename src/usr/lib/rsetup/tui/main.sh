@@ -16,7 +16,9 @@ then
 fi
 
 __tui_about() {
-    msgbox "rsetup - Radxa system setup utility\n\nCopyright 2022-$(date +%Y) Radxa Computer Co., Ltd"
+    msgbox "rsetup - Radxa system setup utility
+
+Copyright 2022-$(date +%Y) Radxa Computer Co., Ltd"
 }
 
 __tui_main() {
