@@ -78,8 +78,8 @@ Are you sure?"
     fi
 }
 
-__overlay_filter() {
-    local overlay="$1" temp="$2"
+__overlay_filter_worker() {
+    local temp="$1" overlay="$2"
 
     if ! __overlay_is_compatible "$overlay"
     then
@@ -98,8 +98,29 @@ __overlay_filter() {
     fi
 }
 
+__overlay_filter() {
+    local temp="$1" dtbos=( "$U_BOOT_FDT_OVERLAYS_DIR"/*.dtbo* ) running
+    for i in "${dtbos[@]}"
+    do
+        __overlay_filter_worker "$temp" "$i" &
+    done
+
+    while true
+    do
+        running="$(jobs -r | wc -l)"
+        if (( running == 0 ))
+        then
+            wait
+            return
+        else
+            echo $(( (${#dtbos[@]} - running) * 100 / ${#dtbos[@]} ))
+            sleep 0.1
+        fi
+    done
+}
+
 __overlay_manage() {
-    echo "Fetching available overlays may take a while, please wait..." >&2
+    echo "Searching available overlays may take a while, please wait..." >&2
     load_u-boot_setting
     checklist_init
 
@@ -107,12 +128,8 @@ __overlay_manage() {
     temp="$(mktemp)"
     # shellcheck disable=SC2064
     trap "rm -f $temp" RETURN EXIT
-    for i in "$U_BOOT_FDT_OVERLAYS_DIR"/*.dtbo*
-    do
-        __overlay_filter "$i" "$temp" &
-    done
 
-    wait
+    __overlay_filter "$temp" | gauge "Searching available overlays..." 0
 
     # Bash doesn support IFS=$'\0'
     # Use array to emulate this
