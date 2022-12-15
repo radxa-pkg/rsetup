@@ -5,20 +5,21 @@ checklist_init() {
     __parameter_count_check 0 "$@"
 
     export RSETUP_CHECKLIST=()
+    export RSETUP_CHECKLIST_VALUE=()
     export RSETUP_CHECKLIST_STATE_OLD=()
     export RSETUP_CHECKLIST_STATE_NEW=()
 }
 
 checklist_add() {
-    __parameter_count_check 2 "$@"
-
-    local item=$1
-    local status=$2
+    local title="$1"
+    local status="$2"
     local tag="$((${#RSETUP_CHECKLIST[@]} / 3))"
+    local value="${3:-$title}"
 
     __parameter_value_check "$status" "ON" "OFF"
 
-    RSETUP_CHECKLIST+=( "$tag" "$item" "$status" )
+    RSETUP_CHECKLIST+=( "$tag" "$title" "$status" )
+    RSETUP_CHECKLIST_VALUE+=( "$value" )
 
     if [[ $status == "ON" ]]
     then
@@ -46,7 +47,7 @@ checklist_show() {
 checklist_getitem() {
     __parameter_count_check 1 "$@"
 
-    echo "${RSETUP_CHECKLIST[$(( ${1//\"} * 3 + 1))]}"
+    echo "${RSETUP_CHECKLIST_VALUE[${1//\"}]}"
 }
 
 checklist_emptymsg() {

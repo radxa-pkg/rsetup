@@ -4,13 +4,13 @@ source "/usr/lib/rsetup/mod/hwid.sh"
 source "/usr/lib/rsetup/mod/pkg.sh"
 
 __overlay_parse_dtbo() {
-    dtc -I dtb -O dts "$1" 2>/dev/null | dtc -I dts -O yaml 2>/dev/null | yq -r ".[0].metadata.$2"
+    dtc -I dtb -O dts "$1" 2>/dev/null | dtc -I dts -O yaml 2>/dev/null | yq -r ".[0].metadata.$2[0]" | xargs -0
 }
 
 __overlay_is_compatible() {
     local overlay="$1" dtbo_compatible
 
-    if ! dtbo_compatible="$(__overlay_parse_dtbo "$overlay" "compatible[0]" | xargs -0)"
+    if ! dtbo_compatible="$(__overlay_parse_dtbo "$overlay" "compatible")"
     then
         return 1
     fi
@@ -56,7 +56,8 @@ Are you sure?"
     basename="$(basename "$item")"
     basename="${basename%.dts}.dtbo"
     temp="$(mktemp)"
-    trap 'rm -f $temp' RETURN EXIT
+    # shellcheck disable=SC2064
+    trap "rm -f $temp" RETURN EXIT
 
     if ! cpp -E -I "/usr/src/linux-headers-$(uname -r)/include" "$item" "$temp"
     then
@@ -70,7 +71,11 @@ Are you sure?"
         return
     fi
 
-    u-boot-update
+    if ! u-boot-update >/dev/null
+    then
+        msgbox "Unable to update the boot config!"
+        return
+    fi
 }
 
 __overlay_filter() {
@@ -86,10 +91,10 @@ __overlay_filter() {
 
     if [[ "$i" == *.dtbo ]]
     then
-        echo "$(basename "$overlay") ON" >&100
+        echo -e "$(__overlay_parse_dtbo "$overlay" "title")\0ON\0$(basename "$overlay")" >&100
     elif [[ "$i" == *.dtbo.disabled ]]
     then
-        echo "$(basename "$overlay" | sed -E "s/(.*\.dtbo).*/\1/") OFF" >&100
+        echo -e "$(__overlay_parse_dtbo "$overlay" "title")\0OFF\0$(basename "$overlay" | sed -E "s/(.*\.dtbo).*/\1/")" >&100
     fi
 }
 
@@ -100,7 +105,8 @@ __overlay_manage() {
 
     local temp
     temp="$(mktemp)"
-    trap 'rm -f $temp' RETURN EXIT
+    # shellcheck disable=SC2064
+    trap "rm -f $temp" RETURN EXIT
     for i in "$U_BOOT_FDT_OVERLAYS_DIR"/*.dtbo*
     do
         __overlay_filter "$i" "$temp" &
@@ -108,11 +114,15 @@ __overlay_manage() {
 
     wait
 
-    local item=()
-    while read -ra item
+    # Bash doesn support IFS=$'\0'
+    # Use array to emulate this
+    local items=()
+    mapfile items < <(sort "$temp" | tr $"\0" $"\n")
+    while (( ${#items[@]} >= 3 ))
     do
-        checklist_add "${item[@]}"
-    done < <(sort "$temp")
+        checklist_add "${items[0]/$'\n'}" "${items[1]/$'\n'}" "${items[2]/$'\n'}"
+        items=("${items[@]:3}")
+    done
 
     checklist_emptymsg "Unable to find any compatible overlay under $U_BOOT_FDT_OVERLAYS_DIR."
     if ! checklist_show "Please select overlays you want to enable on boot:"
@@ -129,7 +139,11 @@ __overlay_manage() {
         mv "$U_BOOT_FDT_OVERLAYS_DIR/$item.disabled" "$U_BOOT_FDT_OVERLAYS_DIR/$item"
     done
 
-    u-boot-update
+    if ! u-boot-update >/dev/null
+    then
+        msgbox "Unable to update the boot config!"
+        return
+    fi
 }
 
 __overlay_reset() {
