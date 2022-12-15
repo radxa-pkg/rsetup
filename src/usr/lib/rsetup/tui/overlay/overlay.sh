@@ -29,7 +29,17 @@ __overlay_is_compatible() {
 }
 
 __overlay_install() {
-    local item basename
+    if ! yesno "3rd party overlay could physically damage your system.
+In addition, they may miss important metadata for rsetup to recognize correctly.
+This means if you ever run 'Manage overlay' function again, your custom overlays
+might be disabled, and you will have to manually reenable them.
+
+Are you sure?"
+    then
+        return
+    fi
+
+    local item basename temp
     if ! item="$(fselect "$PWD")"
     then
         return
@@ -39,13 +49,22 @@ __overlay_install() {
 
     basename="$(basename "$item")"
     basename="${basename%.dts}.dtbo"
-    if ! dtc -q -I dts -O dtb -o "$U_BOOT_FDT_OVERLAYS_DIR/$basename" "$item"
+    temp="$(mktemp)"
+    trap 'rm -f $temp' RETURN EXIT
+
+    if ! cpp -E -I "/usr/src/linux-headers-$(uname -r)/include" "$item" "$temp"
     then
-        msgbox "Unable to compile the given device tree!"
+        msgbox "Unable to preprocess the source code!"
         return
     fi
 
-    __overlay_rebuild
+    if ! dtc -q -@ -I dts -O dtb -o "$U_BOOT_FDT_OVERLAYS_DIR/$basename" "$item"
+    then
+        msgbox "Unable to compile the source code!"
+        return
+    fi
+
+    u-boot-update
 }
 
 __overlay_filter() {
@@ -104,20 +123,7 @@ __overlay_manage() {
         mv "$U_BOOT_FDT_OVERLAYS_DIR/$item.disabled" "$U_BOOT_FDT_OVERLAYS_DIR/$item"
     done
 
-    __overlay_rebuild
-}
-
-__overlay_rebuild() {
-    load_u-boot_setting
-
-    for i in "$U_BOOT_FDT_OVERLAYS_DIR"/*.dtbo
-    do
-        :
-    done
-    echo -e "\n======================="
     u-boot-update
-    echo "Rebuilding boot configuration completed."
-    read -rp "Press enter to continue..."
 }
 
 __overlay_reset() {
@@ -140,9 +146,8 @@ To avoid potential conflicts, overlay feature is temporarily disabled until such
     fi
 
     menu_init
+    menu_add __overlay_manage "Manage overlay"
     menu_add __overlay_install "Install overlay from source"
-    menu_add __overlay_manage "Manage installed overlay"
-    menu_add __overlay_rebuild "Rebuild boot configuration"
-    menu_add __overlay_reset "Reset overlay libraries with kernel's default"
+    menu_add __overlay_reset "Reset installed overlay to kernel's default"
     menu_show "Configure Device Tree Overlay"
 }
