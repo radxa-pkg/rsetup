@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 
 source "/usr/lib/rsetup/mod/hwid.sh"
+source "/usr/lib/rsetup/mod/pkg.sh"
 
 __overlay_parse_dtbo() {
     dtc -I dtb -O dts "$1" 2>/dev/null | dtc -I dts -O yaml 2>/dev/null | yq -r ".[0].metadata.$2"
@@ -29,6 +30,11 @@ __overlay_is_compatible() {
 }
 
 __overlay_install() {
+    if ! __depends_package "gcc" "linux-headers-$(uname -r)"
+    then
+        return
+    fi
+
     if ! yesno "3rd party overlay could physically damage your system.
 In addition, they may miss important metadata for rsetup to recognize correctly.
 This means if you ever run 'Manage overlay' function again, your custom overlays
