@@ -66,23 +66,6 @@ $(SRC-DOC)/SOURCE: $(SRC-DOC)
 	echo -e "git clone $(shell git remote get-url origin)\ngit checkout $(shell git rev-parse HEAD)" > "$@"
 
 #
-# Install
-#
-.PHONY: install
-install: install-man
-	install -d $(DESTDIR)$(LIBDIR)/rsetup
-	cp -R src/usr/lib/rsetup/. $(DESTDIR)$(LIBDIR)/rsetup
-	find $(DESTDIR)$(LIBDIR)/rsetup -type f -exec chmod 644 {} +
-
-	install -d $(DESTDIR)$(BINDIR)
-	install -m 755 src/usr/bin/rsetup $(DESTDIR)$(BINDIR)/rsetup
-
-.PHONY: install-man
-install-man: build-man
-	install -d $(DESTDIR)$(MANDIR)/man8
-	install -m 644 $(SRC-MAN)/*.8 $(DESTDIR)$(MANDIR)/man8/
-
-#
 # Clean
 #
 .PHONY: distclean
