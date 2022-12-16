@@ -1,3 +1,12 @@
+rsetup (0.3.0) stable; urgency=medium
+
+  * Only show compatible overlays in Overlay Management
+  * Now supporting building overlay that uses Linux headers
+  * Overlay will be displayed by their title instead of the file name
+  * Add progress window for long operation
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Fri, 16 Dec 2022 18:29:40 +0800
+
 rsetup (0.2.5) stable; urgency=medium
 
   * Fix incorrect variable name
