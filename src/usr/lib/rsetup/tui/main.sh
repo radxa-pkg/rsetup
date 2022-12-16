@@ -25,7 +25,7 @@ __tui_main() {
     menu_init
     menu_add __system "System Maintaince"
     menu_add __hardware "Onboard Hardware"
-    menu_add __overlay "Overlay Management"
+    menu_add __overlay "Overlays"
     menu_add __comm "Connectivity"
     menu_add __user "User Settings"
     menu_add __local "Localization"

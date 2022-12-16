@@ -183,7 +183,7 @@ To avoid potential conflicts, overlay feature is temporarily disabled until such
     fi
 
     menu_init
-    menu_add __overlay_manage "Manage overlay"
+    menu_add __overlay_manage "Manage overlays"
     menu_add __overlay_install "Install overlay from source"
     menu_add __overlay_reset "Reset installed overlay to kernel's default"
     menu_show "Configure Device Tree Overlay"
