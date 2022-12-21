@@ -1,23 +1,9 @@
 # shellcheck shell=bash
 
 get_soc_vendor() {
-    case "$(cat /sys/devices/soc0/family)" in
-        "Amlogic Meson")
-            echo "amlogic"
-            ;;
-        *)
-            echo "unknown"
-            return 1
-            ;;
-    esac
+    tr $"\0" $"\n" < /proc/device-tree/compatible | tail -n 1 | cut -d "," -f 1
 }
 
 get_product_id() {
-    local pid
-    pid="$(tr '[:upper:]' '[:lower:]' < /sys/devices/soc0/machine | tr ' ' -)"
-    case "$pid" in
-        *)
-            ;;
-    esac
-    echo "$pid"
+    tr $"\0" $"\n" < /proc/device-tree/compatible | head -n 1 | cut -d "," -f 2
 }
