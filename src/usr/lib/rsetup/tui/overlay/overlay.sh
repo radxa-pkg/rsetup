@@ -164,10 +164,12 @@ __overlay_manage() {
 }
 
 __overlay_reset() {
-    rm -rf "$U_BOOT_FDT_OVERLAYS_DIR"
-    mkdir -p "$U_BOOT_FDT_OVERLAYS_DIR"
-    cp -aR "/usr/lib/linux-image-$(uname -r)/$(get_soc_vendor)/overlays/." "$U_BOOT_FDT_OVERLAYS_DIR"
-    disable_overlays
+    if reset_overlays
+    then
+        msgbox "Overlay has been reset to kernel's default."
+    else
+        msgbox "Error occurred during overlays reset."
+    fi
 }
 
 __overlay() {

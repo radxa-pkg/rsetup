@@ -46,3 +46,12 @@ disable_overlays() {
         mv -- "$i" "${i}.disabled"
     done
 }
+
+reset_overlays() {
+    local new_overlays
+    new_overlays="$(realpath U_BOOT_FDT_OVERLAYS_DIR)_new"
+    cp -aR "/usr/lib/linux-image-$(uname -r)/$(get_soc_vendor)/overlays/" "$new_overlays"
+    rm -rf "$U_BOOT_FDT_OVERLAYS_DIR"
+    mv "$new_overlays" "$U_BOOT_FDT_OVERLAYS_DIR"
+    disable_overlays
+}
