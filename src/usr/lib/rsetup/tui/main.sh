@@ -29,9 +29,9 @@ __tui_main() {
     menu_add __comm "Connectivity"
     menu_add __user "User Settings"
     menu_add __local "Localization"
-    menu_add __task "Common Tasks"
     if $DEBUG
     then
+        menu_add __task "Common Tasks"
         menu_add __test "TUI Test"
     fi
     menu_add __tui_about "About"

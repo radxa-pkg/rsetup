@@ -45,7 +45,7 @@ __task_docker_disable() {
 
 __task_docker() {
     menu_init
-    if apt list --installed docker.io | grep docker.io
+    if apt-get list --installed docker.io | grep docker.io
     then
         menu_add __task_docker_uninstall   "Uninstall Docker"
     else

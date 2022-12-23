@@ -42,7 +42,7 @@ __task_ssh_disable() {
 
 __task_ssh() {
     menu_init
-    if apt list --installed openssh-server | grep openssh-server
+    if apt-get list --installed openssh-server | grep openssh-server
     then
         menu_add __task_ssh_uninstall   "Uninstall SSH"
     else

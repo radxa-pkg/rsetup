@@ -1,11 +1,10 @@
 # shellcheck shell=bash
 
 __user_change_password (){
-    local new_password=1
-    local new_password2
+    local new_password=1 new_password2=
     while [[ "$new_password" != "$new_password2" ]]
     do
-        if ! new_password=$(passwordbox "Please enter the new password:")
+        if ! new_password=$(passwordbox "Please enter the new password for $(logname):")
         then
             return
         fi
@@ -17,7 +16,7 @@ __user_change_password (){
 
         if [[ "$new_password" != "$new_password2" ]]
         then
-            msgbox "Passwords do not match. Try again"
+            msgbox "Passwords do not match. Please try again."
         fi
     done
 
@@ -40,11 +39,12 @@ __user_change_hostname (){
     else
         if update_hostname "$item"
         then
-            msgbox "Hostname has been changed to '$item'."
+            msgbox "Hostname has been changed to $item.
+Please reboot for the change to take effect."
         else
             update_hostname "$cur_name"
             msgbox "An error occured when trying to change hostname.
-Hostname has been set to '$(hostname)'."
+Hostname has been set to $(hostname)."
         fi
     fi
 }
@@ -93,6 +93,9 @@ __user() {
     menu_init
     menu_add __user_change_password "Change Password"
     menu_add __user_change_hostname "Change Hostname"
-    menu_add __user_enable_auto_login "Enable Auto Login"
+    if $DEBUG
+    then
+        menu_add __user_enable_auto_login "Enable Auto Login"
+    fi
     menu_show "User Settings"
 }

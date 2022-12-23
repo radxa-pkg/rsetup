@@ -1,43 +1,11 @@
 # shellcheck shell=bash
 
-source "/usr/lib/rsetup/tui/local/timezone/timezone.sh"
+__local_change_timezone() {
+    dpkg-reconfigure tzdata
+}
 
-__local_locale() {
+__local_change_locale() {
     dpkg-reconfigure locales
-}
-
-__local_display_language() {
-    local lg
-    lg=$(locale | sed -n '1p' | cut -d '=' -f 2)
-    msgbox "Current language used by the system: $lg"
-}
-
-__local_install_CJKV_fonts() {
-    if yesno "Are you sure to install CJKV fonts?"
-    then
-        local tmp fonts=( "fonts-arphic-ukai" "fonts-arphic-uming" "fonts-ipafont-mincho" "fonts-ipafont-gothic" "fonts-unfonts-core" )
-        tmp="$(mktemp)"
-        for(( i = 0; i < ${#fonts[@]}; i++ ))
-        do
-
-            if apt-get install -y "${fonts[$i]}" 2>/dev/null
-            then
-                echo $(( (i + 1) * 20 ))
-                echo "$i" > "$tmp"
-            else
-                echo 0 > "$tmp"
-                exit 1
-            fi
-        done | gauge "Installing..." 0
-
-        if [[ "$(cat "$tmp")" != "0" ]]
-        then
-            msgbox "CJKV fonts installed successfully."
-        else
-            msgbox "Failed to install CJKV fonts."
-        fi
-        rm -f "$tmp"
-    fi
 }
 
 __local_keyboard_layout() {
@@ -107,13 +75,41 @@ __local_wifi_country() {
     fi
 }
 
+
+__local_install_CJKV_fonts() {
+    if yesno "Are you sure to install CJKV fonts?"
+    then
+        local tmp fonts=( "fonts-arphic-ukai" "fonts-arphic-uming" "fonts-ipafont-mincho" "fonts-ipafont-gothic" "fonts-unfonts-core" )
+        tmp="$(mktemp)"
+        apt-get update
+        for(( i = 0; i < ${#fonts[@]}; i++ ))
+        do
+            if apt-get install -y "${fonts[$i]}" 2>/dev/null
+            then
+                echo $(( (i + 1) * 20 ))
+                echo "$i" > "$tmp"
+            else
+                echo 0 > "$tmp"
+                exit 1
+            fi
+        done | gauge "Installing..." 0
+
+        if [[ "$(cat "$tmp")" != "0" ]]
+        then
+            msgbox "CJKV fonts installed successfully."
+        else
+            msgbox "Failed to install CJKV fonts."
+        fi
+        rm -f "$tmp"
+    fi
+}
+
 __local() {
     menu_init
-    menu_add __local_timezone           "Timezone"
-    menu_add __local_locale             "Locale"
-    menu_add __local_keyboard_layout    "Keyboard Layout"
-    menu_add __local_display_language   "Display Language"
-    menu_add __local_wifi_country       "WiFi Country"
+    menu_add __local_timezone_change    "Change Timezone"
+    menu_add __local_change_locale      "Change Locale"
+    menu_add __local_keyboard_layout    "Change Keyboard Layout"
+    menu_add __local_wifi_country       "Change Wi-Fi Country"
     menu_add __local_install_CJKV_fonts "Install CJKV Fonts"
     menu_show "Please select an option below:"
 }

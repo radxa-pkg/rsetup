@@ -75,6 +75,9 @@ __hardware() {
     menu_init
     menu_add __hardware_video "Video capture devices"
     menu_add __hardware_gpio_leds "GPIO LEDs"
-    menu_add __hardware_rgb_leds "RGB LEDs"
+    if $DEBUG
+    then
+        menu_add __hardware_rgb_leds "RGB LEDs"
+    fi
     menu_show "Manage on-board hardware"
 }

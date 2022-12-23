@@ -11,6 +11,9 @@ __comm_bluetooth() {
 __comm() {
     menu_init
     menu_add __comm_network "Network"
-    menu_add __comm_bluetooth "Bluetooth"
+    if $DEBUG
+    then
+        menu_add __comm_bluetooth "Bluetooth"
+    fi
     menu_show "Customize Connectivity"
 }
