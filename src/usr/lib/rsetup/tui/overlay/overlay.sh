@@ -3,32 +3,6 @@
 source "/usr/lib/rsetup/mod/hwid.sh"
 source "/usr/lib/rsetup/mod/pkg.sh"
 
-__overlay_parse_dtbo() {
-    dtc -I dtb -O dts "$1" 2>/dev/null | dtc -I dts -O yaml 2>/dev/null | yq -r ".[0].metadata.$2[0]" | xargs -0
-}
-
-__overlay_is_compatible() {
-    local overlay="$1" dtbo_compatible
-
-    if ! dtbo_compatible="$(__overlay_parse_dtbo "$overlay" "compatible")"
-    then
-        return 1
-    fi
-
-    for d in $dtbo_compatible
-    do
-        for p in $(xargs -0 < /sys/firmware/devicetree/base/compatible)
-        do
-            if [[ "$d" == "$p" ]]
-            then
-                return
-            fi
-        done
-    done
-
-    return 1
-}
-
 __overlay_install() {
     if ! __depends_package "gcc" "linux-headers-$(uname -r)"
     then
@@ -81,7 +55,7 @@ Are you sure?"
 __overlay_filter_worker() {
     local temp="$1" overlay="$2"
 
-    if ! __overlay_is_compatible "$overlay"
+    if ! dtbo_is_compatible "$overlay"
     then
         return
     fi
@@ -91,10 +65,10 @@ __overlay_filter_worker() {
 
     if [[ "$i" == *.dtbo ]]
     then
-        echo -e "$(__overlay_parse_dtbo "$overlay" "title")\0ON\0$(basename "$overlay")" >&100
+        echo -e "$(parse_dtbo "$overlay" "title")\0ON\0$(basename "$overlay")" >&100
     elif [[ "$i" == *.dtbo.disabled ]]
     then
-        echo -e "$(__overlay_parse_dtbo "$overlay" "title")\0OFF\0$(basename "$overlay" | sed -E "s/(.*\.dtbo).*/\1/")" >&100
+        echo -e "$(parse_dtbo "$overlay" "title")\0OFF\0$(basename "$overlay" | sed -E "s/(.*\.dtbo).*/\1/")" >&100
     fi
 }
 
@@ -166,9 +140,9 @@ __overlay_manage() {
 __overlay_reset() {
     if reset_overlays
     then
-        msgbox "Overlay has been reset to kernel's default."
+        msgbox "Installed overlays has been reset to kernel's default."
     else
-        msgbox "Error occurred during overlays reset."
+        msgbox "Unabel to reset the installed overlays!"
     fi
 }
 

@@ -47,11 +47,51 @@ disable_overlays() {
     done
 }
 
+__reset_overlays_worker() {
+    local overlay="$1" output="$2"
+
+    if dtbo_is_compatible "$overlay"
+    then
+        cp "$overlay" "$output"
+    fi
+}
+
 reset_overlays() {
-    local new_overlays
+    local new_overlays dtbos=( "/usr/lib/linux-image-$(uname -r)/$(get_soc_vendor)/overlays/"/*.dtbo* ) i
     new_overlays="$(realpath U_BOOT_FDT_OVERLAYS_DIR)_new"
-    cp -aR "/usr/lib/linux-image-$(uname -r)/$(get_soc_vendor)/overlays/" "$new_overlays"
+    mkdir -p "$new_overlays"
+    for i in "${dtbos[@]}"
+    do
+        __reset_overlays_worker "$i" "$new_overlays" &
+    done
+    wait
     rm -rf "$U_BOOT_FDT_OVERLAYS_DIR"
     mv "$new_overlays" "$U_BOOT_FDT_OVERLAYS_DIR"
     disable_overlays
+}
+
+parse_dtbo() {
+    dtc -I dtb -O dts "$1" 2>/dev/null | dtc -I dts -O yaml 2>/dev/null | yq -r ".[0].metadata.$2[0]" | xargs -0
+}
+
+dtbo_is_compatible() {
+    local overlay="$1" dtbo_compatible
+
+    if ! dtbo_compatible="$(parse_dtbo "$overlay" "compatible")"
+    then
+        return 1
+    fi
+
+    for d in $dtbo_compatible
+    do
+        for p in $(xargs -0 < /sys/firmware/devicetree/base/compatible)
+        do
+            if [[ "$d" == "$p" ]]
+            then
+                return
+            fi
+        done
+    done
+
+    return 1
 }
