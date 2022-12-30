@@ -1,4 +1,4 @@
-name: Build & Release
+name: Release
 on:
   workflow_dispatch:
   push:
@@ -22,18 +22,20 @@ jobs:
           make all deb
       - name: Check if the latest version is releasable
         run: |
-          echo "version=$(dpkg-parsechangelog -S Version)" >> $GITHUB_ENV
+          version="$(dpkg-parsechangelog -S Version)"
+          echo "version=$version" >> $GITHUB_ENV
           echo "changes<<EOF" >> $GITHUB_ENV
           echo '```' >> $GITHUB_ENV
           echo "$(dpkg-parsechangelog -S Changes)" >> $GITHUB_ENV
           echo '```' >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
-          if [[ -n "$(git tag -l "$(dpkg-parsechangelog -S Version)")" ]]
+          if [[ -n "$(git tag -l "$version")" ]]
           then
             echo "distro=UNRELEASED" >> $GITHUB_ENV
           else
             echo "distro=$(dpkg-parsechangelog -S Distribution)" >> $GITHUB_ENV
           fi
+          echo "$version" > VERSION
       - name: Release
         if: env.distro != 'UNRELEASED'
         uses: softprops/action-gh-release@v1
@@ -45,6 +47,7 @@ jobs:
           draft: false
           files: |
             ../*.deb
+            VERSION
       - name: Append changelog
         if: env.distro != 'UNRELEASED'
         uses: softprops/action-gh-release@v1

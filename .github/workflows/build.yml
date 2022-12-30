@@ -1,0 +1,23 @@
+name: Build
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+
+jobs:
+  release:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - name: Test
+        run: |
+          make test
+      - name: Build
+        run: |
+          sudo apt-get update
+          sudo apt-get build-dep --no-install-recommends -y .
+          make all deb

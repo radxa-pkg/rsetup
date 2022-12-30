@@ -1,8 +1,10 @@
 [Unit]
 Description=rsetup configuration service
 Documentation=https://github.com/radxa-pkg/rsetup/
+
 [Service]
 Type=simple
 ExecStart=/usr/bin/rsetup __on_boot
+
 [Install]
 WantedBy=multi-user.target
