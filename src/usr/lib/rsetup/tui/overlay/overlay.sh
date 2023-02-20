@@ -33,7 +33,7 @@ Are you sure?"
     # shellcheck disable=SC2064
     trap "rm -f $temp" RETURN EXIT
 
-    if ! cpp -E -I "/usr/src/linux-headers-$(uname -r)/include" "$item" "$temp"
+    if ! cpp -x assembler-with-cpp -E -I "/usr/src/linux-headers-$(uname -r)/include" "$item" "$temp"
     then
         msgbox "Unable to preprocess the source code!"
         return
