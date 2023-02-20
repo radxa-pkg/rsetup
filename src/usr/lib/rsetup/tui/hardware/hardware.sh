@@ -67,6 +67,32 @@ Select any to update their trigger." || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 
     fi
 }
 
+__hardware_thermal() {
+    radiolist_init
+
+    local current_policy available_policies
+    current_policy="$(cat /sys/class/thermal/thermal_zone0/policy)"
+    mapfile -t available_policies < <(sed -E -e "s/ $//g" -e "s/ /\n/g" /sys/class/thermal/thermal_zone0/available_policies)
+    for i in "${available_policies[@]}"
+    do
+        if [[ "$i" == "$current_policy" ]]
+        then
+            radiolist_add "$i" "ON"
+        else
+            radiolist_add "$i" "OFF"
+        fi
+    done
+    radiolist_emptymsg "No thermal governor is available."
+
+    if ! radiolist_show "Please select the thermal governor.
+Recommendation: fanless or DC fan => power_allocator | PWM fan => step_wise/fair_share" || (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} == 0 ))
+    then
+        return
+    fi
+
+    set_thermal_governor "$(radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}")"
+}
+
 __hardware_rgb_leds() {
     :
 }
@@ -75,6 +101,7 @@ __hardware() {
     menu_init
     menu_add __hardware_video "Video capture devices"
     menu_add __hardware_gpio_leds "GPIO LEDs"
+    menu_add __hardware_thermal "Thermal governor"
     if $DEBUG
     then
         menu_add __hardware_rgb_leds "RGB LEDs"

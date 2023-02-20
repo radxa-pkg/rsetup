@@ -3,7 +3,7 @@
 source "/usr/lib/rsetup/mod/block_helpers.sh"
 source "/usr/lib/rsetup/mod/hwid.sh"
 
-ALLOWED_RCONFIG_FUNC+=("regenerate_machine_id" "update_hostname" "update_locale" "enable_service" "disable_service" "resize_root")
+ALLOWED_RCONFIG_FUNC+=("regenerate_machine_id" "update_hostname" "update_locale" "enable_service" "disable_service" "resize_root" "set_thermal_governor")
 
 update_bootloader() {
     __parameter_count_check 0 "$@"
@@ -86,4 +86,14 @@ resize_root() {
             return 1
             ;;
     esac
+}
+
+set_thermal_governor() {
+    __parameter_count_check 1 "$@"
+
+    local new_policy="$1"
+    for i in /sys/class/thermal/thermal_zone*/policy
+    do
+        echo "$new_policy" > "$i"
+    done
 }
