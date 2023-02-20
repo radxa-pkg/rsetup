@@ -106,7 +106,7 @@ __local_install_CJKV_fonts() {
 
 __local() {
     menu_init
-    menu_add __local_timezone_change    "Change Timezone"
+    menu_add __local_change_timezone    "Change Timezone"
     menu_add __local_change_locale      "Change Locale"
     menu_add __local_keyboard_layout    "Change Keyboard Layout"
     menu_add __local_wifi_country       "Change Wi-Fi Country"
