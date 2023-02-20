@@ -108,7 +108,7 @@ __overlay_manage() {
     # Bash doesn support IFS=$'\0'
     # Use array to emulate this
     local items=()
-    mapfile items < <(sort "$temp" | tr $"\0" $"\n")
+    mapfile -t items < <(sort "$temp" | tr $"\0" $"\n")
     while (( ${#items[@]} >= 3 ))
     do
         checklist_add "${items[0]/$'\n'}" "${items[1]/$'\n'}" "${items[2]/$'\n'}"
