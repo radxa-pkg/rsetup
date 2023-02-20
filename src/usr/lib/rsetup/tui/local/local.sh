@@ -75,41 +75,11 @@ __local_wifi_country() {
     fi
 }
 
-
-__local_install_CJKV_fonts() {
-    if yesno "Are you sure to install CJKV fonts?"
-    then
-        local tmp fonts=( "fonts-arphic-ukai" "fonts-arphic-uming" "fonts-ipafont-mincho" "fonts-ipafont-gothic" "fonts-unfonts-core" )
-        tmp="$(mktemp)"
-        apt-get update
-        for(( i = 0; i < ${#fonts[@]}; i++ ))
-        do
-            if apt-get install -y "${fonts[$i]}" 2>/dev/null
-            then
-                echo $(( (i + 1) * 20 ))
-                echo "$i" > "$tmp"
-            else
-                echo 0 > "$tmp"
-                exit 1
-            fi
-        done | gauge "Installing..." 0
-
-        if [[ "$(cat "$tmp")" != "0" ]]
-        then
-            msgbox "CJKV fonts installed successfully."
-        else
-            msgbox "Failed to install CJKV fonts."
-        fi
-        rm -f "$tmp"
-    fi
-}
-
 __local() {
     menu_init
     menu_add __local_change_timezone    "Change Timezone"
     menu_add __local_change_locale      "Change Locale"
     menu_add __local_keyboard_layout    "Change Keyboard Layout"
     menu_add __local_wifi_country       "Change Wi-Fi Country"
-    menu_add __local_install_CJKV_fonts "Install CJKV Fonts"
     menu_show "Please select an option below:"
 }
