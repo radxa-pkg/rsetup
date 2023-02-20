@@ -147,6 +147,17 @@ __overlay_reset() {
 }
 
 __overlay() {
+    if ! yesno "WARNING
+
+Overlays, by its nature, require \"hidden\" knowledge about the running device tree.
+While major breakage is unlikely, this does mean that after kernel update, the overlay may cease to work.
+
+If you accept the risk, select Yes to continue.
+Otherwise, select No to go back to previous menu."
+    then
+        return
+    fi
+
     load_u-boot_setting
 
     if [[ -n "${U_BOOT_FDT_OVERLAYS:-}" ]]
