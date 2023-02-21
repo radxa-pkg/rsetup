@@ -6,9 +6,8 @@ source "/usr/lib/rsetup/mod/hwid.sh"
 ALLOWED_RCONFIG_FUNC+=("regenerate_machine_id" "update_hostname" "update_locale" "enable_service" "disable_service" "resize_root" "set_thermal_governor")
 
 update_bootloader() {
-    __parameter_count_check 0 "$@"
     local pid
-    pid="$(get_product_id)"
+    pid="${1:-$(get_product_id)}"
     __assert_f "/usr/lib/u-boot-$pid/setup.sh"
 
     local device
