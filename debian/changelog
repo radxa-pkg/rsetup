@@ -1,3 +1,9 @@
+rsetup (0.3.3) stable; urgency=medium
+
+  * Add option to install alternative bootloader
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Tue, 21 Feb 2023 19:24:54 +0800
+
 rsetup (0.3.2) stable; urgency=medium
 
   * Fix regenerate_ssh_hostkey not working issue
