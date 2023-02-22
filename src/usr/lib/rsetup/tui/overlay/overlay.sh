@@ -93,7 +93,7 @@ __overlay_filter() {
     done
 }
 
-__overlay_manage() {
+__overlay_show() {
     echo "Searching available overlays may take a while, please wait..." >&2
     load_u-boot_setting
     checklist_init
@@ -116,7 +116,14 @@ __overlay_manage() {
     done
 
     checklist_emptymsg "Unable to find any compatible overlay under $U_BOOT_FDT_OVERLAYS_DIR."
-    if ! checklist_show "Please select overlays you want to enable on boot:"
+    if ! checklist_show "Please select overlays:"
+    then
+        return 1
+    fi
+}
+
+__overlay_manage() {
+    if ! __overlay_show
     then
         return
     fi
