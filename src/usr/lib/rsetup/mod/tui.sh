@@ -32,6 +32,13 @@ push_screen() {
     register_screen ":"
 }
 
+switch_screen() {
+    __parameter_count_check 1 "$@"
+
+    unregister_screen
+    push_screen "$1"
+}
+
 tui_start() {
     __parameter_count_check 1 "$@"
     __parameter_type_check "$1" "function"
