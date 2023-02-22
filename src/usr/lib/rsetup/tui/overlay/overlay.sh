@@ -144,6 +144,27 @@ __overlay_manage() {
     fi
 }
 
+__overlay_info() {
+    if ! __overlay_show
+    then
+        return
+    fi
+
+    local item
+    for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
+    do
+        item="$(checklist_getitem "$i")"
+        if ! yesno "Title: $(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "title")
+Category: $(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "category")
+Description:
+
+$(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "description")"
+        then
+            break
+        fi
+    done
+}
+
 __overlay_reset() {
     if reset_overlays
     then
@@ -180,6 +201,7 @@ To avoid potential conflicts, overlay feature is temporarily disabled until such
 
     menu_init
     menu_add __overlay_manage "Manage overlays"
+    menu_add __overlay_info "View overlay info"
     menu_add __overlay_install "Install overlay from source"
     menu_add __overlay_reset "Reset installed overlay to kernel's default"
     menu_show "Configure Device Tree Overlay"
