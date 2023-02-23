@@ -15,5 +15,5 @@ __comm() {
     then
         menu_add __comm_bluetooth "Bluetooth"
     fi
-    menu_show "Customize Connectivity"
+    menu_show "Manage Connectivity"
 }

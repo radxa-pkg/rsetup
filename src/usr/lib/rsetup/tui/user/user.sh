@@ -92,7 +92,7 @@ EOF
 __user() {
     menu_init
     menu_add __user_change_password "Change Password"
-    menu_add __user_change_hostname "Change Host Name"
+    menu_add __user_change_hostname "Change Hostname"
     if $DEBUG
     then
         menu_add __user_enable_auto_login "Enable Auto Login"
