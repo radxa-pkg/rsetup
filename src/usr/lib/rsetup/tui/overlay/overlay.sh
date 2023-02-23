@@ -45,10 +45,11 @@ Are you sure?"
         return
     fi
 
-    if ! u-boot-update >/dev/null
+    if u-boot-update >/dev/null
     then
-        msgbox "Unable to update the boot config!"
-        return
+        msgbox "Selected overlays will be enabled at next boot."
+    else
+        msgbox "Unable to update the boot config."
     fi
 }
 
@@ -137,10 +138,11 @@ __overlay_manage() {
         mv "$U_BOOT_FDT_OVERLAYS_DIR/$item.disabled" "$U_BOOT_FDT_OVERLAYS_DIR/$item"
     done
 
-    if ! u-boot-update >/dev/null
+    if u-boot-update >/dev/null
     then
-        msgbox "Unable to update the boot config!"
-        return
+        msgbox "Selected overlays will be enabled at next boot."
+    else
+        msgbox "Unable to update the boot config."
     fi
 }
 

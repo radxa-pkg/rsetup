@@ -65,6 +65,8 @@ Select any to update their trigger." || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 
             radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}" > "/sys/bus/platform/drivers/leds-gpio/leds/leds/${i[0]}/trigger"
         done
     fi
+
+    msgbox "LED trigger has been updated."
 }
 
 __hardware_thermal() {
@@ -91,6 +93,8 @@ Recommendation: fanless or DC fan => power_allocator | PWM fan => step_wise/fair
     fi
 
     set_thermal_governor "$(radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}")"
+
+    msgbox "Thermal governor has been updated."
 }
 
 __hardware_rgb_leds() {
