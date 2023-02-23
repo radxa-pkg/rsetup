@@ -166,11 +166,20 @@ $(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "description")"
 }
 
 __overlay_reset() {
+    if ! yesno "WARNING
+
+All installed overlays will be reset to current running kernel's default.
+All enabled overlays will be disabled.
+Any overlay that is not shipped with the running kernel will be removed."
+    then
+        return
+    fi
+
     if reset_overlays
     then
-        msgbox "Installed overlays has been reset to kernel's default."
+        msgbox "Overlays has been reset to current running kernel's default."
     else
-        msgbox "Unabel to reset the installed overlays!"
+        msgbox "Unable to reset overlays"
     fi
 }
 
@@ -203,6 +212,6 @@ To avoid potential conflicts, overlay feature is temporarily disabled until such
     menu_add __overlay_manage "Manage overlays"
     menu_add __overlay_info "View overlay info"
     menu_add __overlay_install "Install overlay from source"
-    menu_add __overlay_reset "Reset installed overlay to kernel's default"
+    menu_add __overlay_reset "Reset overlays"
     menu_show "Configure Device Tree Overlay"
 }
