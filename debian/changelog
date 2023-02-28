@@ -1,3 +1,11 @@
+rsetup (0.3.5) stable; urgency=medium
+
+  * Add warning for overlay reset
+  * Notify users about operation success
+  * Update menu name
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Tue, 28 Feb 2023 11:12:18 +0800
+
 rsetup (0.3.4) stable; urgency=medium
 
   * Show overlay warning only once
