@@ -101,11 +101,106 @@ __hardware_rgb_leds() {
     :
 }
 
+__hardware_dsi_mirror() {
+    local active_monitors=() dsi_monitors=() external_monitors=()
+    mapfile -t active_monitors < <(xrandr --listactivemonitors | tail -n +2 | awk '{print $4}')
+    for i in "${active_monitors[@]}"
+    do
+        if [[ "$i" =~ "DSI" ]]
+        then
+            dsi_monitors+=( "$i" )
+        else
+            external_monitors+=( "$i" )
+        fi
+    done
+
+    if ! (( ${#dsi_monitors[@]} ))
+    then
+        msgbox "No active DSI display is found.
+Please check if the overlay is enabled, and the screen is connected and powered on."
+        return
+    fi
+
+    if ! (( ${#external_monitors[@]} ))
+    then
+        msgbox "No external display is found.
+Please check if the screen is connected and powered on."
+        return
+    fi
+
+    local selected_dsi="${dsi_monitors[0]}" selected_external=( "${external_monitors[0]}" )
+
+    if (( ${#dsi_monitors[@]} > 1 ))
+    then
+        radiolist_init
+        for i in "${dsi_monitors[@]}"
+        do
+            radiolist_add "$i" "OFF"
+        done
+        if ! radiolist_show "Please select the DSI monitor to be mirrored:" || (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} == 0 ))
+        then
+            return
+        fi
+        selected_dsi="$(radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}")"
+    fi
+
+    if (( ${#external_monitors[@]} > 1 ))
+    then
+        checklist_init
+        for i in "${external_monitors[@]}"
+        do
+            checklist_add "$i" "OFF"
+        done
+        if ! checklist_show "Please select external monitors to mirror the DSI monitor:" || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 0 ))
+        then
+            return
+        fi
+        selected_external=()
+        for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
+        do
+            selected_external+=( "$(checklist_getitem "$i")" )
+        done
+    fi
+
+    local dsi_res dsi_native_res_x dsi_native_res_y
+    dsi_res="$(tail -n 1 "/sys/devices/platform/display-subsystem/drm/card0/card0-$selected_dsi/modes")"
+    dsi_native_res_x="$(cut -d "x" -f 1 <<< "$dsi_res")"
+    dsi_native_res_y="$(cut -d "x" -f 2 <<< "$dsi_res")"
+
+    local xrandr_cmd=(
+        xrandr
+        --output "$selected_dsi"
+        --auto
+        --primary
+    )
+
+    if (( dsi_native_res_x < dsi_native_res_y ))
+    then
+        xrandr_cmd+=( --rotate left )
+        dsi_res="${dsi_native_res_y}x${dsi_native_res_x}"
+    fi
+    
+    for i in "${selected_external[@]}"
+    do
+        xrandr_cmd+=(
+            --output "$i"
+            --auto
+            --scale-from "$dsi_res"
+            --same-as "$selected_dsi"
+        )
+    done
+    
+    "${xrandr_cmd[@]}"
+
+    radxa-map-tp
+}
+
 __hardware() {
     menu_init
     menu_add __hardware_video "Video capture devices"
     menu_add __hardware_gpio_leds "GPIO LEDs"
     menu_add __hardware_thermal "Thermal governor"
+    menu_add __hardware_dsi_mirror "Enable DSI mirroring display"
     if $DEBUG
     then
         menu_add __hardware_rgb_leds "RGB LEDs"
