@@ -182,13 +182,13 @@ Please check if the screen is connected and powered on."
     
     for i in "${selected_external[@]}"
     do
+        xrandr_cmd+=( --output "$i" )
+    done
         xrandr_cmd+=(
-            --output "$i"
             --auto
             --scale-from "$dsi_res"
             --same-as "$selected_dsi"
         )
-    done
     
     "${xrandr_cmd[@]}"
 
