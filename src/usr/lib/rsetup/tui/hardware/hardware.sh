@@ -184,15 +184,18 @@ Please check if the screen is connected and powered on."
     do
         xrandr_cmd+=( --output "$i" )
     done
-        xrandr_cmd+=(
-            --auto
-            --scale-from "$dsi_res"
-            --same-as "$selected_dsi"
-        )
+    xrandr_cmd+=(
+        --auto
+        --scale-from "$dsi_res"
+        --same-as "$selected_dsi"
+    )
     
     "${xrandr_cmd[@]}"
 
     radxa-map-tp
+
+    msgbox "DSI display mirroring has been enabled.
+To return to normal mode, please use your desktop environment's display setup tool."
 }
 
 __hardware() {
@@ -200,7 +203,7 @@ __hardware() {
     menu_add __hardware_video "Video capture devices"
     menu_add __hardware_gpio_leds "GPIO LEDs"
     menu_add __hardware_thermal "Thermal governor"
-    menu_add __hardware_dsi_mirror "Enable DSI mirroring display"
+    menu_add __hardware_dsi_mirror "Configure DSI display mirroring"
     if $DEBUG
     then
         menu_add __hardware_rgb_leds "RGB LEDs"
