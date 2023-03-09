@@ -1,3 +1,9 @@
+rsetup (0.3.6) stable; urgency=medium
+
+  * Add DSI display mirroring configuration
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Thu, 09 Mar 2023 16:20:26 +0800
+
 rsetup (0.3.5) stable; urgency=medium
 
   * Add warning for overlay reset
