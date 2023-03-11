@@ -16,12 +16,19 @@ DEBUG="${DEBUG:-false}"
 
 source "/usr/lib/rsetup/cli/main.sh"
 
-if (( $# == 0 )) || [[ $1 == main ]]
+RSETUP_EXEC_NAME="$(basename "$0")"
+if (( $# == 0 )) && [[ "$RSETUP_EXEC_NAME" == "rsetup" ]]
 then
     source "/usr/lib/rsetup/tui/main.sh"
     tui_start __tui_main
 else
-    __parameter_type_check "$1" "function"
-
-    "$@"
+    if [[ "$RSETUP_EXEC_NAME" == "rsetup" ]]
+    then
+        __parameter_type_check "$1" "function"
+        "$@"
+    else
+        __parameter_type_check "__$RSETUP_EXEC_NAME" "function"
+        "__$RSETUP_EXEC_NAME" "$@"
+    fi
+    
 fi
