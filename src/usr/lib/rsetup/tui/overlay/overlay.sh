@@ -177,7 +177,7 @@ Any overlay that is not shipped with the running kernel will be removed."
         return
     fi
 
-    if reset_overlays
+    if reset_overlays "$(uname -r)" "$(get_soc_vendor)"
     then
         msgbox "Overlays has been reset to current running kernel's default."
     else

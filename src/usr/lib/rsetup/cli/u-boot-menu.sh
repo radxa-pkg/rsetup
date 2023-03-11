@@ -41,33 +41,94 @@ load_u-boot_setting() {
 disable_overlays() {
     load_u-boot_setting
 
-    for i in "$U_BOOT_FDT_OVERLAYS_DIR"/*.dtbo
-    do
-        mv -- "$i" "${i}.disabled"
-    done
+    if [[ -f "$U_BOOT_FDT_OVERLAYS_DIR/managed.list" ]]
+    then
+        mapfile -t RSETUP_MANAGED_OVERLAYS < "$U_BOOT_FDT_OVERLAYS_DIR/managed.list"
+        for i in "${RSETUP_MANAGED_OVERLAYS[@]}"
+        do
+            mv -- "$U_BOOT_FDT_OVERLAYS_DIR/$i" "$U_BOOT_FDT_OVERLAYS_DIR/${i}.disabled"
+        done
+    else
+        for i in "$U_BOOT_FDT_OVERLAYS_DIR"/*.dtbo
+        do
+            mv -- "$i" "${i}.disabled"
+        done
+    fi
 }
 
 __reset_overlays_worker() {
-    local overlay="$1" output="$2"
+    local overlay="$1" new_overlays="$2"
 
     if dtbo_is_compatible "$overlay"
     then
-        cp "$overlay" "$output"
+        cp "$overlay" "$new_overlays/$(basename "$overlay").disabled"
+        exec 100>>"$new_overlays/managed.list"
+        flock 100
+        basename "$overlay" >&100
     fi
 }
 
 reset_overlays() {
-    local new_overlays dtbos=( "/usr/lib/linux-image-$(uname -r)/$(get_soc_vendor)/overlays/"/*.dtbo* ) i
-    new_overlays="$(realpath U_BOOT_FDT_OVERLAYS_DIR)_new"
-    mkdir -p "$new_overlays"
+    load_u-boot_setting
+
+    local version="$1" vendor="$2" dtbos i 
+    local old_overlays new_overlays enabled_overlays=()
+    old_overlays="$(realpath "$U_BOOT_FDT_OVERLAYS_DIR")"
+    new_overlays="${old_overlays}_new"
+    if [[ -d "$old_overlays" ]]
+    then
+        cp -aR "$old_overlays" "$new_overlays"
+    else
+        mkdir -p "$old_overlays" "$new_overlays"
+    fi
+
+    if [[ -f "$new_overlays/managed.list" ]]
+    then
+        mapfile -t RSETUP_MANAGED_OVERLAYS < "$new_overlays/managed.list"
+
+        for i in "${RSETUP_MANAGED_OVERLAYS[@]}"
+        do
+            if [[ -f "$new_overlays/$i" ]]
+            then
+                enabled_overlays+=( "$i" )
+                rm -f "$new_overlays/$i"
+            fi
+            rm -f "$new_overlays/$i.disabled"
+        done
+    fi
+
+    if [[ -n "$vendor" ]]
+    then
+        dtbos=( "/usr/lib/linux-image-$version/$vendor/overlays/"*.dtbo* )
+    else
+        dtbos=( "/usr/lib/linux-image-$version/"*"/overlays/"*.dtbo* )
+    fi
+    rm -f "$new_overlays/managed.list"
+    touch "$new_overlays/managed.list"
     for i in "${dtbos[@]}"
     do
-        __reset_overlays_worker "$i" "$new_overlays" &
+        if [[ ! -f /sys/firmware/devicetree/base/compatible ]]
+        then
+            # Assume we are running at image building stage
+            # Do not fork out so we don't trigger OOM killer
+            __reset_overlays_worker "$i" "$new_overlays"
+        else
+            __reset_overlays_worker "$i" "$new_overlays" &
+        fi
     done
     wait
-    rm -rf "$U_BOOT_FDT_OVERLAYS_DIR"
-    mv "$new_overlays" "$U_BOOT_FDT_OVERLAYS_DIR"
-    disable_overlays
+
+    for i in "${enabled_overlays[@]}"
+    do
+        if [[ -f "$new_overlays/${i}.disabled" ]]
+        then
+            mv -- "$new_overlays/${i}.disabled" "$new_overlays/$i"
+        fi
+    done
+
+    rm -rf "${old_overlays}_old"
+    mv "$old_overlays" "${old_overlays}_old"
+    mv "$new_overlays" "$old_overlays"
 }
 
 parse_dtbo() {
@@ -75,6 +136,13 @@ parse_dtbo() {
 }
 
 dtbo_is_compatible() {
+    if [[ ! -f /sys/firmware/devicetree/base/compatible ]]
+    then
+        # Assume we are running at image building stage
+        # Skip checking
+        return
+    fi
+
     local overlay="$1" dtbo_compatible
 
     if ! dtbo_compatible="$(parse_dtbo "$overlay" "compatible")"
