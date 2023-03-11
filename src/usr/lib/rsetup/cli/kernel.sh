@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-__zz-update-overlays() {
+__yz-update-overlays() {
     # shellcheck disable=SC2034
     local ABI="${1:-}" IMAGE="${2:-}"
 
