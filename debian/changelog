@@ -1,6 +1,7 @@
 rsetup (0.3.9) stable; urgency=medium
 
-  * Fix conflict with zz-u-boot-menu where overlays are updated after extlinux.conf
+  * Fix conflict with zz-u-boot-menu where overlays
+    are updated after extlinux.conf
 
  -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Sat, 11 Mar 2023 22:28:27 +0800
 
