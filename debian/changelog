@@ -1,3 +1,11 @@
+rsetup (0.3.7) stable; urgency=medium
+
+  * Fix GPIO LED option
+  * GPIO LED triggers and thermal governor settings are now persistent
+  * Overlays are now updated when new kernel is installed
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Sat, 11 Mar 2023 21:51:10 +0800
+
 rsetup (0.3.6) stable; urgency=medium
 
   * Add DSI display mirroring configuration
