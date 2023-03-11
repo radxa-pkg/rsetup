@@ -97,9 +97,11 @@ set_thermal_governor() {
     done
 }
 
+RBUILD_LED_GPIO_PATH="/sys/bus/platform/drivers/leds-gpio/gpio-leds/leds"
+
 set_led_trigger() {
     __parameter_count_check 2 "$@"
 
     local led="$1" trigger="$2"
-    echo "$trigger" > "/sys/bus/platform/drivers/leds-gpio/leds/leds/$led/trigger"
+    echo "$trigger" > "$RBUILD_LED_GPIO_PATH/$led/trigger"
 }
