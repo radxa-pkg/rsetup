@@ -1,5 +1,7 @@
 # shellcheck shell=bash
 
+source "/usr/lib/rsetup/mod/config.sh"
+
 __hardware_gstreamer_test() {
     local temp
     temp="$(mktemp tmp.XXXXXXXXXX.jpg)"
