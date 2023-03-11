@@ -61,11 +61,14 @@ Select any to update their trigger." || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 
     done
     if radiolist_show "Please select the new trigger:" && (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} > 0 ))
     then
+        config_transaction_start
         for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
         do
             read -r -a i <<< "$(checklist_getitem "$i")"
-            set_led_trigger "${i[0]}" "$(radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}")"
+            remove_config set_led_trigger "${i[0]}"
+            enable_config set_led_trigger "${i[0]}" "$(radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}")"
         done
+        config_transaction_commit
     fi
 
     msgbox "LED trigger has been updated."
@@ -94,7 +97,7 @@ Recommendation: fanless or DC fan => power_allocator | PWM fan => step_wise/fair
         return
     fi
 
-    set_thermal_governor "$(radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}")"
+    enable_unique_config set_thermal_governor "$(radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}")"
 
     msgbox "Thermal governor has been updated."
 }
