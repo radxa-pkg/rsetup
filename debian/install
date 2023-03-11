@@ -1,3 +1,4 @@
+src/etc     /
 src/usr/bin /usr
 src/usr/lib /usr
 src/usr/share/man/man8/rsetup.8 /usr/share/man/man8
