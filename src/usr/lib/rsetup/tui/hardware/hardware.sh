@@ -64,7 +64,7 @@ Select any to update their trigger." || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 
         for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
         do
             read -r -a i <<< "$(checklist_getitem "$i")"
-            radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}" > "/sys/bus/platform/drivers/leds-gpio/leds/leds/${i[0]}/trigger"
+            set_led_trigger "${i[0]}" "$(radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}")"
         done
     fi
 

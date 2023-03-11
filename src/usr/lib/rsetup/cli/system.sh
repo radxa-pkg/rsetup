@@ -3,7 +3,7 @@
 source "/usr/lib/rsetup/mod/block_helpers.sh"
 source "/usr/lib/rsetup/mod/hwid.sh"
 
-ALLOWED_RCONFIG_FUNC+=("regenerate_machine_id" "update_hostname" "update_locale" "enable_service" "disable_service" "resize_root" "set_thermal_governor")
+ALLOWED_RCONFIG_FUNC+=("regenerate_machine_id" "update_hostname" "update_locale" "enable_service" "disable_service" "resize_root" "set_thermal_governor" "set_led_trigger")
 
 update_bootloader() {
     local pid
@@ -95,4 +95,11 @@ set_thermal_governor() {
     do
         echo "$new_policy" > "$i"
     done
+}
+
+set_led_trigger() {
+    __parameter_count_check 2 "$@"
+
+    local led="$1" trigger="$2"
+    echo "$trigger" > "/sys/bus/platform/drivers/leds-gpio/leds/leds/$led/trigger"
 }
