@@ -1,3 +1,9 @@
+rsetup (0.3.8) stable; urgency=medium
+
+  * Fix Manage overlays "No such file or directory" error
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Sat, 11 Mar 2023 22:22:24 +0800
+
 rsetup (0.3.7) stable; urgency=medium
 
   * Fix GPIO LED option
