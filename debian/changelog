@@ -1,3 +1,9 @@
+rsetup (0.3.11) stable; urgency=medium
+
+  * Remove fair_share for PWM fan recommendation
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Sun, 12 Mar 2023 18:50:53 +0800
+
 rsetup (0.3.10) stable; urgency=medium
 
   * Fix kernel hook name
