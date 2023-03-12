@@ -92,7 +92,7 @@ __hardware_thermal() {
     radiolist_emptymsg "No thermal governor is available."
 
     if ! radiolist_show "Please select the thermal governor.
-Recommendation: fanless or DC fan => power_allocator | PWM fan => step_wise/fair_share" || (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} == 0 ))
+Recommendation: fanless or DC fan => power_allocator | PWM fan => step_wise" || (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} == 0 ))
     then
         return
     fi
