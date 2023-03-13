@@ -147,13 +147,13 @@ dtbo_is_compatible() {
     fi
 
     local overlay="$1" dtbo_compatible
-    dtbo_compatible="$(parse_dtbo "$overlay" "compatible")"
-    if [[ "$dtbo_compatible" == "null" ]]
+    mapfile -t dtbo_compatible < <(parse_dtbo "$overlay" "compatible")
+    if [[ "${dtbo_compatible[0]}" == "null" ]]
     then
         return
     fi
 
-    for d in $dtbo_compatible
+    for d in "${dtbo_compatible[@]}"
     do
         for p in $(xargs -0 < /sys/firmware/devicetree/base/compatible)
         do

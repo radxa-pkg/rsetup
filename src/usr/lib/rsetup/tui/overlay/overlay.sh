@@ -75,13 +75,13 @@ __overlay_filter_worker() {
     fi
 
     overlay_name="$(basename "$overlay" | sed -E "s/(.*\.dtbo).*/\1/")"
-    title="$(parse_dtbo "$overlay" "title")" 
-    if [[ "$title" == "null" ]]
+    mapfile -t title < <(parse_dtbo "$overlay" "title")
+    if [[ "${title[0]}" == "null" ]]
     then
-        title="$overlay_name"
+        title=( "$overlay_name" )
     fi
 
-    echo -e "${title}\0${state}\0${overlay_name}" >&100
+    echo -e "${title[0]}\0${state}\0${overlay_name}" >&100
 }
 
 __overlay_filter() {
@@ -167,16 +167,16 @@ __overlay_info() {
     for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
     do
         item="$(checklist_getitem "$i")"
-        title="$(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "title")"
-        category="$(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "category")"
+        mapfile -t title < <(parse_dtbo "$overlay" "title")
+        mapfile -t category < <(parse_dtbo "$overlay" "category")
         description="$(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "description")"
-        if [[ "$title" == "null" ]]
+        if [[ "${title[0]}" == "null" ]]
         then
-            title="$item"
+            title=( "$item" )
             description="This is a 3rd party overlay. No metadata is available."
         fi
-        if ! yesno "Title: $title
-Category: $category
+        if ! yesno "Title: ${title[0]}
+Category: ${category[0]}
 Description:
 
 $description"
