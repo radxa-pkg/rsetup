@@ -54,7 +54,7 @@ Are you sure?"
 }
 
 __overlay_filter_worker() {
-    local temp="$1" overlay="$2"
+    local temp="$1" overlay="$2" state title overlay_name
 
     if ! dtbo_is_compatible "$overlay"
     then
@@ -64,13 +64,24 @@ __overlay_filter_worker() {
     exec 100>> "$temp"
     flock 100
 
-    if [[ "$i" == *.dtbo ]]
+    if [[ "$overlay" == *.dtbo ]]
     then
-        echo -e "$(parse_dtbo "$overlay" "title")\0ON\0$(basename "$overlay")" >&100
-    elif [[ "$i" == *.dtbo.disabled ]]
+        state="ON"
+    elif [[ "$overlay" == *.dtbo.disabled ]]
     then
-        echo -e "$(parse_dtbo "$overlay" "title")\0OFF\0$(basename "$overlay" | sed -E "s/(.*\.dtbo).*/\1/")" >&100
+        state="OFF"
+    else
+        return
     fi
+
+    overlay_name="$(basename "$overlay" | sed -E "s/(.*\.dtbo).*/\1/")"
+    title="$(parse_dtbo "$overlay" "title")" 
+    if [[ "$title" == "null" ]]
+    then
+        title="$overlay_name"
+    fi
+
+    echo -e "${title}\0${state}\0${overlay_name}" >&100
 }
 
 __overlay_filter() {
@@ -152,15 +163,23 @@ __overlay_info() {
         return
     fi
 
-    local item
+    local item title category description i
     for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
     do
         item="$(checklist_getitem "$i")"
-        if ! yesno "Title: $(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "title")
-Category: $(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "category")
+        title="$(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "title")"
+        category="$(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "category")"
+        description="$(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "description")"
+        if [[ "$title" == "null" ]]
+        then
+            title="$item"
+            description="This is a 3rd party overlay. No metadata is available."
+        fi
+        if ! yesno "Title: $title
+Category: $category
 Description:
 
-$(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "description")"
+$description"
         then
             break
         fi

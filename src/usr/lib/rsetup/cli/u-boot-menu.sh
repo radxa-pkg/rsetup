@@ -147,10 +147,10 @@ dtbo_is_compatible() {
     fi
 
     local overlay="$1" dtbo_compatible
-
-    if ! dtbo_compatible="$(parse_dtbo "$overlay" "compatible")"
+    dtbo_compatible="$(parse_dtbo "$overlay" "compatible")"
+    if [[ "$dtbo_compatible" == "null" ]]
     then
-        return 1
+        return
     fi
 
     for d in $dtbo_compatible
