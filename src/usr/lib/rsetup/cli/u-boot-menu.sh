@@ -2,6 +2,39 @@
 
 ALLOWED_RCONFIG_FUNC+=("load_u-boot_setting")
 
+check_overlay_conflict_init() {
+    RSETUP_OVERLAY_RESOURCES=()
+    RSETUP_OVERLAY_RESOURCE_OWNER=()
+}
+
+check_overlay_conflict() {
+    local name resources res i
+    mapfile -t resources < <(parse_dtbo "$1" "exclusive")
+    mapfile -t name < <(parse_dtbo "$1" "title" "$(basename "$1")")
+
+    for res in "${resources[@]}"
+    do
+        if [[ "$res" == "null" ]]
+        then
+            continue
+        fi
+        if i="$(__in_array "$res" "${RSETUP_OVERLAY_RESOURCES[@]}")"
+        then
+            msgbox "Resource conflict detected!
+
+'${name[0]}' and '${RSETUP_OVERLAY_RESOURCE_OWNER[$i]}' both require the exclusive ownership of the following resource:
+
+${RSETUP_OVERLAY_RESOURCES[$i]}
+
+Please only enable one of them."
+            return 1
+        else
+            RSETUP_OVERLAY_RESOURCES+=("$res")
+            RSETUP_OVERLAY_RESOURCE_OWNER+=("${name[0]}")
+        fi
+    done
+}
+
 load_u-boot_setting() {
     if [[ ! -e "/etc/default/u-boot" ]]
     then
@@ -41,10 +74,10 @@ load_u-boot_setting() {
 disable_overlays() {
     load_u-boot_setting
 
-        for i in "$U_BOOT_FDT_OVERLAYS_DIR"/*.dtbo
-        do
-            mv -- "$i" "${i}.disabled"
-        done
+    for i in "$U_BOOT_FDT_OVERLAYS_DIR"/*.dtbo
+    do
+        mv -- "$i" "${i}.disabled"
+    done
 }
 
 __reset_overlays_worker() {

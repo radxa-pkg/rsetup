@@ -113,20 +113,21 @@ __overlay_show() {
 
     __overlay_filter "$temp" | gauge "Searching available overlays..." 0
 
+    checklist_init
+    # Bash doesn support IFS=$'\0'
+    # Use array to emulate this
+    local items=()
+    mapfile -t items < <(sort "$temp" | tr $"\0" $"\n")
+    while (( ${#items[@]} >= 3 ))
+    do
+        checklist_add "${items[0]/$'\n'}" "${items[1]/$'\n'}" "${items[2]/$'\n'}"
+        items=("${items[@]:3}")
+    done
+
+    checklist_emptymsg "Unable to find any compatible overlay under $U_BOOT_FDT_OVERLAYS_DIR."
+
     while true
     do
-        checklist_init
-        # Bash doesn support IFS=$'\0'
-        # Use array to emulate this
-        local items=()
-        mapfile -t items < <(sort "$temp" | tr $"\0" $"\n")
-        while (( ${#items[@]} >= 3 ))
-        do
-            checklist_add "${items[0]/$'\n'}" "${items[1]/$'\n'}" "${items[2]/$'\n'}"
-            items=("${items[@]:3}")
-        done
-
-        checklist_emptymsg "Unable to find any compatible overlay under $U_BOOT_FDT_OVERLAYS_DIR."
         if ! checklist_show "Please select overlays:"
         then
             return 1
@@ -139,8 +140,21 @@ __overlay_show() {
     done
 }
 
+__overlay_validate() {
+    local i item
+    check_overlay_conflict_init
+    for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
+    do
+        item="$(checklist_getitem "$i")"
+        if ! check_overlay_conflict "$U_BOOT_FDT_OVERLAYS_DIR/$item"*
+        then
+            return 1
+        fi
+    done
+}
+
 __overlay_manage() {
-    if ! __overlay_show
+    if ! __overlay_show __overlay_validate
     then
         return
     fi
