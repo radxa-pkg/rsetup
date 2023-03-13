@@ -43,6 +43,12 @@ tui_start() {
     __parameter_count_check 1 "$@"
     __parameter_type_check "$1" "function"
 
+    if ! infocmp "$TERM" &>/dev/null
+    then
+        echo "Could not find terminfo for $TERM." >&2
+        return 1
+    fi
+
     register_screen "$1"
     while (( ${#RSETUP_SCREEN[@]} != 0 ))
     do
