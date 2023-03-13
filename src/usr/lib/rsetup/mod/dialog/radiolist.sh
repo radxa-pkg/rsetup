@@ -34,10 +34,19 @@ radiolist_show() {
         return 2
     fi
 
-    local output
+    local output i
     if output="$(__dialog --radiolist "$1" "${RSETUP_RADIOLIST[@]}" 3>&1 1>&2 2>&3 3>&-)"
     then
         read -r -a RSETUP_RADIOLIST_STATE_NEW <<< "$output"
+        for i in $(seq 2 3 ${#RSETUP_RADIOLIST[@]})
+        do
+            RSETUP_RADIOLIST[$i]="OFF"
+        done
+        for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
+        do
+            i="${i//\"}"
+            RSETUP_RADIOLIST[$(( i * 3 + 2 ))]="ON"
+        done
     else
         return 1
     fi

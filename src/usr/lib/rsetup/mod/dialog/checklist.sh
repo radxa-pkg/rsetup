@@ -35,10 +35,19 @@ checklist_show() {
         return 2
     fi
 
-    local output
+    local output i
     if output="$(__dialog --checklist "$1" "${RSETUP_CHECKLIST[@]}" 3>&1 1>&2 2>&3 3>&-)"
     then
         read -r -a RSETUP_CHECKLIST_STATE_NEW <<< "$output"
+        for i in $(seq 2 3 ${#RSETUP_CHECKLIST[@]})
+        do
+            RSETUP_CHECKLIST[$i]="OFF"
+        done
+        for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
+        do
+            i="${i//\"}"
+            RSETUP_CHECKLIST[$(( i * 3 + 2 ))]="ON"
+        done
     else
         return 1
     fi
