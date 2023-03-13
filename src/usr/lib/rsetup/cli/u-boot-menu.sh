@@ -41,22 +41,10 @@ load_u-boot_setting() {
 disable_overlays() {
     load_u-boot_setting
 
-    if [[ -f "$U_BOOT_FDT_OVERLAYS_DIR/managed.list" ]]
-    then
-        mapfile -t RSETUP_MANAGED_OVERLAYS < "$U_BOOT_FDT_OVERLAYS_DIR/managed.list"
-        for i in "${RSETUP_MANAGED_OVERLAYS[@]}"
-        do
-            if [[ -f "$U_BOOT_FDT_OVERLAYS_DIR/$i" ]]
-            then
-                mv -- "$U_BOOT_FDT_OVERLAYS_DIR/$i" "$U_BOOT_FDT_OVERLAYS_DIR/${i}.disabled"
-            fi
-        done
-    else
         for i in "$U_BOOT_FDT_OVERLAYS_DIR"/*.dtbo
         do
             mv -- "$i" "${i}.disabled"
         done
-    fi
 }
 
 __reset_overlays_worker() {
