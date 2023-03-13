@@ -75,11 +75,7 @@ __overlay_filter_worker() {
     fi
 
     overlay_name="$(basename "$overlay" | sed -E "s/(.*\.dtbo).*/\1/")"
-    mapfile -t title < <(parse_dtbo "$overlay" "title")
-    if [[ "${title[0]}" == "null" ]]
-    then
-        title=( "$overlay_name" )
-    fi
+    mapfile -t title < <(parse_dtbo "$overlay" "title" "$overlay_name")
 
     echo -e "${title[0]}\0${state}\0${overlay_name}" >&100
 }
@@ -170,7 +166,7 @@ __overlay_info() {
         mapfile -t title < <(parse_dtbo "$overlay" "title")
         mapfile -t category < <(parse_dtbo "$overlay" "category")
         description="$(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "description")"
-        if [[ "${title[0]}" == "null" ]]
+        if (( ${#title[@]} == 1 )) && [[ "${title[0]}" == "null" ]]
         then
             title=( "$item" )
             description="This is a 3rd party overlay. No metadata is available."

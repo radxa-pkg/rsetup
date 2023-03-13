@@ -135,7 +135,17 @@ reset_overlays() {
 }
 
 parse_dtbo() {
-    dtc -I dtb -O dts "$1" 2>/dev/null | dtc -I dts -O yaml 2>/dev/null | yq -r ".[0].metadata.$2[0]" | xargs -0
+    local output
+    mapfile -t output < <(dtc -I dtb -O dts "$1" 2>/dev/null | dtc -I dts -O yaml 2>/dev/null | yq -r ".[0].metadata.$2[0]" | xargs -0)
+    if (( $# >= 3 ))
+    then
+        if (( ${#output[@]} == 1 )) && [[ "${output[0]}" == "null" ]]
+        then
+            echo "$3"
+            return
+        fi
+    fi
+    echo "${output[@]}"
 }
 
 dtbo_is_compatible() {
