@@ -102,9 +102,9 @@ __overlay_filter() {
 }
 
 __overlay_show() {
+    local validation="${1:-true}"
     echo "Searching available overlays may take a while, please wait..." >&2
     load_u-boot_setting
-    checklist_init
 
     local temp
     temp="$(mktemp)"
@@ -113,21 +113,30 @@ __overlay_show() {
 
     __overlay_filter "$temp" | gauge "Searching available overlays..." 0
 
-    # Bash doesn support IFS=$'\0'
-    # Use array to emulate this
-    local items=()
-    mapfile -t items < <(sort "$temp" | tr $"\0" $"\n")
-    while (( ${#items[@]} >= 3 ))
+    while true
     do
-        checklist_add "${items[0]/$'\n'}" "${items[1]/$'\n'}" "${items[2]/$'\n'}"
-        items=("${items[@]:3}")
-    done
+        checklist_init
+        # Bash doesn support IFS=$'\0'
+        # Use array to emulate this
+        local items=()
+        mapfile -t items < <(sort "$temp" | tr $"\0" $"\n")
+        while (( ${#items[@]} >= 3 ))
+        do
+            checklist_add "${items[0]/$'\n'}" "${items[1]/$'\n'}" "${items[2]/$'\n'}"
+            items=("${items[@]:3}")
+        done
 
-    checklist_emptymsg "Unable to find any compatible overlay under $U_BOOT_FDT_OVERLAYS_DIR."
-    if ! checklist_show "Please select overlays:"
-    then
-        return 1
-    fi
+        checklist_emptymsg "Unable to find any compatible overlay under $U_BOOT_FDT_OVERLAYS_DIR."
+        if ! checklist_show "Please select overlays:"
+        then
+            return 1
+        fi
+
+        if $validation
+        then
+            return
+        fi
+    done
 }
 
 __overlay_manage() {
