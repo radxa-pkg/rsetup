@@ -1,3 +1,11 @@
+rsetup (0.3.12) stable; urgency=medium
+
+  * Detect incompariable terminal, and provide error message
+  * Allow management of 3rd party overlays
+  * Add overlay resource conflict check
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Mon, 13 Mar 2023 14:28:24 +0800
+
 rsetup (0.3.11) stable; urgency=medium
 
   * Remove fair_share for PWM fan recommendation
