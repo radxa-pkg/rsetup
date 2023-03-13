@@ -19,7 +19,7 @@ process_config() {
             continue
         fi
 
-        if [[ $(type -t "$cmd") == function ]] && __in_array "$cmd" "${ALLOWED_RCONFIG_FUNC[@]}"
+        if [[ $(type -t "$cmd") == function ]] && __in_array "$cmd" "${ALLOWED_RCONFIG_FUNC[@]}" >/dev/null
         then
             echo "Running $cmd with $*..."
             if $DEBUG

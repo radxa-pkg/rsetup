@@ -60,9 +60,19 @@ __parameter_type_check() {
 }
 
 __in_array() {
-    local item="$1"
+    local item="$1" i=0
     shift
-    [[ "$*" == *"$item"* ]]
+    while (( $# > 0 ))
+    do
+        if [[ "$item" == "$1" ]]
+        then
+            echo "$i"
+            return
+        fi
+        i=$(( i + 1 ))
+        shift
+    done
+    return 1
 }
 
 log() {
