@@ -41,12 +41,12 @@ checklist_show() {
         read -r -a RSETUP_CHECKLIST_STATE_NEW <<< "$output"
         for i in $(seq 2 3 ${#RSETUP_CHECKLIST[@]})
         do
-            RSETUP_CHECKLIST[$i]="OFF"
+            RSETUP_CHECKLIST[i]="OFF"
         done
         for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
         do
             i="${i//\"}"
-            RSETUP_CHECKLIST[$(( i * 3 + 2 ))]="ON"
+            RSETUP_CHECKLIST[i * 3 + 2]="ON"
         done
     else
         return 1
