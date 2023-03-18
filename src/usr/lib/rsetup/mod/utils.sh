@@ -76,7 +76,7 @@ __in_array() {
 }
 
 log() {
-    printf "%s\n" "$*"
+    printf "%s\n" "$*" >&2
 }
 
 __check_terminal() {
