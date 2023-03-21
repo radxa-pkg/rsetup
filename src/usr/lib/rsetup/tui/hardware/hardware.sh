@@ -59,8 +59,11 @@ Select any to update their trigger." || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 
     do
         radiolist_add "$i" "OFF"
     done
-    if radiolist_show "Please select the new trigger:" && (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} > 0 ))
+    if ! radiolist_show "Please select the new trigger:" || (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} == 0 ))
     then
+        return
+    fi
+
         config_transaction_start
         for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
         do
@@ -69,7 +72,6 @@ Select any to update their trigger." || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 
             enable_config set_led_trigger "${i[0]}" "$(radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}")"
         done
         config_transaction_commit
-    fi
 
     msgbox "LED trigger has been updated."
 }
