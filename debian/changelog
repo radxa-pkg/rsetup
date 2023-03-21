@@ -1,3 +1,11 @@
+rsetup (0.3.13) stable; urgency=medium
+
+  * Fix SC2004 and SC2321
+  * Log message to stderr
+  * Fix parse_dtbo output format
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Tue, 21 Mar 2023 12:26:20 +0800
+
 rsetup (0.3.12) stable; urgency=medium
 
   * Detect incompariable terminal, and provide error message
