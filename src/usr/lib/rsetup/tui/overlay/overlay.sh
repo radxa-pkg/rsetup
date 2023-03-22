@@ -186,8 +186,8 @@ __overlay_info() {
     for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
     do
         item="$(checklist_getitem "$i")"
-        mapfile -t title < <(parse_dtbo "$overlay" "title")
-        mapfile -t category < <(parse_dtbo "$overlay" "category")
+        mapfile -t title < <(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "title")
+        mapfile -t category < <(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "category")
         description="$(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "description")"
         if (( ${#title[@]} == 1 )) && [[ "${title[0]}" == "null" ]]
         then
