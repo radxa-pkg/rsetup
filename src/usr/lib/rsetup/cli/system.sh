@@ -3,7 +3,7 @@
 source "/usr/lib/rsetup/mod/block_helpers.sh"
 source "/usr/lib/rsetup/mod/hwid.sh"
 
-ALLOWED_RCONFIG_FUNC+=("regenerate_machine_id" "update_hostname" "update_locale" "enable_service" "disable_service" "resize_root" "set_thermal_governor" "set_led_trigger")
+ALLOWED_RCONFIG_FUNC+=("update_hostname" "update_locale" "enable_service" "disable_service" "resize_root" "set_thermal_governor" "set_led_trigger")
 
 update_bootloader() {
     local pid
@@ -14,14 +14,6 @@ update_bootloader() {
     device=$(__get_block_dev)
 
     "/usr/lib/u-boot-$pid/setup.sh" update_bootloader "$device"
-}
-
-regenerate_machine_id() {
-    echo "Remove existing machine ids..."
-    rm -f "/etc/machine-id" "/var/lib/dbus/machine-id"
-    echo "Regenerating machine ids..."
-    dbus-uuidgen --ensure="/etc/machine-id"
-    dbus-uuidgen --ensure
 }
 
 update_hostname() {
