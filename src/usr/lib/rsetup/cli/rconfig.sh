@@ -4,6 +4,14 @@ ALLOWED_RCONFIG_FUNC+=("request_reboot")
 
 RCONFIG_REBOOT="false"
 
+rconfig_allowed_func() {
+    if [[ $(type -t "$1") != function ]] || ! __in_array "$1" "${ALLOWED_RCONFIG_FUNC[@]}" >/dev/null
+    then
+        echo "'$1' is not an allowed command."
+        return 1
+    fi
+}
+
 request_reboot() {
     RCONFIG_REBOOT="${1:-true}"
 }
@@ -19,7 +27,7 @@ process_config() {
             continue
         fi
 
-        if [[ $(type -t "$cmd") == function ]] && __in_array "$cmd" "${ALLOWED_RCONFIG_FUNC[@]}" >/dev/null
+        if rconfig_allowed_func "$cmd"
         then
             echo "Running $cmd with $*..."
             if $DEBUG
@@ -28,8 +36,6 @@ process_config() {
             else
                 eval "$REPLY"
             fi
-        else
-            echo "'$cmd' is not an allowed command."
         fi
     done < <(grep "" "$1")
 }
