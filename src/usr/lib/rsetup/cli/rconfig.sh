@@ -17,24 +17,29 @@ request_reboot() {
 }
 
 process_config() {
+    local argv
     while read -r
     do
-        local cmd
-        cmd="$(awk '{print $1}' <<< "$REPLY")"
+        read -r -a argv <<< "$REPLY"
 
-        if [[ "$cmd" == \#* ]] || [[ -z "$cmd" ]]
+        case "${argv[0]}"
+        in
+            \#*|"")
+                continue
+                ;;
         then
             continue
         fi
+        esac
 
-        if rconfig_allowed_func "$cmd"
+        if rconfig_allowed_func "${argv[0]}"
         then
-            echo "Running $cmd with $*..."
+            echo "Running ${argv[0]} with" "${argv[@]:1}" "..."
             if $DEBUG
             then
-                echo "$REPLY"
+                echo "${argv[*]}"
             else
-                eval "$REPLY"
+                "${argv[@]}"
             fi
         fi
     done < <(grep "" "$1")
