@@ -1,8 +1,19 @@
 # shellcheck shell=bash
 
-ALLOWED_RCONFIG_FUNC+=("request_reboot")
+ALLOWED_RCONFIG_FUNC+=("request_reboot" "headless")
 
 RCONFIG_REBOOT="false"
+
+headless() {
+    local i
+    for i in /sys/class/drm/*/status
+    do
+        if [[ "$(cat "$i")" == "connected" ]]
+        then
+            return 1
+        fi
+    done
+}
 
 rconfig_allowed_func() {
     if [[ $(type -t "$1") != function ]] || ! __in_array "$1" "${ALLOWED_RCONFIG_FUNC[@]}" >/dev/null
@@ -27,9 +38,20 @@ process_config() {
             \#*|"")
                 continue
                 ;;
-        then
-            continue
-        fi
+            if|if_not)
+                if ! rconfig_allowed_func "${argv[1]}"
+                then
+                    continue
+                elif [[ "${argv[0]}" == "if" ]] && ! "${argv[1]}"
+                then
+                    continue
+                elif [[ "${argv[0]}" == "if_not" ]] && "${argv[1]}"
+                then
+                    continue
+                else
+                    argv=( "${argv[@]:2}" )
+                fi
+                ;;
         esac
 
         if rconfig_allowed_func "${argv[0]}"
