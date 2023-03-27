@@ -64,14 +64,14 @@ Select any to update their trigger." || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 
         return
     fi
 
-        config_transaction_start
-        for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
-        do
-            read -r -a i <<< "$(checklist_getitem "$i")"
-            remove_config set_led_trigger "${i[0]}"
-            enable_config set_led_trigger "${i[0]}" "$(radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}")"
-        done
-        config_transaction_commit
+    config_transaction_start
+    for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
+    do
+        read -r -a i <<< "$(checklist_getitem "$i")"
+        remove_config set_led_trigger "${i[0]}"
+        enable_config set_led_trigger "${i[0]}" "$(radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}")"
+    done
+    config_transaction_commit
 
     msgbox "LED trigger has been updated."
 }
