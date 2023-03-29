@@ -1,3 +1,9 @@
+rsetup (0.3.15) stable; urgency=medium
+
+  * Fix rconfig error on empty line
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Wed, 29 Mar 2023 16:06:38 +0800
+
 rsetup (0.3.14) stable; urgency=medium
 
   * Do not show LED updated message if user cancels operation
