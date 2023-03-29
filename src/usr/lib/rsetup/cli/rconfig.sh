@@ -32,6 +32,10 @@ process_config() {
     while read -r
     do
         read -r -a argv <<< "$REPLY"
+        if [[ -z ${argv+IS_SET} ]]
+        then
+            local argv=("")
+        fi
 
         case "${argv[0]}"
         in
