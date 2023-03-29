@@ -1,3 +1,15 @@
+rsetup (0.3.14) stable; urgency=medium
+
+  * Do not show LED updated message if user cancels operation
+  * Fix unbound variable error
+  * regenerate_machine_id is no longer needed
+  * Add rconfig_allowed_func helper
+  * Use bash array to handle rconfig commands
+  * Add conditional execution in rconfig
+  * Fix formatting
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Wed, 29 Mar 2023 10:23:07 +0800
+
 rsetup (0.3.13) stable; urgency=medium
 
   * Fix SC2004 and SC2321
