@@ -2,6 +2,7 @@
 
 source "/usr/lib/rsetup/mod/hwid.sh"
 source "/usr/lib/rsetup/mod/pkg.sh"
+source "/usr/lib/rsetup/mod/overlay.sh"
 
 __overlay_install() {
     if ! __depends_package "gcc" "linux-headers-$(uname -r)"
@@ -19,7 +20,7 @@ Are you sure?"
         return
     fi
 
-    local item basename temp
+    local item basename err=0
     if ! item="$(fselect "$PWD")"
     then
         return
@@ -29,21 +30,23 @@ Are you sure?"
 
     basename="$(basename "$item")"
     basename="${basename%.dts}.dtbo"
-    temp="$(mktemp)"
-    # shellcheck disable=SC2064
-    trap "rm -f $temp" RETURN EXIT
 
-    if ! cpp -x assembler-with-cpp -E -I "/usr/src/linux-headers-$(uname -r)/include" "$item" "$temp"
-    then
-        msgbox "Unable to preprocess the source code!"
-        return
-    fi
-
-    if ! dtc -q -@ -I dts -O dtb -o "$U_BOOT_FDT_OVERLAYS_DIR/$basename" "$item"
-    then
-        msgbox "Unable to compile the source code!"
-        return
-    fi
+    compile_dtb "$item" "$U_BOOT_FDT_OVERLAYS_DIR/$basename" || err=$?
+    case $err in
+        0) : ;;
+        1)
+            msgbox "Unable to preprocess the source code!"
+            return
+            ;;
+        2)
+            msgbox "Unable to compile the source code!"
+            return
+            ;;
+        *)
+            msgbox "Unknown error $err occured during compilation."
+            return
+            ;;
+    esac
 
     if u-boot-update >/dev/null
     then
