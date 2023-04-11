@@ -1,5 +1,7 @@
 # shellcheck shell=bash
 
+source "/usr/lib/rsetup/mod/overlay.sh"
+
 ALLOWED_RCONFIG_FUNC+=("load_u-boot_setting")
 
 check_overlay_conflict_init() {
