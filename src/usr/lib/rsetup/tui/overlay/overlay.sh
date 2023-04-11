@@ -29,21 +29,33 @@ Are you sure?"
     load_u-boot_setting
 
     basename="$(basename "$item")"
-    basename="${basename%.dts}.dtbo"
 
-    compile_dtb "$item" "$U_BOOT_FDT_OVERLAYS_DIR/$basename" || err=$?
-    case $err in
-        0) : ;;
-        1)
-            msgbox "Unable to preprocess the source code!"
-            return
+    case $basename in
+        *.dtbo)
+            cp "$item" "$U_BOOT_FDT_OVERLAYS_DIR/$basename"
             ;;
-        2)
-            msgbox "Unable to compile the source code!"
-            return
+        *.dtb)
+            basename="${basename%.dts}.dtbo"
+
+            compile_dtb "$item" "$U_BOOT_FDT_OVERLAYS_DIR/$basename" || err=$?
+            case $err in
+                0) : ;;
+                1)
+                    msgbox "Unable to preprocess the source code!"
+                    return
+                    ;;
+                2)
+                    msgbox "Unable to compile the source code!"
+                    return
+                    ;;
+                *)
+                    msgbox "Unknown error $err occured during compilation."
+                    return
+                    ;;
+            esac
             ;;
         *)
-            msgbox "Unknown error $err occured during compilation."
+            msgbox "Unknown file format: $basename"
             return
             ;;
     esac
