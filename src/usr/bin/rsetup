@@ -1,10 +1,5 @@
 #!/bin/bash
 
-if (( EUID != 0 ))
-then
-    exec sudo "$0" "$@"
-fi
-
 set -euo pipefail
 shopt -s nullglob
 
@@ -19,6 +14,10 @@ source "/usr/lib/rsetup/cli/main.sh"
 RSETUP_EXEC_NAME="$(basename "$0")"
 if (( $# == 0 )) && [[ "$RSETUP_EXEC_NAME" == "rsetup" ]]
 then
+    if (( EUID != 0 ))
+    then
+        exec sudo "$0" "$@"
+    fi
     source "/usr/lib/rsetup/tui/main.sh"
     tui_start __tui_main
 else
