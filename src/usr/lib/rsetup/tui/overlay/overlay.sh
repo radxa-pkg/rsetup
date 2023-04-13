@@ -266,7 +266,7 @@ To avoid potential conflicts, overlay feature is temporarily disabled until such
     menu_init
     menu_add __overlay_manage "Manage overlays"
     menu_add __overlay_info "View overlay info"
-    menu_add __overlay_install "Install overlay from source"
+    menu_add __overlay_install "Install 3rd party overlay"
     menu_add __overlay_reset "Reset overlays"
     menu_show "Configure Device Tree Overlay"
 }
