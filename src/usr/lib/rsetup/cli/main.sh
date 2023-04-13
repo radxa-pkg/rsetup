@@ -10,6 +10,7 @@ source "/usr/lib/rsetup/cli/docker.sh"
 source "/usr/lib/rsetup/cli/u-boot-menu.sh"
 source "/usr/lib/rsetup/cli/wi-fi.sh"
 source "/usr/lib/rsetup/cli/kernel.sh"
+source "/usr/lib/rsetup/cli/test/mpp.sh"
 
 if $DEBUG
 then
