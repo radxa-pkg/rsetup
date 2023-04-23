@@ -8,12 +8,12 @@ ALLOWED_RCONFIG_FUNC+=("update_hostname" "update_locale" "enable_service" "disab
 update_bootloader() {
     local pid
     pid="${1:-$(get_product_id)}"
-    __assert_f "/usr/lib/u-boot-$pid/setup.sh"
+    __assert_f "/usr/lib/u-boot/$pid/setup.sh"
 
     local device
     device=$(__get_block_dev)
 
-    "/usr/lib/u-boot-$pid/setup.sh" update_bootloader "$device"
+    "/usr/lib/u-boot/$pid/setup.sh" update_bootloader "$device"
 }
 
 update_hostname() {

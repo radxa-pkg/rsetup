@@ -28,9 +28,9 @@ Are you sure you want to update the bootloader?"
 
     local pid
     pid="$(get_product_id)"
-    for i in /usr/lib/u-boot-"$pid"*
+    for i in /usr/lib/u-boot/"$pid"*
     do
-        radiolist_add "${i##/usr/lib/u-boot-}" "OFF"
+        radiolist_add "${i##/usr/lib/u-boot/}" "OFF"
     done
     radiolist_emptymsg "No compatible bootloader is available."
 
