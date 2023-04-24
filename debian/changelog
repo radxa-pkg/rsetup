@@ -1,3 +1,13 @@
+rsetup (0.3.17) stable; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * Do not create source package
+  * Fix description since dtbo can be used as well
+  * Add mpp debug commands
+  * Update U-Boot installation direction
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Mon, 24 Apr 2023 10:35:48 +0800
+
 rsetup (0.3.16) stable; urgency=medium
 
   * Only force sudo when running as TUI
