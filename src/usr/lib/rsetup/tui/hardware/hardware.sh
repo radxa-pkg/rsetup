@@ -170,7 +170,7 @@ Please check if the screen is connected and powered on."
     fi
 
     local dsi_res dsi_native_res_x dsi_native_res_y
-    dsi_res="$(tail -n 1 "/sys/devices/platform/display-subsystem/drm/card0/card0-$selected_dsi/modes")"
+    dsi_res="$(tail -n 1 "/sys/devices/platform/display-subsystem/drm/card*/card*-$selected_dsi/modes")"
     dsi_native_res_x="$(cut -d "x" -f 1 <<< "$dsi_res")"
     dsi_native_res_y="$(cut -d "x" -f 2 <<< "$dsi_res")"
 
