@@ -1,3 +1,17 @@
+rsetup (0.3.18) jammy; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * Allow DSI to be connected to card*
+  * Declare i as local variable
+  * Manage any subnodes in leds-gpio
+  * Fix overlay building issue
+  * Fix get_product_id for non ROCK products
+  * Add Update SPI Bootloader option
+  * Update CI
+  * Create release commit
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Thu, 15 Jun 2023 12:35:31 +0000
+
 rsetup (0.3.17) stable; urgency=medium
 
   [ ZHANG Yuntian ]
