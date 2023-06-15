@@ -16,6 +16,14 @@ update_bootloader() {
     "/usr/lib/u-boot/$pid/setup.sh" update_bootloader "$device"
 }
 
+update_spinor() {
+    local pid
+    pid="${1:-$(get_product_id)}"
+    __assert_f "/usr/lib/u-boot/$pid/setup.sh"
+
+    "/usr/lib/u-boot/$pid/setup.sh" update_spinor
+}
+
 update_hostname() {
     __parameter_count_check 1 "$@"
 
