@@ -82,7 +82,7 @@ resize_root() {
 set_thermal_governor() {
     __parameter_count_check 1 "$@"
 
-    local new_policy="$1"
+    local new_policy="$1" i
     for i in /sys/class/thermal/thermal_zone*/policy
     do
         echo "$new_policy" > "$i"
