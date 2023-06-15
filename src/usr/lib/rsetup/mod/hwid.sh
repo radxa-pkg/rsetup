@@ -14,6 +14,13 @@ get_product_id() {
     then
         echo "$RSETUP_PRODUCT_ID_OVERRIDE"
     else
-        tr $"\0" $"\n" < /proc/device-tree/compatible | head -n 1 | cut -d "," -f 2
+        local model
+        model="$(tr $"\0" $"\n" < /proc/device-tree/compatible | head -n 1 | cut -d "," -f 2)"
+        if [[ $model =~ ^rock ]]
+        then
+            echo "$model"
+        else
+            echo "radxa-$model"
+        fi
     fi
 }
