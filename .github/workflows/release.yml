@@ -86,6 +86,7 @@ jobs:
             ${{ env.changes }}
           append_body: true
       - name: Update Test repos
+        if: env.distro != 'UNRELEASED'
         uses: radxa-repo/update-repo-action@main
         with:
           test-repo: true
