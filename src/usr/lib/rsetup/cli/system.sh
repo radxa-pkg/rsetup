@@ -6,12 +6,11 @@ source "/usr/lib/rsetup/mod/hwid.sh"
 ALLOWED_RCONFIG_FUNC+=("update_hostname" "update_locale" "enable_service" "disable_service" "resize_root" "set_thermal_governor" "set_led_trigger")
 
 update_bootloader() {
-    local pid
+    local pid device
     pid="${1:-$(get_product_id)}"
     __assert_f "/usr/lib/u-boot/$pid/setup.sh"
 
-    local device
-    device=$(__get_block_dev)
+    device="${2:-$(__get_block_dev)}"
 
     "/usr/lib/u-boot/$pid/setup.sh" update_bootloader "$device"
 }
@@ -22,6 +21,17 @@ update_spinor() {
     __assert_f "/usr/lib/u-boot/$pid/setup.sh"
 
     "/usr/lib/u-boot/$pid/setup.sh" update_spinor
+}
+
+update_emmc_boot() {
+    local pid device
+    pid="${1:-$(get_product_id)}"
+    __assert_f "/usr/lib/u-boot/$pid/setup.sh"
+
+    for device in /dev/mmcblk*boot0
+    do
+        "/usr/lib/u-boot/$pid/setup.sh" update_emmc_boot "$device"
+    done
 }
 
 update_hostname() {
