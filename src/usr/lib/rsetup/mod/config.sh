@@ -49,7 +49,12 @@ save_unique_config() {
 enable_unique_config() {
     local command="$1"
     shift
-    local arguments=( "$@" )
-    "$command" "${arguments[@]}"
-    save_unique_config "$command" "${arguments[@]}"
+    local arguments=( "$@" ) ret=0
+    "$command" "${arguments[@]}" || ret=$?
+    if (( ret == 0 ))
+    then
+        save_unique_config "$command" "${arguments[@]}"
+    else
+        return $ret
+    fi
 }
