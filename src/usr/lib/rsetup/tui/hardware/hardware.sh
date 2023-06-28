@@ -79,7 +79,7 @@ Select any to update their trigger." || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 
 __hardware_thermal() {
     radiolist_init
 
-    local current_policy available_policies
+    local current_policy available_policies selected_governor
     current_policy="$(cat /sys/class/thermal/thermal_zone0/policy)"
     mapfile -t available_policies < <(sed -E -e "s/ $//g" -e "s/ /\n/g" /sys/class/thermal/thermal_zone0/available_policies)
     for i in "${available_policies[@]}"
@@ -99,9 +99,19 @@ Recommendation: fanless or DC fan => power_allocator | PWM fan => step_wise" || 
         return
     fi
 
-    enable_unique_config set_thermal_governor "$(radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}")"
-
-    msgbox "Thermal governor has been updated."
+    selected_governor="$(radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}")"
+    if enable_unique_config set_thermal_governor "$selected_governor"
+    then
+        msgbox "Thermal governor has been updated."
+    else
+        if [[ "$selected_governor" == "power_allocator" ]] && ( lsmod | grep pwm_fan )
+        then
+            msgbox "power_allocator governor is incompatible with pwm_fan driver.
+Please disable it and try again."
+        else
+            msgbox "Thermal governor could not be updated."
+        fi
+    fi
 }
 
 __hardware_rgb_leds() {
