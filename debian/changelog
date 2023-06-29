@@ -1,3 +1,14 @@
+rsetup (0.3.19) jammy; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * Trigger apt update on release
+  * Update CI
+  * Support updating eMMC Boot partition
+  * Only update the persistent config if it is valid
+  * Handle power_allocator and pwm_fan conflict
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Thu, 29 Jun 2023 08:28:17 +0000
+
 rsetup (0.3.18) jammy; urgency=medium
 
   [ ZHANG Yuntian ]
