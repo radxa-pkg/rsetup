@@ -96,24 +96,23 @@ __overlay_filter_worker() {
 }
 
 __overlay_filter() {
-    local temp="$1" dtbos=( "$U_BOOT_FDT_OVERLAYS_DIR"/*.dtbo* ) running
-    for i in "${dtbos[@]}"
+    local temp="$1" nproc index
+    local dtbos=( "$U_BOOT_FDT_OVERLAYS_DIR"/*.dtbo* )
+    mapfile -t index < <(eval "echo {0..$(( ${#dtbos[@]} - 1 ))}" | tr ' ' '\n')
+    nproc=$(nproc)
+
+    for i in "${index[@]}"
     do
-        __overlay_filter_worker "$temp" "$i" &
+        while (( $(jobs -r | wc -l) > nproc ))
+        do
+            sleep 0.1
+        done
+
+        __overlay_filter_worker "$temp" "${dtbos[$i]}" &
+        echo $(( i * 100 / (${index[-1]} + 1) ))
     done
 
-    while true
-    do
-        running="$(jobs -r | wc -l)"
-        if (( running == 0 ))
-        then
-            wait
-            return
-        else
-            echo $(( (${#dtbos[@]} - running) * 100 / ${#dtbos[@]} ))
-            sleep 0.1
-        fi
-    done
+    wait
 }
 
 __overlay_show() {
