@@ -1,3 +1,10 @@
+rsetup (0.3.20) jammy; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * Concurrent tasks for overlay_filter scale with nproc
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Fri, 21 Jul 2023 07:49:42 +0000
+
 rsetup (0.3.19) jammy; urgency=medium
 
   [ ZHANG Yuntian ]
