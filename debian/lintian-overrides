@@ -3,3 +3,5 @@ rsetup: improbable-bug-number-in-closes
 
 # We depends on x-terminal-emulator
 rsetup: desktop-command-not-in-package
+
+rsetup: groff-message
