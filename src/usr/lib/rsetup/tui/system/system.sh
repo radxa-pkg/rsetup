@@ -7,9 +7,14 @@ __system_system_update() {
         msgbox "Unable to update package list."
         return
     fi
-    if ! apt-get full-upgrade
+    if ! apt-get dist-upgrade --allow-downgrades
     then
         msgbox "Unable to upgrade packages."
+        return
+    fi
+    if ! apt-get dist-upgrade --allow-downgrades
+    then
+        msgbox "Unable to upgrade pinned packages."
         return
     fi
     read -rp "Press enter to continue..."
