@@ -153,5 +153,5 @@ __system() {
     menu_add __system_update_bootloader "Update Bootloader"
     menu_add __system_update_spinor "Update SPI Bootloader"
     menu_add __system_update_emmc_boot "Update eMMC Boot partition"
-    menu_show "System Maintaince"
+    menu_show "System Maintenance"
 }
