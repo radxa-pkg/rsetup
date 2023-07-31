@@ -1,3 +1,13 @@
+rsetup (0.3.21) jammy; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * Fix typo
+  * Update system upgrade sequence
+  * Basic desktop integration
+  * Fix build
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Mon, 31 Jul 2023 10:25:30 +0000
+
 rsetup (0.3.20) jammy; urgency=medium
 
   [ ZHANG Yuntian ]
