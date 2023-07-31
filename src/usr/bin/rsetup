@@ -16,7 +16,12 @@ if (( $# == 0 )) && [[ "$RSETUP_EXEC_NAME" == "rsetup" ]]
 then
     if (( EUID != 0 ))
     then
-        exec sudo "$0" "$@"
+        if [[ -n "${DISPLAY:-}" ]]
+        then
+            exec pkexec "$0" "$@"
+        else
+            exec sudo "$0" "$@"
+        fi
     fi
     source "/usr/lib/rsetup/tui/main.sh"
     tui_start __tui_main

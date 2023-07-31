@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=rsetup
+Icon=preferences-system
+GenericName=RadxaOS System Configurator
+Comment=Customize your RadxaOS
+Exec=x-terminal-emulator -e rsetup
+Categories=Settings;
+Keywords=system;rsetup

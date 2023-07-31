@@ -16,9 +16,11 @@ Priority: standard
 Depends: device-tree-compiler,
          gdisk,
          parted,
+         pkexec,
          whiptail,
          yq,
          ${misc:Depends},
+Suggests: x-terminal-emulator
 Description: Radxa system setup utility
  Radxa system setup utility (rsetup) provides an user friendly menu to
  perform many essential system configuration tasks. It also provides
