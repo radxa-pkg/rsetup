@@ -1,3 +1,10 @@
+rsetup (0.3.22) jammy; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * Fix dependency with Debian 11
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Wed, 02 Aug 2023 08:30:07 +0000
+
 rsetup (0.3.21) jammy; urgency=medium
 
   [ ZHANG Yuntian ]
