@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-ALLOWED_RCONFIG_FUNC+=("request_reboot" "headless")
+ALLOWED_RCONFIG_FUNC+=("request_reboot" "headless" "no_fail")
 
 RCONFIG_REBOOT="false"
 
@@ -27,8 +27,12 @@ request_reboot() {
     RCONFIG_REBOOT="${1:-true}"
 }
 
+no_fail() {
+    no_fail="${1:-true}"
+}
+
 process_config() {
-    local argv
+    local argv no_fail="false"
     while read -r
     do
         read -r -a argv <<< "$REPLY"
@@ -65,7 +69,7 @@ process_config() {
             then
                 echo "${argv[*]}"
             else
-                "${argv[@]}"
+                "${argv[@]}" || "$no_fail"
             fi
         fi
     done < <(grep "" "$1")
