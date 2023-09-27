@@ -78,9 +78,9 @@ process_config() {
 __on_boot() {
     __parameter_count_check 0 "$@"
 
-    local conf_dir="/config"
+    local ext_user_conf_dir="/config" distro_conf_dir="/usr/lib/rsetup/conf.d/on_boot"
 
-    for i in "$conf_dir/before.txt" "$conf_dir/config.txt" "$conf_dir/after.txt"
+    for i in "$distro_conf_dir"/*.conf "$ext_user_conf_dir/before.txt" "$ext_user_conf_dir/config.txt" "$ext_user_conf_dir/after.txt"
     do
         if [[ -e "$i" ]]
         then
@@ -88,7 +88,7 @@ __on_boot() {
         fi
     done
 
-    rm -f "$conf_dir/before.txt" "$conf_dir/after.txt"
+    rm -f "$ext_user_conf_dir/before.txt" "$ext_user_conf_dir/after.txt"
 
     if [[ "$RCONFIG_REBOOT" == "true" ]]
     then
