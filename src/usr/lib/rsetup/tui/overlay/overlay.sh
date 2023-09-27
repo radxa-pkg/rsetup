@@ -164,6 +164,14 @@ __overlay_validate() {
         then
             return 1
         fi
+
+        local title package
+        mapfile -t title < <(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "title" "$(basename "$item")")
+        mapfile -t package < <(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "package")
+        if [[ "${package[0]}" != "null" ]]
+        then
+            __depends_package "${title[0]}" "${package[@]}"
+        fi
     done
 }
 
