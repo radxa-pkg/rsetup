@@ -1,0 +1,4 @@
+#!/usr/bin/dh-exec
+
+/usr/bin/rsetup /etc/kernel/postinst.d/yz-update-overlays
+/usr/bin/rsetup /etc/kernel/postrm.d/yz-update-overlays
