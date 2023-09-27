@@ -3,7 +3,8 @@
 ALLOWED_RCONFIG_FUNC+=("remove_packages")
 
 __depends_package() {
-    local p missing_packages=()
+    local title="$1" p missing_packages=()
+    shift
     for p in "$@"
     do
         if ! dpkg -l "$p" &>/dev/null
@@ -14,7 +15,7 @@ __depends_package() {
 
     if (( ${#missing_packages[@]} != 0 ))
     then
-        if ! yesno "This feature requires the following packages: ${missing_packages[*]}.
+        if ! yesno "'$title' requires the following packages: ${missing_packages[*]}.
 
 Do you want to install them right now?"
         then

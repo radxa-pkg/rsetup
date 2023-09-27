@@ -5,7 +5,7 @@ source "/usr/lib/rsetup/mod/pkg.sh"
 source "/usr/lib/rsetup/mod/overlay.sh"
 
 __overlay_install() {
-    if ! __depends_package "gcc" "linux-headers-$(uname -r)"
+    if ! __depends_package "Install 3rd party overlay" "gcc" "linux-headers-$(uname -r)"
     then
         return
     fi
