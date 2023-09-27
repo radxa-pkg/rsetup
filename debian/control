@@ -25,3 +25,12 @@ Description: Radxa system setup utility
  Radxa system setup utility (rsetup) provides an user friendly menu to
  perform many essential system configuration tasks. It also provides
  an on-boot configuration service to allow customization.
+
+Package: rsetup-config-thermal-governor-step-wise
+Architecture: all
+Section: admin
+Priority: standard
+Depends: rsetup (= ${binary:Version}),
+         ${misc:Depends},
+Description: Radxa system config - Set thermal_governor to step_wise
+ This package set thermal_governor to step_wise on boot.

@@ -1,0 +1,1 @@
+config/00-thermal_governor-step_wise.conf /usr/lib/rsetup/conf.d/on_boot
