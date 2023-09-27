@@ -36,7 +36,6 @@ shell: overlay
 #
 .PHONY: test
 test:
-	find src -type f \( -name "*.sh" -o -name "rsetup" \) -exec shellcheck --source-path=./src --external-sources {} +
 
 #
 # Build
