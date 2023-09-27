@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 
+# shellcheck source=src/usr/lib/rsetup/tui/task/docker/docker.sh
 source "/usr/lib/rsetup/tui/task/docker/docker.sh"
 source "/usr/lib/rsetup/tui/task/ssh/ssh.sh"
 

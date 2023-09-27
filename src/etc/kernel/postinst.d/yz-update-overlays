@@ -14,11 +14,13 @@ LANGUAGE="C"
 
 DEBUG="${DEBUG:-false}"
 
+# shellcheck source=src/usr/lib/rsetup/cli/main.sh
 source "/usr/lib/rsetup/cli/main.sh"
 
 RSETUP_EXEC_NAME="$(basename "$0")"
 if (( $# == 0 )) && [[ "$RSETUP_EXEC_NAME" == "rsetup" ]]
 then
+    # shellcheck source=src/usr/lib/rsetup/tui/main.sh
     source "/usr/lib/rsetup/tui/main.sh"
     tui_start __tui_main
 else
@@ -30,5 +32,4 @@ else
         __parameter_type_check "__$RSETUP_EXEC_NAME" "function"
         "__$RSETUP_EXEC_NAME" "$@"
     fi
-    
 fi

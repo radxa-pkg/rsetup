@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 
+# shellcheck source=src/usr/lib/rsetup/mod/dialog/basic.sh
 source "/usr/lib/rsetup/mod/dialog/basic.sh"
 source "/usr/lib/rsetup/mod/dialog/menu.sh"
 source "/usr/lib/rsetup/mod/dialog/checklist.sh"

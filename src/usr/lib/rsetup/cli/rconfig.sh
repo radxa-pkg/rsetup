@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 
 # Provides remove_packages
+# shellcheck source=src/usr/lib/rsetup/mod/pkg.sh
 source "/usr/lib/rsetup/mod/pkg.sh"
 
 ALLOWED_RCONFIG_FUNC+=("request_reboot" "headless" "no_fail")

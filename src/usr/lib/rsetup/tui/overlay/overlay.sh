@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 
+# shellcheck source=src/usr/lib/rsetup/mod/hwid.sh
 source "/usr/lib/rsetup/mod/hwid.sh"
 source "/usr/lib/rsetup/mod/pkg.sh"
 source "/usr/lib/rsetup/mod/overlay.sh"

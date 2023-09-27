@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 
+# shellcheck source=src/usr/lib/rsetup/mod/block_helpers.sh
 source "/usr/lib/rsetup/mod/block_helpers.sh"
 source "/usr/lib/rsetup/mod/hwid.sh"
 

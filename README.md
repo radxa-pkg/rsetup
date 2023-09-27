@@ -45,6 +45,7 @@ yay -Syu perl-data-validate-uri perl-list-someutils perl-moox-aliases perl-names
 # Copy profile for Arch
 sudo cp -r /usr/share/lintian/profiles/debian/. /usr/share/lintian/profiles/archlinux/
 ```
+
 </details>
 
 <details>
@@ -55,6 +56,7 @@ sudo apt-get update
 sudo apt-get build-dep --no-install-recommends .
 sudo apt-get install git-buildpackage
 ```
+
 </details>
 
 ## Developer commands

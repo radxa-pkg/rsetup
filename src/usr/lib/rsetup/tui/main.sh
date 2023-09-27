@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 
+# shellcheck source=src/usr/lib/rsetup/tui/main.sh
 source "/usr/lib/rsetup/mod/tui.sh"
 
 source "/usr/lib/rsetup/tui/overlay/overlay.sh"
