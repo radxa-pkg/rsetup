@@ -170,7 +170,11 @@ __overlay_validate() {
         mapfile -t package < <(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "package")
         if [[ "${package[0]}" != "null" ]]
         then
-            __depends_package "${title[0]}" "${package[@]}"
+            if ! __depends_package "${title[0]}" "${package[@]}"
+            then
+                msgbox "Failed to install required packages for '${title[0]}'."
+                return 1
+            fi
         fi
     done
 }
