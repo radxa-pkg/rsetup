@@ -196,12 +196,14 @@ __overlay_info() {
         return
     fi
 
-    local item title category description i
+    local item title category description exclusive package i
     for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
     do
         item="$(checklist_getitem "$i")"
         mapfile -t title < <(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "title")
         mapfile -t category < <(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "category")
+        mapfile -t exclusive < <(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "exclusive")
+        mapfile -t package < <(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "package")
         description="$(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "description")"
         if (( ${#title[@]} == 1 )) && [[ "${title[0]}" == "null" ]]
         then
@@ -210,6 +212,8 @@ __overlay_info() {
         fi
         if ! yesno "Title: ${title[0]}
 Category: ${category[0]}
+Exclusive: ${exclusive[*]}
+Package: ${package[*]}
 Description:
 
 $description"
