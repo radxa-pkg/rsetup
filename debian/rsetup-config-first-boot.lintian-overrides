@@ -1,0 +1,4 @@
+# Unfortunate result of using /config as the mount point
+rsetup-config-first-boot: non-etc-file-marked-as-conffile
+rsetup-config-first-boot: non-standard-toplevel-dir
+rsetup-config-first-boot: file-in-unusual-dir

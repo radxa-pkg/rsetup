@@ -33,4 +33,13 @@ Priority: standard
 Depends: rsetup (= ${binary:Version}),
          ${misc:Depends},
 Description: Radxa system config - Set thermal_governor to step_wise
- This package set thermal_governor to step_wise on boot.
+ This package sets thermal_governor to step_wise on boot.
+
+Package: rsetup-config-first-boot
+Architecture: all
+Section: admin
+Priority: standard
+Depends: rsetup (= ${binary:Version}),
+         ${misc:Depends},
+Description: Radxa system config - First boot configuration
+ This package contains the default first boot script.
