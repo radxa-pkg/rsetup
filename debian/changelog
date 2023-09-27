@@ -1,3 +1,27 @@
+rsetup (0.3.25) jammy; urgency=medium
+
+  [ dependabot[bot] ]
+  * Bump actions/checkout from 3 to 4
+
+  [ ZHANG Yuntian ]
+  * Update mpp debug functions
+  * Prepare for additional packages
+  * Support distro/etc on_boot config
+  * Add rsetup-config-thermal-governor-step-wise package
+  * Ship default config.txt with rsetup package
+  * Add remove_packages function
+  * Add rsetup-config-first-boot package
+  * Update overlay_info with the latest spec
+  * Add title argument to __depends_package
+  * Install packages from overlay specs
+  * Handle package install failure in __overlay_validate
+  * List installation candidates in a new line
+  * Add pre-commit config
+  * Fix issues reported by pre-commit
+  * Replace kernel hooks with symlinks
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Wed, 27 Sep 2023 09:43:16 +0000
+
 rsetup (0.3.24) jammy; urgency=medium
 
   [ ZHANG Yuntian ]
