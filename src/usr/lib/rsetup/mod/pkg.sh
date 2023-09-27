@@ -15,7 +15,9 @@ __depends_package() {
 
     if (( ${#missing_packages[@]} != 0 ))
     then
-        if ! yesno "'$title' requires the following packages: ${missing_packages[*]}.
+        if ! yesno "'$title' requires the following packages:
+
+${missing_packages[*]}
 
 Do you want to install them right now?"
         then
