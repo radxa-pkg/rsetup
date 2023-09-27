@@ -1,5 +1,7 @@
 # shellcheck shell=bash
 
+ALLOWED_RCONFIG_FUNC+=("remove_packages")
+
 __depends_package() {
     local p missing_packages=()
     for p in "$@"
@@ -18,7 +20,11 @@ Do you want to install them right now?"
         then
             return 1
         fi
-        apt-get update || exit
-        apt-get install --no-install-recommends -y "${missing_packages[@]}" || exit
+        apt-get update
+        apt-get install --no-install-recommends -y "${missing_packages[@]}"
     fi
+}
+
+remove_packages() {
+    apt-get autoremove -y "$@"
 }

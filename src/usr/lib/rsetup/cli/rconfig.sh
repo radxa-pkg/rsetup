@@ -1,5 +1,8 @@
 # shellcheck shell=bash
 
+# Provides remove_packages
+source "/usr/lib/rsetup/mod/pkg.sh"
+
 ALLOWED_RCONFIG_FUNC+=("request_reboot" "headless" "no_fail")
 
 RCONFIG_REBOOT="false"
