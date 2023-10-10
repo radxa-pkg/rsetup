@@ -2,8 +2,9 @@
 # Configurations here will be applied on every boot.
 #
 # Additionally you can create `before.txt` and `after.txt` in this folder.
-# They will run before and after this file and will be deleted in the end.
+# They will run before and after this file.
+# They will be deleted after the configuration process is completed.
 # This makes them suitable for one-time setup.
 #
 # Example can be found in the default `before.txt`:
-# https://github.com/radxa-repo/rbuild/blob/main/common/overlays/common/config/before.txt
+# https://github.com/radxa-pkg/rsetup/blob/main/config/before.txt
