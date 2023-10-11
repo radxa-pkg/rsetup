@@ -1,3 +1,10 @@
+rsetup (0.3.27) jammy; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * Fix install on new system
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Wed, 11 Oct 2023 06:11:17 +0000
+
 rsetup (0.3.26) jammy; urgency=medium
 
   [ ZHANG Yuntian ]
