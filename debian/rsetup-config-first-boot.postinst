@@ -6,6 +6,10 @@ action="$1"
 
 if [ "$action" = configure ]
 then
+    if [ ! -e /config ]
+    then
+        mkdir /config
+    fi
     if [ ! -e /config/before.txt ]
     then
         cp /usr/share/doc/rsetup-config-first-boot/before.txt /config/before.txt
