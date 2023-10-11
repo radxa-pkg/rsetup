@@ -5,8 +5,3 @@ rsetup: improbable-bug-number-in-closes
 rsetup: desktop-command-not-in-package
 
 rsetup: groff-message
-
-# Unfortunate result of using /config as the mount point
-rsetup: non-etc-file-marked-as-conffile
-rsetup: non-standard-toplevel-dir
-rsetup: file-in-unusual-dir

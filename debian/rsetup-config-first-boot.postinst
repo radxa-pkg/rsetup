@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -e
+
+action="$1"
+
+if [ "$action" = configure ]
+then
+    if [ ! -e /config/before.txt ]
+    then
+        cp /usr/share/doc/rsetup-config-first-boot/before.txt /config/before.txt
+    fi
+fi
+
+#DEBHELPER#
+
+exit 0

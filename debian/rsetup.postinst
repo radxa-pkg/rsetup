@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -e
+
+action="$1"
+
+if [ "$action" = configure ]
+then
+    if [ ! -e /config/config.txt ]
+    then
+        cp /usr/share/doc/rsetup/config.txt /config/config.txt
+    fi
+fi
+
+#DEBHELPER#
+
+exit 0
