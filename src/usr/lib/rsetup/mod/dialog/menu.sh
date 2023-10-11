@@ -33,7 +33,7 @@ menu_add_separator() {
 menu_emptymsg() {
     __parameter_count_check 1 "$@"
 
-    if (( ${#RSETUP_MENU_CALLBACK[@]} == 0))
+    if (( ${#RSETUP_MENU_CALLBACK[@]} == 0 ))
     then
         msgbox "$1"
     fi
@@ -48,8 +48,9 @@ menu_getitem() {
 menu_show() {
     __parameter_count_check 1 "$@"
 
-    local item
-    if item=$(__dialog --menu "$1" "${RSETUP_MENU[@]}" 3>&1 1>&2 2>&3 3>&-)
+    local item="0"
+    if (( ${#RSETUP_MENU_CALLBACK[@]} == 1 )) || \
+       item=$(__dialog --menu "$1" "${RSETUP_MENU[@]}" 3>&1 1>&2 2>&3 3>&-)
     then
         RSETUP_MENU_SELECTED="$(menu_getitem "$item")"
         push_screen "${RSETUP_MENU_CALLBACK[$item]}"
