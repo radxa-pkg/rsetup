@@ -3,12 +3,12 @@
 # shellcheck source=src/usr/lib/rsetup/mod/config.sh
 source "/usr/lib/rsetup/mod/config.sh"
 
-__hardware_gstreamer_test() {
+__hardware_gstreamer_test_picture() {
     local temp
     temp="$(mktemp tmp.XXXXXXXXXX.jpg)"
 
     if gst-launch-1.0 v4l2src "device=/dev/$RSETUP_MENU_SELECTED" io-mode=4 ! \
-                      videoconvert ! \
+                      autovideoconvert ! \
                       video/x-raw,format=UYVY,width=1920,height=1080 ! \
                       jpegenc ! \
                       multifilesink "location=$temp"
@@ -21,6 +21,25 @@ Please check if you have the required libraries installed."
     fi
 }
 
+__hardware_gstreamer_test_live() {
+    gst-launch-1.0 v4l2src "device=/dev/$RSETUP_MENU_SELECTED" io-mode=4 ! \
+                   autovideoconvert ! \
+                   video/x-raw,format=NV12,width=1920,height=1080,framerate=30/1 ! \
+                   xvimagesink
+}
+
+__hardware_gstreamer_test() {
+
+    menu_init
+    if [[ -n "${DISPLAY:-}" ]]
+    then
+        menu_add __hardware_gstreamer_test_live "Show live video"
+    fi
+    menu_add __hardware_gstreamer_test_picture "Capture a picture"
+    menu_show "Please select the test case:"
+    __hardware_gstreamer_test_picture
+}
+
 __hardware_video() {
     menu_init
     for i in /dev/video*
@@ -30,7 +49,7 @@ __hardware_video() {
     menu_emptymsg "No supported devices is detected.
 
 Please make sure they are enabled first."
-    menu_show "Take a test image with the selected video capture device:"
+    menu_show "Select video capture device:"
 }
 
 __hardware_gpio_leds() {
