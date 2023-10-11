@@ -1,3 +1,11 @@
+rsetup (0.3.26) jammy; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * Clarify default config.txt
+  * Avoid making /config as part of the package
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Wed, 11 Oct 2023 03:21:58 +0000
+
 rsetup (0.3.25) jammy; urgency=medium
 
   [ dependabot[bot] ]
