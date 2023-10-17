@@ -1,3 +1,13 @@
+rsetup (0.3.28) jammy; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * Short-circuit menu if only one option is available
+  * Add live view for video test
+  * Support dtso as overlay source file
+  * Provide placeholders for legacy config files
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Tue, 17 Oct 2023 10:12:38 +0000
+
 rsetup (0.3.27) jammy; urgency=medium
 
   [ ZHANG Yuntian ]
