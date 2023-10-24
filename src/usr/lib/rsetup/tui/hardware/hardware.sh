@@ -37,7 +37,6 @@ __hardware_gstreamer_test() {
     fi
     menu_add __hardware_gstreamer_test_picture "Capture a picture"
     menu_show "Please select the test case:"
-    __hardware_gstreamer_test_picture
 }
 
 __hardware_video() {
