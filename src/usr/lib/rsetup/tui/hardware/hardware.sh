@@ -3,6 +3,9 @@
 # shellcheck source=src/usr/lib/rsetup/mod/config.sh
 source "/usr/lib/rsetup/mod/config.sh"
 
+# shellcheck source=src/usr/lib/rsetup/tui/hardware/gpio.sh
+source "/usr/lib/rsetup/tui/hardware/gpio.sh"
+
 __hardware_gstreamer_test_picture() {
     local temp
     temp="$(mktemp tmp.XXXXXXXXXX.jpg)"
@@ -240,6 +243,7 @@ __hardware() {
     menu_add __hardware_gpio_leds "GPIO LEDs"
     menu_add __hardware_thermal "Thermal governor"
     menu_add __hardware_dsi_mirror "Configure DSI display mirroring"
+    menu_add __hardware_gpio "40-pin GPIO"
     if $DEBUG
     then
         menu_add __hardware_rgb_leds "RGB LEDs"
