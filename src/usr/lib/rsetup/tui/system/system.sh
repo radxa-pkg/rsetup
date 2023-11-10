@@ -20,6 +20,30 @@ __system_system_update() {
     read -rp "Press enter to continue..."
 }
 
+__system_select_compatible_bootloader() {
+    radiolist_init
+
+    local pid
+    pid="$(get_product_id)"
+    for i in /usr/lib/u-boot/*
+    do
+        i="$(basename "$i")"
+
+        if [[ "$(sed -E "s/[-_]//g" <<< "$i")" == "$(sed -E "s/[-_]//g" <<< "$pid")" ]]
+        then
+            radiolist_add "$i" "OFF"
+        fi
+    done
+    radiolist_emptymsg "No compatible bootloader is available."
+
+    if ! radiolist_show "Please select the bootloader to be installed:" || (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} == 0 ))
+    then
+        return 1
+    fi
+
+    radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}"
+}
+
 __system_update_bootloader() {
     if ! yesno "Updating bootloader is not necessary in most cases.
 Incorrect bootloader can make system unbootable.
@@ -29,22 +53,13 @@ Are you sure you want to update the bootloader?"
         return
     fi
 
-    radiolist_init
-
-    local pid
-    pid="$(get_product_id)"
-    for i in /usr/lib/u-boot/"$pid"*
-    do
-        radiolist_add "${i##/usr/lib/u-boot/}" "OFF"
-    done
-    radiolist_emptymsg "No compatible bootloader is available."
-
-    if ! radiolist_show "Please select the bootloader to be installed:" || (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} == 0 ))
+    local bootloader
+    if ! bootloader="$(__system_select_compatible_bootloader)"
     then
         return
     fi
 
-    if update_bootloader "$(radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}")"
+    if update_bootloader "$bootloader"
     then
         msgbox "The bootloader has been updated successfully."
     else
@@ -75,22 +90,13 @@ Are you sure you want to update the bootloader?"
         return
     fi
 
-    radiolist_init
-
-    local pid ret
-    pid="$(get_product_id)"
-    for i in /usr/lib/u-boot/"$pid"*
-    do
-        radiolist_add "${i##/usr/lib/u-boot/}" "OFF"
-    done
-    radiolist_emptymsg "No compatible bootloader is available."
-
-    if ! radiolist_show "Please select the bootloader to be installed:" || (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} == 0 ))
+    local bootloader
+    if ! bootloader="$(__system_select_compatible_bootloader)"
     then
         return
     fi
 
-    if update_spinor "$(radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}")"
+    if update_spinor "$bootloader"
     then
         msgbox "The bootloader has been updated successfully."
     else
@@ -121,22 +127,13 @@ Are you sure you want to update the bootloader?"
         return
     fi
 
-    radiolist_init
-
-    local pid
-    pid="$(get_product_id)"
-    for i in /usr/lib/u-boot/"$pid"*
-    do
-        radiolist_add "${i##/usr/lib/u-boot/}" "OFF"
-    done
-    radiolist_emptymsg "No compatible bootloader is available."
-
-    if ! radiolist_show "Please select the bootloader to be installed:" || (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} == 0 ))
+    local bootloader
+    if ! bootloader="$(__system_select_compatible_bootloader)"
     then
         return
     fi
 
-    if update_emmc_boot "$(radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}")"
+    if update_emmc_boot "$bootloader"
     then
         msgbox "The bootloader has been updated successfully."
     else
