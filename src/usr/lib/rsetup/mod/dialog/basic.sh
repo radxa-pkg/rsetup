@@ -29,13 +29,15 @@ __dialog() {
         local backtitle=()
     fi
 
-    $RSETUP_DIALOG --title "RSETUP" ${backtitle:+"${backtitle[@]}"} --notags "$box" "$text" "$height" "$width" ${listheight:+"$listheight"} "$@"
+    $RSETUP_DIALOG --title "RSETUP" ${backtitle:+"${backtitle[@]}"} --notags \
+        "$box" "$text" "$height" "$width" ${listheight:+"$listheight"} \
+        "$@" 3>&1 1>&2 2>&3 3>&-
 }
 
 yesno() {
     __parameter_count_check 1 "$@"
 
-    __dialog --yesno "$1" 3>&1 1>&2 2>&3 3>&-
+    __dialog --yesno "$1"
 }
 
 msgbox() {
@@ -47,13 +49,13 @@ msgbox() {
 inputbox() {
     __parameter_count_check 2 "$@"
 
-    __dialog --inputbox "$1" "$2" 3>&1 1>&2 2>&3 3>&-
+    __dialog --inputbox "$1" "$2"
 }
 
 passwordbox() {
     __parameter_count_check 1 "$@"
 
-    __dialog --passwordbox "$1" 3>&1 1>&2 2>&3 3>&-
+    __dialog --passwordbox "$1"
 }
 
 gauge() {

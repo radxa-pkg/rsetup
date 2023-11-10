@@ -36,7 +36,7 @@ checklist_show() {
     fi
 
     local output i
-    if output="$(__dialog --checklist "$1" "${RSETUP_CHECKLIST[@]}" 3>&1 1>&2 2>&3 3>&-)"
+    if output="$(__dialog --checklist "$1" "${RSETUP_CHECKLIST[@]}")"
     then
         read -r -a RSETUP_CHECKLIST_STATE_NEW <<< "$output"
         for i in $(seq 2 3 ${#RSETUP_CHECKLIST[@]})

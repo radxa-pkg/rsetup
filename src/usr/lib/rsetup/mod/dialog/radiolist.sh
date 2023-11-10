@@ -35,7 +35,7 @@ radiolist_show() {
     fi
 
     local output i
-    if output="$(__dialog --radiolist "$1" "${RSETUP_RADIOLIST[@]}" 3>&1 1>&2 2>&3 3>&-)"
+    if output="$(__dialog --radiolist "$1" "${RSETUP_RADIOLIST[@]}")"
     then
         read -r -a RSETUP_RADIOLIST_STATE_NEW <<< "$output"
         for i in $(seq 2 3 ${#RSETUP_RADIOLIST[@]})

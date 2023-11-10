@@ -53,7 +53,7 @@ menu_show() {
     then
         RSETUP_MENU_SELECTED="$(menu_getitem "$item")"
         switch_screen "${RSETUP_MENU_CALLBACK[$item]}"
-    elif item=$(__dialog --menu "$1" "${RSETUP_MENU[@]}" 3>&1 1>&2 2>&3 3>&-)
+    elif item="$(__dialog --menu "$1" "${RSETUP_MENU[@]}")"
     then
         RSETUP_MENU_SELECTED="$(menu_getitem "$item")"
         push_screen "${RSETUP_MENU_CALLBACK[$item]}"
@@ -64,7 +64,7 @@ menu_call() {
     __parameter_count_check 1 "$@"
 
     local item
-    if item=$(__dialog --menu "$1" "${RSETUP_MENU[@]}" 3>&1 1>&2 2>&3 3>&-)
+    if item="$(__dialog --menu "$1" "${RSETUP_MENU[@]}")"
     then
         RSETUP_MENU_SELECTED="$(menu_getitem "$item")"
         ${RSETUP_MENU_CALLBACK[$item]}
