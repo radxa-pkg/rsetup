@@ -17,7 +17,7 @@ if (( $# == 0 )) && [[ "$RSETUP_EXEC_NAME" == "rsetup" ]]
 then
     if (( EUID != 0 ))
     then
-        if [[ -n "${DISPLAY:-}" ]]
+        if [[ -n "${DISPLAY:-}" ]] && [[ -z "${SSH_TTY:-}" ]]
         then
             exec pkexec "$0" "$@"
         else
