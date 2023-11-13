@@ -15,16 +15,45 @@ __require_parameter_check() {
     fi
 }
 
+__parameter_count_at_least_check() {
+    __require_parameter_check "$@"
+
+    local lower=$1
+    shift
+    if (( $# < lower ))
+    then
+        echo "'${FUNCNAME[1]}' expects at least '$lower' parameters while getting $#: '$*'" >&2
+        return $ERROR_TOO_FEW_PARAMETERS
+    fi
+}
+
+__parameter_count_at_most_check() {
+    __require_parameter_check "$@"
+
+    local upper=$1
+    shift
+    if (( $# > upper ))
+    then
+        echo "'${FUNCNAME[1]}' expects at most '$upper' parameters while getting $#: '$*'" >&2
+        return $ERROR_TOO_FEW_PARAMETERS
+    fi
+}
+
+__parameter_count_range_check() {
+    __require_parameter_check "$@"
+
+    local lower=$1 upper=$2
+    shift 2
+    __parameter_count_at_least_check "$lower" "$@"
+    __parameter_count_at_most_check "$upper" "$@"
+}
+
 __parameter_count_check() {
     __require_parameter_check "$@"
 
     local expected=$1
-    shift 1
-    if (( $# != expected ))
-    then
-        echo "'${FUNCNAME[1]}' expects '$expected' parameters while getting $#: '$*'" >&2
-        return $ERROR_TOO_FEW_PARAMETERS
-    fi
+    shift
+    __parameter_count_range_check "$expected" "$expected" "$@"
 }
 
 __assert_f() {
