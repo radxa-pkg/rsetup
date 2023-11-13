@@ -79,7 +79,10 @@ __local() {
     menu_init
     menu_add __local_change_timezone    "Change Timezone"
     menu_add __local_change_locale      "Change Locale"
-    menu_add __local_keyboard_layout    "Change Keyboard Layout"
+    if $DEBUG
+    then
+        menu_add __local_keyboard_layout    "Change Keyboard Layout"
+    fi
     menu_add __local_wifi_country       "Change Wi-Fi Country"
     menu_show "Please select an option below:"
 }
