@@ -41,6 +41,21 @@ __test_gauge() {
     done | gauge "Let's go!" 0
 }
 
+__test_infobox() {
+    infobox "An infobox. Control is returned to the function for background task..."
+    sleep 5
+    msgbox "Work is done."
+}
+
+__test_show_once() {
+    if ! show_once DIALOG_TEST_SHOW_ONCE yesno "First time here?"
+    then
+        msgbox "It's a lie."
+        return
+    fi
+    msgbox "Hi again."
+}
+
 __test_checklist() {
     checklist_init
     checklist_add "Item 1" "OFF"
@@ -94,6 +109,9 @@ __test() {
     menu_add __test_inputbox "inputbox"
     menu_add __test_passwordbox "passwordbox"
     menu_add __test_gauge "gauge"
+    menu_add __test_infobox "infobox"
+    menu_add_separator
+    menu_add __test_show_once "show_once yesno"
     menu_add_separator
     menu_add __test_checklist "checklist"
     menu_add_separator
