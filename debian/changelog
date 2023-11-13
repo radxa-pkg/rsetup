@@ -1,3 +1,21 @@
+rsetup (0.3.29) jammy; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * Fix menu short-circuit loop
+  * Remove test code
+  * hardware: add GPIO test functions
+  * Support command substitution for dialog functions
+  * Add __system_select_compatible_bootloader
+  * Don't run pkexec if we are in SSH session
+  * Rename reset_overlay to rebuild_overlay
+  * Add __parameter_count_range_check
+  * Add show_once helper
+  * Add infobox
+  * Add test cases for new TUI functions
+  * Hide broken keyboard optiion
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Mon, 13 Nov 2023 08:19:00 +0000
+
 rsetup (0.3.28) jammy; urgency=medium
 
   [ ZHANG Yuntian ]
