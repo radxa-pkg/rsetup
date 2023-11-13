@@ -34,6 +34,24 @@ __dialog() {
         "$@" 3>&1 1>&2 2>&3 3>&-
 }
 
+show_once() {
+    __parameter_count_at_least_check 2 "$@"
+    __parameter_type_check "$2" "function"
+
+    local first_run="$1"
+    shift
+
+    eval "$first_run=\"\${$first_run:-true}\""
+
+    if eval "[[ \"\$$first_run\" == \"true\" ]]" && ! "$@"
+    then
+        return 1
+    else
+        eval "$first_run=\"false\""
+        return 0
+    fi
+}
+
 yesno() {
     __parameter_count_check 1 "$@"
 

@@ -261,8 +261,7 @@ Are you sure?
 }
 
 __overlay() {
-    RSETUP_OVERLAY_WARNING="${RSETUP_OVERLAY_WARNING:-true}"
-    if [[ "$RSETUP_OVERLAY_WARNING" == "true" ]] && ! yesno "WARNING
+    if ! show_once "RSETUP_OVERLAY_WARNING" yesno "WARNING
 
 Overlays, by its nature, require \"hidden\" knowledge about the running device tree.
 While major breakage is unlikely, this does mean that after kernel update, the overlay may cease to work.
@@ -272,7 +271,6 @@ Otherwise, select No to go back to previous menu."
     then
         return
     fi
-    RSETUP_OVERLAY_WARNING="false"
 
     load_u-boot_setting
 
