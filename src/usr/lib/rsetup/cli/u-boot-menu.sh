@@ -83,7 +83,7 @@ disable_overlays() {
     done
 }
 
-__reset_overlays_worker() {
+__rebuild_overlays_worker() {
     local overlay="$1" new_overlays="$2"
 
     if dtbo_is_compatible "$overlay"
@@ -95,7 +95,7 @@ __reset_overlays_worker() {
     fi
 }
 
-reset_overlays() {
+rebuild_overlays() {
     load_u-boot_setting
 
     local version="$1" vendor="$2" dtbos i
@@ -138,9 +138,9 @@ reset_overlays() {
         then
             # Assume we are running at image building stage
             # Do not fork out so we don't trigger OOM killer
-            __reset_overlays_worker "$i" "$new_overlays"
+            __rebuild_overlays_worker "$i" "$new_overlays"
         else
-            __reset_overlays_worker "$i" "$new_overlays" &
+            __rebuild_overlays_worker "$i" "$new_overlays" &
         fi
     done
     wait

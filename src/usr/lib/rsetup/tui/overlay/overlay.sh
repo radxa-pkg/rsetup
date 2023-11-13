@@ -236,21 +236,27 @@ $description"
     done
 }
 
-__overlay_reset() {
+__overlay_rebuild() {
     if ! yesno "WARNING
 
-All installed overlays will be reset to current running kernel's default.
-All enabled overlays will be disabled.
-Any overlay that is not shipped with the running kernel will be removed."
+This feature will rebuild the overlay folder.
+Overlays *provided by Radxa* will be replaced by the one from the current running kernel,
+and incompatible ones will be removed.
+
+This operation will preserve the overlay enable status as much as possible,
+and user supplied overlays will be untouched.
+
+Are you sure?
+"
     then
         return
     fi
 
-    if reset_overlays "$(uname -r)" "$(get_soc_vendor)"
+    if rebuild_overlays "$(uname -r)" "$(get_soc_vendor)"
     then
-        msgbox "Overlays has been reset to current running kernel's default."
+        msgbox "Overlays have been reset."
     else
-        msgbox "Unable to reset overlays"
+        msgbox "Unable to reset overlays."
     fi
 }
 
@@ -283,6 +289,6 @@ To avoid potential conflicts, overlay feature is temporarily disabled until such
     menu_add __overlay_manage "Manage overlays"
     menu_add __overlay_info "View overlay info"
     menu_add __overlay_install "Install 3rd party overlay"
-    menu_add __overlay_reset "Reset overlays"
+    menu_add __overlay_rebuild "Rebuild overlays"
     menu_show "Configure Device Tree Overlay"
 }
