@@ -14,6 +14,9 @@ __dialog() {
         --checklist|--radiolist)
             listheight=$(( height - 8 ))
             ;;
+        --infobox)
+            height=$(( height - 1 ))
+            ;;
     esac
 
     if (( height < 8 ))
@@ -80,4 +83,11 @@ gauge() {
     __parameter_count_check 2 "$@"
 
     __dialog --gauge "$1" "$2"
+}
+
+infobox() {
+    __parameter_count_check 1 "$@"
+
+    # TERM cannot be xterm as described in https://stackoverflow.com/a/15192893
+    TERM=linux __dialog --infobox "$1"
 }
