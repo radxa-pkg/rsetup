@@ -5,8 +5,8 @@ BindsTo=dev-%i.device
 After=dev-%i.device
 
 [Service]
-Type=simple
-ExecStart=/usr/bin/bash -c '/usr/bin/hciattach -s 1500000 /dev/%I any 1500000 flow nosleep && /usr/sbin/rfkill unblock bluetooth'
+Type=forking
+ExecStart=/usr/bin/hciattach -s 1500000 /dev/%I any 1500000 flow nosleep
 
 [Install]
 WantedBy=multi-user.target
