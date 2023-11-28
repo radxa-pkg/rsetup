@@ -1,3 +1,10 @@
+rsetup (0.3.31) jammy; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * rsetup-config-hciattach-ttys1 is a dependency
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Tue, 28 Nov 2023 09:12:46 +0000
+
 rsetup (0.3.30) jammy; urgency=medium
 
   [ ZHANG Yuntian ]
