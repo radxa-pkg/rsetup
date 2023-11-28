@@ -8,3 +8,7 @@ include /usr/share/dpkg/architecture.mk
 
 override_dh_builddeb:
 	dh_builddeb -- -Zxz
+
+override_dh_installsystemd:
+	dh_installsystemd --name=rsetup-hciattach@
+	dh_installsystemd --name=rsetup

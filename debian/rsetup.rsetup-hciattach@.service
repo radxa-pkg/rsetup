@@ -1,0 +1,12 @@
+[Unit]
+Description=hciattach on %I
+Documentation=https://github.com/radxa-pkg/rsetup/
+BindsTo=dev-%i.device
+After=dev-%i.device
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/hciattach -s 1500000 /dev/%I any 1500000 flow nosleep
+
+[Install]
+WantedBy=multi-user.target

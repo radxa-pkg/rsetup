@@ -44,3 +44,12 @@ Depends: rsetup (= ${binary:Version}),
          ${misc:Depends},
 Description: Radxa system config - First boot configuration
  This package contains the default first boot script.
+
+Package: rsetup-config-hciattach-ttys1
+Architecture: all
+Section: admin
+Priority: standard
+Depends: rsetup (= ${binary:Version}),
+         ${misc:Depends},
+Description: Radxa system config - Attach UART Bluetooth on /dev/ttyS1
+ This package attaches UART Bluetooth on /dev/ttyS1 on boot.
