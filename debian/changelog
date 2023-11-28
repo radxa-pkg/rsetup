@@ -1,3 +1,10 @@
+rsetup (0.3.30) jammy; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * Add rsetup-config-hciattach-ttys1
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Tue, 28 Nov 2023 07:45:25 +0000
+
 rsetup (0.3.29) jammy; urgency=medium
 
   [ ZHANG Yuntian ]
