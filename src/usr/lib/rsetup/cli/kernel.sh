@@ -12,7 +12,11 @@ __yz-update-overlays() {
     case $ACTION in
         configure)
             echo "Updating overlays for $ABI ..."
-            rebuild_overlays "$ABI" "$(get_soc_vendor)"
+            if ! rebuild_overlays "$ABI" "$(get_soc_vendor)"
+            then
+                echo "Failed to update overlays."
+                echo "Please make sure u-boot-menu is installed on your system."
+            fi
             ;;
         remove)
             ;;
