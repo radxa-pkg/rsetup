@@ -22,6 +22,7 @@ Depends: device-tree-compiler,
          whiptail,
          yq,
          u-boot-menu,
+         radxa-system-config-kernel-cmdline,
          ${misc:Depends},
 Suggests: x-terminal-emulator
 Description: Radxa system setup utility
