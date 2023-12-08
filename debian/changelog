@@ -1,3 +1,10 @@
+rsetup (0.3.37) jammy; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * Require /etc/kernel/cmdline to be configured
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Fri, 08 Dec 2023 13:44:42 +0000
+
 rsetup (0.3.36) jammy; urgency=medium
 
   [ ZHANG Yuntian ]
