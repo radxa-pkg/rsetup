@@ -20,6 +20,7 @@ Depends: device-tree-compiler,
          pkexec | policykit-1 (<< 122-1),
          whiptail,
          yq,
+         u-boot-menu,
          ${misc:Depends},
 Suggests: x-terminal-emulator
 Description: Radxa system setup utility
