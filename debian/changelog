@@ -1,3 +1,12 @@
+rsetup (0.3.36) jammy; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * Add u-boot-menu as runtime dependency
+  * Mark rsetup as essential
+  * Fix build
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Fri, 08 Dec 2023 13:02:04 +0000
+
 rsetup (0.3.35) jammy; urgency=medium
 
   [ ZHANG Yuntian ]
