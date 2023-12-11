@@ -1,3 +1,10 @@
+rsetup (0.3.38) jammy; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * Revert cmdline dependency
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Mon, 11 Dec 2023 03:17:03 +0000
+
 rsetup (0.3.37) jammy; urgency=medium
 
   [ ZHANG Yuntian ]
