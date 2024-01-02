@@ -1,3 +1,10 @@
+rsetup (0.3.40) jammy; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * Fix AIC8800 reset service
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Tue, 02 Jan 2024 10:39:53 +0000
+
 rsetup (0.3.39) jammy; urgency=medium
 
   [ dependabot[bot] ]
