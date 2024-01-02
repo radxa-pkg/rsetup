@@ -3,6 +3,8 @@
 # shellcheck source=src/usr/lib/rsetup/mod/overlay.sh
 source "/usr/lib/rsetup/mod/overlay.sh"
 
+PARSE_DTBO_METADATA="/usr/lib/rsetup/mod/parse_dtbo_metadata"
+
 ALLOWED_RCONFIG_FUNC+=("load_u-boot_setting")
 
 check_overlay_conflict_init() {
@@ -135,7 +137,7 @@ rebuild_overlays() {
 
 parse_dtbo() {
     local output
-    output="$(dtc -I dtb -O dts "$1" 2>/dev/null | dtc -I dts -O yaml 2>/dev/null | yq -r ".[0].metadata.$2[0]" | tr '\0' '\n')"
+    output="$(dtc -I dtb -O dts "$1" 2>/dev/null | dtc -I dts -O yaml 2>/dev/null | "$PARSE_DTBO_METADATA" "$2")"
 
     if (( $# >= 3 ))
     then
