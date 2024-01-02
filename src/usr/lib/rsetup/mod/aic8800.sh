@@ -5,11 +5,21 @@ __aic8800_reset() {
 
     while read -r
     do
-        if [[ "$REPLY" == "hci recv thread ready (nil)" ]]
-        then
-            return
-        fi
-    done < <(timeout 5 bt_test -s uart 1500000 "/dev/$1")
+        echo "bt_test > $REPLY"
 
-    return 1
+        case "$(tr -d '\r' <<< "$REPLY")"
+        in
+            "hci recv thread ready (nil)")
+                echo "Device reset successfully."
+                return
+                ;;
+            "dev_open fail")
+                echo "Unable to open /dev/$1. Is Bluetooth already up?"
+                return 1
+                ;;
+        esac
+    done < <(timeout 1 bt_test -s uart 1500000 "/dev/$1")
+
+    echo "Command timed out."
+    return 2
 }
