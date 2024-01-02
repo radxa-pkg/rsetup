@@ -1,7 +1,7 @@
 [Unit]
 Description=Reset AIC8800 Bluetooth on %I
 Documentation=https://github.com/radxa-pkg/rsetup/
-Requires=rsetup-hciattach@%i.device
+Wants=rsetup-hciattach@%i.device
 Before=rsetup-hciattach@%i.device
 
 [Service]
