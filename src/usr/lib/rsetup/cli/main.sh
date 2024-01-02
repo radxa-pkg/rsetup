@@ -2,6 +2,7 @@
 
 # shellcheck source=src/usr/lib/rsetup/mod/utils.sh
 source "/usr/lib/rsetup/mod/utils.sh"
+source "/usr/lib/rsetup/mod/aic8800.sh"
 
 source "/usr/lib/rsetup/cli/rconfig.sh"
 source "/usr/lib/rsetup/cli/ssh.sh"

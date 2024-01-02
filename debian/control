@@ -23,7 +23,8 @@ Depends: device-tree-compiler,
          yq,
          u-boot-menu,
          ${misc:Depends},
-Suggests: x-terminal-emulator
+Suggests: aicrf-test,
+          x-terminal-emulator,
 Description: Radxa system setup utility
  Radxa system setup utility (rsetup) provides an user friendly menu to
  perform many essential system configuration tasks. It also provides
@@ -55,3 +56,12 @@ Depends: rsetup (= ${binary:Version}),
          ${misc:Depends},
 Description: Radxa system config - Attach UART Bluetooth on /dev/ttyS1
  This package attaches UART Bluetooth on /dev/ttyS1 on boot.
+
+Package: rsetup-config-aic8800-ttys1
+Architecture: all
+Section: admin
+Priority: standard
+Depends: rsetup (= ${binary:Version}),
+         ${misc:Depends},
+Description: Radxa system config - Attach AIC8800 Bluetooth on /dev/ttyS1
+ This package attaches AIC8800 Bluetooth on /dev/ttyS1 on boot.

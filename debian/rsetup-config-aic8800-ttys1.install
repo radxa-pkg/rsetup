@@ -1,0 +1,2 @@
+config/00-aic8800-reset-ttys1.conf /usr/lib/rsetup/conf.d/on_boot
+config/01-hciattach-ttys1.conf /usr/lib/rsetup/conf.d/on_boot
