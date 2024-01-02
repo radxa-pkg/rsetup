@@ -1,3 +1,14 @@
+rsetup (0.3.41) jammy; urgency=medium
+
+  [ CodeChenL ]
+  * Replace yq with parse_dtbo_metadata
+
+  [ ZHANG Yuntian ]
+  * Fix issues found in real device
+  * Rename aic8800-reset service
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Tue, 02 Jan 2024 12:16:00 +0000
+
 rsetup (0.3.40) jammy; urgency=medium
 
   [ ZHANG Yuntian ]
