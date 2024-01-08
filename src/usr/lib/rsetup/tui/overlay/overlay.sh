@@ -69,70 +69,19 @@ Are you sure?"
     fi
 }
 
-__overlay_filter_worker() {
-    local temp="$1" overlay="$2" state title overlay_name
-
-    if ! dtbo_is_compatible "$overlay"
-    then
-        return
-    fi
-
-    exec 100>> "$temp"
-    flock 100
-
-    if [[ "$overlay" == *.dtbo ]]
-    then
-        state="ON"
-    elif [[ "$overlay" == *.dtbo.disabled ]]
-    then
-        state="OFF"
-    else
-        return
-    fi
-
-    overlay_name="$(basename "$overlay" | sed -E "s/(.*\.dtbo).*/\1/")"
-    mapfile -t title < <(parse_dtbo --default-value "file" "title" "$overlay" )
-
-    echo -e "${title[0]}\0${state}\0${overlay_name}" >&100
-}
-
-__overlay_filter() {
-    local temp="$1" nproc index
-    local dtbos=( "$U_BOOT_FDT_OVERLAYS_DIR"/*.dtbo* )
-    mapfile -t index < <(eval "echo {0..$(( ${#dtbos[@]} - 1 ))}" | tr ' ' '\n')
-    nproc=$(nproc)
-
-    for i in "${index[@]}"
-    do
-        while (( $(jobs -r | wc -l) > nproc ))
-        do
-            sleep 0.1
-        done
-
-        __overlay_filter_worker "$temp" "${dtbos[$i]}" &
-        echo $(( i * 100 / (${index[-1]} + 1) ))
-    done
-
-    wait
-}
-
 __overlay_show() {
     local validation="${1:-true}"
-    echo "Searching available overlays may take a while, please wait..." >&2
+    infobox "Searching available overlays may take a while, please wait..."
     load_u-boot_setting
 
-    local temp
-    temp="$(mktemp)"
-    # shellcheck disable=SC2064
-    trap "rm -f $temp" RETURN EXIT
-
-    __overlay_filter "$temp" | gauge "Searching available overlays..." 0
+    local dtbos=( "$U_BOOT_FDT_OVERLAYS_DIR"/*.dtbo* )
+    mapfile -t dtbos < <(dtbo_is_compatible "${dtbos[@]}")
 
     checklist_init
     # Bash doesn support IFS=$'\0'
     # Use array to emulate this
     local items=()
-    mapfile -t items < <(sort "$temp" | tr $"\0" $"\n")
+    mapfile -t items < <(parse_dtbo --show-overlays "title" "${dtbos[@]}")
     while (( ${#items[@]} >= 3 ))
     do
         checklist_add "${items[0]/$'\n'}" "${items[1]/$'\n'}" "${items[2]/$'\n'}"

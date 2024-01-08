@@ -61,7 +61,7 @@ disable_overlays() {
 __rebuild_overlays_worker() {
     local overlay="$1" new_overlays="$2"
 
-    if dtbo_is_compatible "$overlay"
+    if [[ -n "$(dtbo_is_compatible "$overlay")" ]]
     then
         cp "$overlay" "$new_overlays/$(basename "$overlay").disabled"
         exec 100>>"$new_overlays/managed.list"
@@ -131,33 +131,4 @@ rebuild_overlays() {
     rm -rf "${old_overlays}_old"
     mv "$old_overlays" "${old_overlays}_old"
     mv "$new_overlays" "$old_overlays"
-}
-
-dtbo_is_compatible() {
-    if [[ ! -f /sys/firmware/devicetree/base/compatible ]]
-    then
-        # Assume we are running at image building stage
-        # Skip checking
-        return
-    fi
-
-    local overlay="$1" dtbo_compatible
-    mapfile -t dtbo_compatible < <(parse_dtbo "$overlay" "compatible")
-    if [[ "${dtbo_compatible[0]}" == "null" ]]
-    then
-        return
-    fi
-
-    for d in "${dtbo_compatible[@]}"
-    do
-        for p in $(xargs -0 < /sys/firmware/devicetree/base/compatible)
-        do
-            if [[ "$d" == "$p" ]]
-            then
-                return
-            fi
-        done
-    done
-
-    return 1
 }
