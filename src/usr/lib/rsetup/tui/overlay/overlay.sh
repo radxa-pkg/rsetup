@@ -91,7 +91,7 @@ __overlay_filter_worker() {
     fi
 
     overlay_name="$(basename "$overlay" | sed -E "s/(.*\.dtbo).*/\1/")"
-    mapfile -t title < <(parse_dtbo "$overlay" "title" "$overlay_name")
+    mapfile -t title < <(parse_dtbo --default-value "file" "title" "$overlay" )
 
     echo -e "${title[0]}\0${state}\0${overlay_name}" >&100
 }
@@ -167,8 +167,8 @@ __overlay_validate() {
         fi
 
         local title package
-        mapfile -t title < <(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "title" "$(basename "$item")")
-        mapfile -t package < <(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "package")
+        mapfile -t title < <(parse_dtbo --default-value "file"  "title" "$U_BOOT_FDT_OVERLAYS_DIR/$item"*)
+        mapfile -t package < <(parse_dtbo "package" "$U_BOOT_FDT_OVERLAYS_DIR/$item"*)
         if [[ "${package[0]}" != "null" ]]
         then
             if ! __depends_package "${title[0]}" "${package[@]}"
@@ -213,11 +213,11 @@ __overlay_info() {
     for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
     do
         item="$(checklist_getitem "$i")"
-        mapfile -t title < <(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "title")
-        mapfile -t category < <(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "category")
-        mapfile -t exclusive < <(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "exclusive")
-        mapfile -t package < <(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "package")
-        description="$(parse_dtbo "$U_BOOT_FDT_OVERLAYS_DIR/$item"* "description")"
+        mapfile -t title < <(parse_dtbo "title" "$U_BOOT_FDT_OVERLAYS_DIR/$item"*)
+        mapfile -t category < <(parse_dtbo "category" "$U_BOOT_FDT_OVERLAYS_DIR/$item"*)
+        mapfile -t exclusive < <(parse_dtbo "exclusive" "$U_BOOT_FDT_OVERLAYS_DIR/$item"*)
+        mapfile -t package < <(parse_dtbo "package" "$U_BOOT_FDT_OVERLAYS_DIR/$item"*)
+        description="$(parse_dtbo "description" "$U_BOOT_FDT_OVERLAYS_DIR/$item"*)"
         if (( ${#title[@]} == 1 )) && [[ "${title[0]}" == "null" ]]
         then
             title=( "$item" )

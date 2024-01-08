@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
+
+import yaml, re, os, argparse
+
+def status(file):
+    if ".disabled" == os.path.splitext(file)[-1]:
+        print("OFF")
+    else:
+        print("ON")
+
+def basename(file):
+    print(re.match(r'(.+\.dtbo)',os.path.basename(file)).group(1))
+
+parser = argparse.ArgumentParser(description='Parse dtbo metadata data')
+parser.add_argument('--show-overlays', action='store_true', default=False, help='Control print DTBO title,enable status and DTBO filename')
+parser.add_argument('--default-value', metavar='string', default="null", help='error default string')
+parser.add_argument('field', metavar='string', help='Metadata field')
+parser.add_argument('filename', nargs='+', metavar='filename', help='DTBO filename list')
+args = parser.parse_args()
+
+yaml.CLoader.add_constructor('!u8', yaml.constructor.FullConstructor.construct_yaml_seq)
+
+for file in args.filename:
+    try:
+        metadata = yaml.load(os.popen("dtc -I dtb -O dts " + file + " 2>/dev/null | dtc -I dts -O yaml 2>/dev/null").read(), Loader=yaml.CLoader)[0]["metadata"]
+        print(metadata[args.field][0].replace("\0", "\n"))
+    except Exception:
+        if args.default_value == "file":
+            basename(file)
+        else:
+            print(args.default_value)
+    if args.show_overlays:
+        status(file)
+        basename(file)

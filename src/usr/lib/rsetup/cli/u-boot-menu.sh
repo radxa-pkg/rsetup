@@ -3,8 +3,6 @@
 # shellcheck source=src/usr/lib/rsetup/mod/overlay.sh
 source "/usr/lib/rsetup/mod/overlay.sh"
 
-PARSE_DTBO_METADATA="/usr/lib/rsetup/mod/parse_dtbo_metadata"
-
 ALLOWED_RCONFIG_FUNC+=("load_u-boot_setting")
 
 check_overlay_conflict_init() {
@@ -14,8 +12,8 @@ check_overlay_conflict_init() {
 
 check_overlay_conflict() {
     local name resources res i
-    mapfile -t resources < <(parse_dtbo "$1" "exclusive")
-    mapfile -t name < <(parse_dtbo "$1" "title" "$(basename "$1")")
+    mapfile -t resources < <(parse_dtbo "exclusive" "$1")
+    mapfile -t name < <(parse_dtbo --default-value "file" "title" "$1")
 
     for res in "${resources[@]}"
     do
@@ -133,21 +131,6 @@ rebuild_overlays() {
     rm -rf "${old_overlays}_old"
     mv "$old_overlays" "${old_overlays}_old"
     mv "$new_overlays" "$old_overlays"
-}
-
-parse_dtbo() {
-    local output
-    output="$(dtc -I dtb -O dts "$1" 2>/dev/null | dtc -I dts -O yaml 2>/dev/null | "$PARSE_DTBO_METADATA" "$2")"
-
-    if (( $# >= 3 ))
-    then
-        if [[ "${output}" == "null" ]]
-        then
-            echo "$3"
-            return
-        fi
-    fi
-    echo "${output}"
 }
 
 dtbo_is_compatible() {
