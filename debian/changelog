@@ -1,3 +1,11 @@
+rsetup (0.3.42) jammy; urgency=medium
+
+  [ CodeChenL ]
+  * Refactor parse_dtbo
+  * Refactor dtbo_is_compatible
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Mon, 08 Jan 2024 13:02:12 +0000
+
 rsetup (0.3.41) jammy; urgency=medium
 
   [ CodeChenL ]
