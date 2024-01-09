@@ -14,6 +14,8 @@ source "/usr/lib/rsetup/cli/wi-fi.sh"
 source "/usr/lib/rsetup/cli/kernel.sh"
 source "/usr/lib/rsetup/cli/test/mpp.sh"
 
+export PATH="$PATH:/usr/lib/rsetup/mod"
+
 if $DEBUG
 then
     source "/usr/lib/rsetup/mod/debug_utils.sh"

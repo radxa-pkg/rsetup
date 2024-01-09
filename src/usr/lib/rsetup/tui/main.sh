@@ -11,8 +11,6 @@ source "/usr/lib/rsetup/tui/system/system.sh"
 source "/usr/lib/rsetup/tui/task/task.sh"
 source "/usr/lib/rsetup/tui/user/user.sh"
 
-export PATH="$PATH:/usr/lib/rsetup/mod"
-
 if $DEBUG
 then
     source "/usr/lib/rsetup/tui/test/test.sh"
