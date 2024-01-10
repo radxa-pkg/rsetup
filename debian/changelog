@@ -1,3 +1,10 @@
+rsetup (0.3.43) jammy; urgency=medium
+
+  [ CodeChenL ]
+  * Fix error for kernel hook rebuild dtbo
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Wed, 10 Jan 2024 02:10:47 +0000
+
 rsetup (0.3.42) jammy; urgency=medium
 
   [ CodeChenL ]
