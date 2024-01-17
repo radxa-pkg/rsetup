@@ -4,7 +4,16 @@
 source "/usr/lib/rsetup/mod/block_helpers.sh"
 source "/usr/lib/rsetup/mod/hwid.sh"
 
-ALLOWED_RCONFIG_FUNC+=("update_hostname" "update_locale" "enable_service" "disable_service" "resize_root" "set_thermal_governor" "set_led_trigger")
+ALLOWED_RCONFIG_FUNC+=(
+    "update_hostname"
+    "update_locale"
+    "enable_service"
+    "disable_service"
+    "resize_root"
+    "set_thermal_governor"
+    "set_led_trigger"
+    "set_led_pattern"
+)
 
 update_bootloader() {
     local pid device
@@ -139,5 +148,14 @@ set_led_trigger() {
     for node in "$RBUILD_DRIVER_ROOT_PATH/$RBUILD_LED_GPIO_DRIVER"/*/leds/"$led"/trigger "$RBUILD_DRIVER_ROOT_PATH/$RBUILD_LED_PWM_DRIVER"/*/leds/"$led"/trigger
     do
         echo "$trigger" > "$node"
+    done
+}
+
+set_led_pattern() {
+    local led="$1" node
+    shift
+    for node in "$RBUILD_DRIVER_ROOT_PATH/$RBUILD_LED_GPIO_DRIVER"/*/leds/"$led"/pattern "$RBUILD_DRIVER_ROOT_PATH/$RBUILD_LED_PWM_DRIVER"/*/leds/"$led"/pattern
+    do
+        echo "$*" > "$node"
     done
 }

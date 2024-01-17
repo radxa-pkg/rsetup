@@ -98,6 +98,132 @@ Select any to update their trigger." || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 
     msgbox "LED trigger has been updated."
 }
 
+__pattern_breath() {
+    local rgb=() sections="2" time
+    mapfile -t rgb < <(color_picker)
+    if (( ${#rgb[@]} == 0 ))
+    then
+        return
+    fi
+
+    if ! time=$(uint_inputbox "Please enter the total cycle time in milliseconds (ms):" "5000")
+    then
+        return
+    fi
+
+    local sections="2"
+    local time_per_section=$((time / sections))
+
+    cat << EOF
+0 $time_per_section ${rgb[0]} $time_per_section
+0 $time_per_section ${rgb[1]} $time_per_section
+0 $time_per_section ${rgb[2]} $time_per_section
+EOF
+}
+
+__pattern_rainbow() {
+    local brightness time
+
+    if ! brightness=$(uint_inputbox "Please enter the maximum brightness:" "255")
+    then
+        return
+    elif (( 10#$brightness < 0 )) || (( 10#$brightness > 255))
+    then
+        msgbox "The maximum brightness must be between 0 and 255. User entered '$brightness'."
+        return
+    fi
+
+    if ! time=$(uint_inputbox "Please enter the total cycle time in milliseconds (ms):" "5000")
+    then
+        return
+    fi
+
+    local sections="6"
+    local time_per_section=$((time / sections))
+    cat << EOF
+$brightness $time_per_section $brightness $time_per_section 0 $time_per_section 0 $time_per_section 0 $time_per_section $brightness $time_per_section
+0 $time_per_section $brightness $time_per_section $brightness $time_per_section $brightness $time_per_section 0 $time_per_section 0 $time_per_section
+0 $time_per_section 0 $time_per_section 0 $time_per_section $brightness $time_per_section $brightness $time_per_section $brightness $time_per_section
+EOF
+}
+
+__pattern_solid() {
+    local rgb=()
+    mapfile -t rgb < <(color_picker)
+    if (( ${#rgb[@]} == 0 ))
+    then
+        return
+    fi
+
+    cat << EOF
+${rgb[0]} 0 ${rgb[0]} 0
+${rgb[1]} 0 ${rgb[1]} 0
+${rgb[2]} 0 ${rgb[2]} 0
+EOF
+}
+
+__hardware_rgb_leds() {
+    checklist_init
+
+    local i rgb_led_name
+    for i in "$RBUILD_DRIVER_ROOT_PATH/$RBUILD_LED_PWM_DRIVER"/*/leds
+    do
+        rgb_led_name="$(basename "$(realpath "$i/..")")"
+        if [[ -d "$i/$rgb_led_name-red" ]] && [[ -d "$i/$rgb_led_name-green" ]] && [[ -d "$i/$rgb_led_name-blue" ]]
+        then
+            checklist_add "$rgb_led_name" "OFF"
+        fi
+    done
+    checklist_emptymsg "No supported devices is detected.
+
+Please make sure they are enabled first."
+    if ! checklist_show "Below are the available LEDs.
+Select any to update their pattern." || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 0 ))
+    then
+        return
+    fi
+
+    radiolist_init
+    for i in breath rainbow solid
+    do
+        radiolist_add "$i" "OFF"
+    done
+    if ! radiolist_show "Please select the new pattern:" || (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} == 0 ))
+    then
+        return
+    fi
+
+    local patterns=()
+    mapfile -t patterns < <(__pattern_"$(radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}")")
+    if (( ${#patterns[@]} == 0 ))
+    then
+        return
+    fi
+
+    config_transaction_start
+    for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
+    do
+        read -r -a i <<< "$(checklist_getitem "$i")"
+        remove_config set_led_trigger "${i[0]}-red"
+        enable_config set_led_trigger "${i[0]}-red" "pattern"
+        remove_config set_led_pattern "${i[0]}-red"
+        enable_config set_led_pattern "${i[0]}-red" "${patterns[0]}"
+
+        remove_config set_led_trigger "${i[0]}-green"
+        enable_config set_led_trigger "${i[0]}-green" "pattern"
+        remove_config set_led_pattern "${i[0]}-green"
+        enable_config set_led_pattern "${i[0]}-green" "${patterns[1]}"
+
+        remove_config set_led_trigger "${i[0]}-blue"
+        enable_config set_led_trigger "${i[0]}-blue" "pattern"
+        remove_config set_led_pattern "${i[0]}-blue"
+        enable_config set_led_pattern "${i[0]}-blue" "${patterns[2]}"
+    done
+    config_transaction_commit
+
+    msgbox "LED pattern has been updated."
+}
+
 __hardware_thermal() {
     radiolist_init
 
@@ -134,10 +260,6 @@ Please disable it and try again."
             msgbox "Thermal governor could not be updated."
         fi
     fi
-}
-
-__hardware_rgb_leds() {
-    :
 }
 
 __hardware_dsi_mirror() {
@@ -241,12 +363,9 @@ __hardware() {
     menu_init
     menu_add __hardware_video "Video capture devices"
     menu_add __hardware_gpio_leds "GPIO LEDs"
+    menu_add __hardware_rgb_leds "RGB LEDs"
     menu_add __hardware_thermal "Thermal governor"
     menu_add __hardware_dsi_mirror "Configure DSI display mirroring"
     menu_add __hardware_gpio "40-pin GPIO"
-    if $DEBUG
-    then
-        menu_add __hardware_rgb_leds "RGB LEDs"
-    fi
     menu_show "Manage on-board hardware"
 }
