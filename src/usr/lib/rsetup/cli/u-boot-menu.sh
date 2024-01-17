@@ -109,7 +109,7 @@ rebuild_overlays() {
     touch "$new_overlays/managed.list"
     for i in "${dtbos[@]}"
     do
-        if [[ ! -f /sys/firmware/devicetree/base/compatible ]]
+        if [[ ! -f /proc/device-tree/compatible ]]
         then
             # Assume we are running at image building stage
             # Do not fork out so we don't trigger OOM killer

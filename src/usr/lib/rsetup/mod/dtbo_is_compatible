@@ -18,7 +18,7 @@ files = argv[1:]
 
 # If this file does not exist, it is assumed that the image is generated inside the chroot
 try:
-    compatible= open("/sys/firmware/devicetree/base/compatible").read().split("\x00")[0:-1]
+    compatible= open("/proc/device-tree/compatible").read().split("\x00")[0:-1]
 except FileNotFoundError as e:
     for file in files:
         print(file)
