@@ -16,12 +16,31 @@ update_bootloader() {
     "/usr/lib/u-boot/$pid/setup.sh" update_bootloader "$device"
 }
 
+erase_spinor() {
+    local pid
+    pid="${1:-$(get_product_id)}"
+    __assert_f "/usr/lib/u-boot/$pid/setup.sh"
+
+    "/usr/lib/u-boot/$pid/setup.sh" erase_spinor
+}
+
 update_spinor() {
     local pid
     pid="${1:-$(get_product_id)}"
     __assert_f "/usr/lib/u-boot/$pid/setup.sh"
 
     "/usr/lib/u-boot/$pid/setup.sh" update_spinor
+}
+
+erase_emmc_boot() {
+    local pid device
+    pid="${1:-$(get_product_id)}"
+    __assert_f "/usr/lib/u-boot/$pid/setup.sh"
+
+    for device in /dev/mmcblk*boot0
+    do
+        "/usr/lib/u-boot/$pid/setup.sh" erase_emmc_boot "$device"
+    done
 }
 
 update_emmc_boot() {

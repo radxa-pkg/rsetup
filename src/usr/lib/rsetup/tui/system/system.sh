@@ -123,11 +123,42 @@ eMMC Boot partition, or have flashed on-board eMMC Boot partition manually befor
 Are you sure you want to update the bootloader?"
 }
 
+__system_erase_spinor() {
+    __system_bootloader_helper "SPI bootloader" erase_spinor \
+"Erasing bootloader can make system unbootable.
+
+If you are running the system off a NVMe drive, you likely requires this bootloader
+to be installed.
+
+If your previous installation of the bootloader failed, you can use this option
+to remove it, and preventing the system into unbootable state due to bad bootloader.
+You still need a valid bootloader on another location for the system to work.
+
+Are you sure you want to erase the bootloader?"
+}
+
+__system_erase_emmc_boot() {
+    __system_bootloader_helper "eMMC Boot partition bootloader" erase_emmc_boot \
+"Erasing bootloader can make system unbootable.
+
+If you are running the system off a NVMe drive, you likely requires this bootloader
+to be installed.
+
+If your previous installation of the bootloader failed, you can use this option
+to remove it, and preventing the system into unbootable state due to bad bootloader.
+You still need a valid bootloader on another location for the system to work.
+
+Are you sure you want to erase the bootloader?"
+}
+
 __system() {
     menu_init
     menu_add __system_system_update "System Update"
     menu_add __system_update_bootloader "Update Bootloader"
     menu_add __system_update_spinor "Update SPI Bootloader"
     menu_add __system_update_emmc_boot "Update eMMC Boot partition"
+    menu_add_separator
+    menu_add __system_erase_spinor "Erase SPI Bootloader"
+    menu_add __system_erase_emmc_boot "Erase eMMC Boot partition"
     menu_show "System Maintenance"
 }
