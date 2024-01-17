@@ -127,13 +127,16 @@ set_thermal_governor() {
     done
 }
 
-RBUILD_LED_GPIO_ROOT_PATH="/sys/bus/platform/drivers/leds-gpio"
+RBUILD_DRIVER_ROOT_PATH="/sys/bus/platform/drivers"
+
+RBUILD_LED_GPIO_DRIVER="leds-gpio"
+RBUILD_LED_PWM_DRIVER="leds_pwm"
 
 set_led_trigger() {
     __parameter_count_check 2 "$@"
 
     local led="$1" trigger="$2" node
-    for node in "$RBUILD_LED_GPIO_ROOT_PATH"/*/leds/"$led"/trigger
+    for node in "$RBUILD_DRIVER_ROOT_PATH/$RBUILD_LED_GPIO_DRIVER"/*/leds/"$led"/trigger "$RBUILD_DRIVER_ROOT_PATH/$RBUILD_LED_PWM_DRIVER"/*/leds/"$led"/trigger
     do
         echo "$trigger" > "$node"
     done
