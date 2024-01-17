@@ -23,16 +23,19 @@ __system_system_update() {
 __system_select_compatible_bootloader() {
     radiolist_init
 
-    local pid
-    pid="$(get_product_id)"
+    local products i p
+    mapfile -t products < <(get_product_ids)
     for i in /usr/lib/u-boot/*
     do
         i="$(basename "$i")"
 
-        if [[ "$(sed -E "s/[-_]//g" <<< "$i")" == "$(sed -E "s/[-_]//g" <<< "$pid")" ]]
-        then
-            radiolist_add "$i" "OFF"
-        fi
+        for p in "${products[@]}"
+        do
+            if [[ "$(sed -E "s/[-_]//g" <<< "$i")" == "$(sed -E "s/[-_]//g" <<< "$p")" ]]
+            then
+                radiolist_add "$i" "OFF"
+            fi
+        done
     done
     radiolist_emptymsg "No compatible bootloader is available."
 
