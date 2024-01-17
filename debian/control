@@ -66,3 +66,12 @@ Depends: rsetup (= ${binary:Version}),
          ${misc:Depends},
 Description: Radxa system config - Attach AIC8800 Bluetooth on /dev/ttyS1
  This package attaches AIC8800 Bluetooth on /dev/ttyS1 on boot.
+
+Package: rsetup-config-rgb0-rainbow
+Architecture: all
+Section: admin
+Priority: standard
+Depends: rsetup (= ${binary:Version}),
+         ${misc:Depends},
+Description: Radxa system config - Set rgb0 LED's pattern to rainbow
+ This package set rgb0 LED's pattern to rainbow on boot.
