@@ -6,6 +6,7 @@ readonly ERROR_REQUIRE_PARAMETER=-1
 readonly ERROR_TOO_FEW_PARAMETERS=-2
 readonly ERROR_REQUIRE_FILE=-3
 readonly ERROR_ILLEGAL_PARAMETERS=-4
+readonly ERROR_REQUIRE_TARGET=-5
 
 __require_parameter_check() {
     if (( $# == 0 ))
@@ -63,6 +64,16 @@ __assert_f() {
     then
         echo "'${FUNCNAME[1]}' requires file '$1' to work!" >&2
         return $ERROR_REQUIRE_FILE
+    fi
+}
+
+__assert_t() {
+    __parameter_count_check 1 "$@"
+
+    if [[ ! -e "$1" ]]
+    then
+        echo "'${FUNCNAME[1]}' requires target '$1' to work!" >&2
+        return $ERROR_REQUIRE_TARGET
     fi
 }
 
