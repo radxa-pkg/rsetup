@@ -102,6 +102,19 @@ __test_dselect() {
     fi
 }
 
+__test_color_picker() {
+    local rgb=()
+
+    mapfile -t rgb < <(color_picker)
+
+    if (( ${#rgb[@]} != 0 ))
+    then
+        msgbox "User selected color '${rgb[*]}'."
+    else
+        msgbox "User cancelled action."
+    fi
+}
+
 __test() {
     menu_init
     menu_add __test_yesno "yesno"
@@ -119,5 +132,7 @@ __test() {
     menu_add_separator
     menu_add __test_fselect "fselect"
     menu_add __test_dselect "dselect"
+    menu_add_separator
+    menu_add __test_color_picker "color_picker"
     menu_show "TUI tests"
 }

@@ -6,6 +6,7 @@ source "/usr/lib/rsetup/mod/dialog/menu.sh"
 source "/usr/lib/rsetup/mod/dialog/checklist.sh"
 source "/usr/lib/rsetup/mod/dialog/radiolist.sh"
 source "/usr/lib/rsetup/mod/dialog/select.sh"
+source "/usr/lib/rsetup/mod/dialog/modal_dialog.sh"
 
 RSETUP_SCREEN=()
 
