@@ -47,11 +47,10 @@ __system_select_compatible_bootloader() {
     radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}"
 }
 
-__system_update_bootloader() {
-    if ! yesno "Updating bootloader is not necessary in most cases.
-Incorrect bootloader can make system unbootable.
+__system_bootloader_helper() {
+    local bootloader_type="$1" bootloader_method="$2" warning_message="$3"
 
-Are you sure you want to update the bootloader?"
+    if ! yesno "$warning_message"
     then
         return
     fi
@@ -62,14 +61,24 @@ Are you sure you want to update the bootloader?"
         return
     fi
 
-    if update_bootloader "$bootloader"
+    if "$bootloader_method" "$bootloader"
     then
-        msgbox "The bootloader has been updated successfully."
+        msgbox "The $bootloader_type has been updated successfully."
     else
         ret=$?
-        case $ret in
-            100)
-                msgbox "The selected bootloader does not support installing on the boot media."
+        case "$ret" in
+            "$ERROR_ILLEGAL_PARAMETERS")
+                msgbox "This product does not support the current operation for the selected $bootloader_type."
+                ;;
+            "$ERROR_REQUIRE_FILE")
+                msgbox "The selected $bootloader_type is missing important components.
+
+Please reinstall the $bootloader_type and try again."
+                ;;
+            "$ERROR_REQUIRE_TARGET")
+                msgbox "The installation destination for the selected $bootloader_type does not exist.
+
+Please check if related overlay is enabled, and the targetting device is connected."
                 ;;
             *)
                 msgbox "The updating process has failed. System might be broken!"
@@ -78,8 +87,17 @@ Are you sure you want to update the bootloader?"
     fi
 }
 
+__system_update_bootloader() {
+    __system_bootloader_helper "bootloader" update_bootloader \
+"Updating bootloader is not necessary in most cases.
+Incorrect bootloader can make system unbootable.
+
+Are you sure you want to update the bootloader?"
+}
+
 __system_update_spinor() {
-    if ! yesno "Updating bootloader is not necessary in most cases.
+    __system_bootloader_helper "SPI bootloader" update_spinor \
+"Updating bootloader is not necessary in most cases.
 Incorrect bootloader can make system unbootable.
 
 In addition, SPI bootloader is stored on non-removable storage, and it is harder
@@ -89,34 +107,11 @@ You should only use this option when you are confident to recover a corrupted
 SPI bootloader, or have flashed on-board SPI flash manually before.
 
 Are you sure you want to update the bootloader?"
-    then
-        return
-    fi
-
-    local bootloader
-    if ! bootloader="$(__system_select_compatible_bootloader)"
-    then
-        return
-    fi
-
-    if update_spinor "$bootloader"
-    then
-        msgbox "The bootloader has been updated successfully."
-    else
-        ret=$?
-        case $ret in
-            100)
-                msgbox "The selected bootloader does not support SPI boot."
-                ;;
-            *)
-                msgbox "The updating process has failed. System might be broken!"
-                ;;
-        esac
-    fi
 }
 
 __system_update_emmc_boot() {
-    if ! yesno "Updating bootloader is not necessary in most cases.
+    __system_bootloader_helper "eMMC Boot partition bootloader" update_emmc_boot \
+"Updating bootloader is not necessary in most cases.
 Incorrect bootloader can make system unbootable.
 
 In addition, eMMC Boot partition could be on the non-removable storage, and it is
@@ -126,30 +121,6 @@ You should only use this option when you are confident to recover a corrupted
 eMMC Boot partition, or have flashed on-board eMMC Boot partition manually before.
 
 Are you sure you want to update the bootloader?"
-    then
-        return
-    fi
-
-    local bootloader
-    if ! bootloader="$(__system_select_compatible_bootloader)"
-    then
-        return
-    fi
-
-    if update_emmc_boot "$bootloader"
-    then
-        msgbox "The bootloader has been updated successfully."
-    else
-        ret=$?
-        case $ret in
-            100)
-                msgbox "The selected bootloader does not support booting from eMMC Boot partition."
-                ;;
-            *)
-                msgbox "The updating process has failed. System might be broken!"
-                ;;
-        esac
-    fi
 }
 
 __system() {
