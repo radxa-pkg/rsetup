@@ -138,13 +138,26 @@ __pattern_rainbow() {
         return
     fi
 
-    local sections="6"
-    local time_per_section=$((time / sections))
-    cat << EOF
+    # 2 rainbow patterns are available:
+    # https://www.instructables.com/How-to-Make-Proper-Rainbow-and-Random-Colors-With-/
+    if (( "${RSETUP_RAINBOW_CONSTANT_BRIGHTNESS:-1}" == 1 ))
+    then
+        local sections="3"
+        local time_per_section=$((time / sections))
+        cat << EOF
+$brightness $time_per_section 0 $time_per_section 0 $time_per_section
+0 $time_per_section $brightness $time_per_section 0 $time_per_section
+0 $time_per_section 0 $time_per_section $brightness $time_per_section
+EOF
+    else
+        local sections="6"
+        local time_per_section=$((time / sections))
+        cat << EOF
 $brightness $time_per_section $brightness $time_per_section 0 $time_per_section 0 $time_per_section 0 $time_per_section $brightness $time_per_section
 0 $time_per_section $brightness $time_per_section $brightness $time_per_section $brightness $time_per_section 0 $time_per_section 0 $time_per_section
 0 $time_per_section 0 $time_per_section 0 $time_per_section $brightness $time_per_section $brightness $time_per_section $brightness $time_per_section
 EOF
+    fi
 }
 
 __pattern_solid() {
