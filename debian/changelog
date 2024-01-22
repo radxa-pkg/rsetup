@@ -1,3 +1,20 @@
+rsetup (0.3.44) jammy; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * fix: use /proc/device-tree per kernel documentation
+  * feat: add ERROR_REQUIRE_TARGET error code and __assert_t
+  * fix: allow bootloader matching by all product ids
+  * feat: add __system_bootloader_helper
+  * feat: add erase_spinor & erase_emmc_boot support
+  * feat: prepare set_led_trigger to support leds_pwm
+  * feat: add color_picker dialog
+  * feat: add uint_inputbox
+  * feat: add support for RGB led
+  * feat: add rsetup-config-rgb0-rainbow package
+  * feat: make default rainbow pattern constant brightness
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Mon, 22 Jan 2024 08:02:52 +0000
+
 rsetup (0.3.43) jammy; urgency=medium
 
   [ CodeChenL ]
