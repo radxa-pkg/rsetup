@@ -372,6 +372,54 @@ Please check if the screen is connected and powered on."
 To return to normal mode, please use your desktop environment's display setup tool."
 }
 
+__hardware_otg() {
+    checklist_init
+
+    local udc udc_function status
+    for udc in /sys/class/udc/*
+    do
+        udc="$(basename "$udc")"
+        if [[ "$(systemctl is-enabled "radxa-adbd@$udc")" == "enabled" ]]
+        then
+            checklist_add "radxa-adbd@$udc" "ON"
+        elif [[ "$(systemctl is-enabled "radxa-adbd@$udc")" == "disabled" ]]
+        then
+            checklist_add "radxa-adbd@$udc" "OFF"
+        fi
+
+        if [[ "$(systemctl is-enabled "radxa-usbnet@$udc")" == "enabled" ]]
+        then
+            checklist_add "radxa-usbnet@$udc" "ON"
+        elif [[ "$(systemctl is-enabled "radxa-usbnet@$udc")" == "disabled" ]]
+        then
+            checklist_add "radxa-usbnet@$udc" "OFF"
+        fi
+    done
+
+    checklist_emptymsg "No UDC exists.
+You can turn on the OTG port Peripheral mode device tree overlay at rsetup and look in the /sys/class/udc directory for."
+
+    if ! checklist_show "Below are the available UDC functions.
+Select any to update their status." || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 0 ))
+    then
+        return
+    fi
+
+    length=${#RSETUP_CHECKLIST[@]}
+    for ((i = 0; i < length; i+=3))
+    do
+        udc_function="${RSETUP_CHECKLIST[i+1]}"
+        status="${RSETUP_CHECKLIST[i+2]}"
+        if [[ "$status" == "ON" ]]
+        then
+            systemctl enable --now "$udc_function"
+        elif [[ "$status" == "OFF" ]]
+        then
+            systemctl disable --now "$udc_function"
+        fi
+    done
+}
+
 __hardware() {
     menu_init
     menu_add __hardware_video "Video capture devices"
@@ -380,5 +428,6 @@ __hardware() {
     menu_add __hardware_thermal "Thermal governor"
     menu_add __hardware_dsi_mirror "Configure DSI display mirroring"
     menu_add __hardware_gpio "40-pin GPIO"
+    menu_add __hardware_otg "USB OTG port functions"
     menu_show "Manage on-board hardware"
 }
