@@ -400,7 +400,7 @@ __hardware_otg() {
 You can turn on the OTG port Peripheral mode device tree overlay at rsetup and look in the /sys/class/udc directory for."
 
     if ! checklist_show "Below are the available UDC functions.
-Select any to update their status." || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 0 ))
+Select any to update their status."
     then
         return
     fi
