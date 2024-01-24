@@ -428,6 +428,6 @@ __hardware() {
     menu_add __hardware_thermal "Thermal governor"
     menu_add __hardware_dsi_mirror "Configure DSI display mirroring"
     menu_add __hardware_gpio "40-pin GPIO"
-    menu_add __hardware_otg "USB OTG port functions"
+    menu_add __hardware_otg "USB OTG services"
     menu_show "Manage on-board hardware"
 }
