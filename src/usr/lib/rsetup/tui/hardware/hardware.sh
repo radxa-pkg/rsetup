@@ -372,28 +372,27 @@ Please check if the screen is connected and powered on."
 To return to normal mode, please use your desktop environment's display setup tool."
 }
 
+__check_service_status() {
+    if [[ "$(systemctl is-enabled "$1@$2")" == "enabled" ]]
+    then
+        checklist_add "$1@$2" "ON"
+    elif [[ "$(systemctl is-enabled "$1@$2")" == "disabled" ]]
+    then
+        checklist_add "$1@$2" "OFF"
+    fi
+}
+
 __hardware_otg() {
     checklist_init
 
-    local udc udc_function status
+    local udc udc_function status i
     for udc in /sys/class/udc/*
     do
         udc="$(basename "$udc")"
-        if [[ "$(systemctl is-enabled "radxa-adbd@$udc")" == "enabled" ]]
-        then
-            checklist_add "radxa-adbd@$udc" "ON"
-        elif [[ "$(systemctl is-enabled "radxa-adbd@$udc")" == "disabled" ]]
-        then
-            checklist_add "radxa-adbd@$udc" "OFF"
-        fi
-
-        if [[ "$(systemctl is-enabled "radxa-usbnet@$udc")" == "enabled" ]]
-        then
-            checklist_add "radxa-usbnet@$udc" "ON"
-        elif [[ "$(systemctl is-enabled "radxa-usbnet@$udc")" == "disabled" ]]
-        then
-            checklist_add "radxa-usbnet@$udc" "OFF"
-        fi
+        for i in radxa-adbd radxa-usbnet
+        do
+            __check_service_status "$i" "$udc"
+        done
     done
 
     checklist_emptymsg "No UDC exists.
