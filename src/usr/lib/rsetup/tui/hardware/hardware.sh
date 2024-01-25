@@ -372,6 +372,63 @@ Please check if the screen is connected and powered on."
 To return to normal mode, please use your desktop environment's display setup tool."
 }
 
+__check_service_status() {
+    local service="$1@$2"
+    case "$(systemctl is-enabled "$service")" in
+      enabled)
+          checklist_add "$service" "ON"
+          ;;
+      disabled)
+          checklist_add "$service" "OFF"
+    esac
+}
+
+__hardware_otg() {
+    checklist_init
+
+    local udc udc_function udc_function_list status i
+    for udc in /sys/class/udc/*
+    do
+        udc="$(basename "$udc")"
+        for i in radxa-adbd radxa-usbnet
+        do
+            __check_service_status "$i" "$udc"
+        done
+    done
+
+    checklist_emptymsg "No UDC exists.
+You can turn on the OTG port Peripheral mode device tree overlay at rsetup and look in the /sys/class/udc directory for."
+
+    if ! checklist_show "Below are the available UDC functions.
+Select any to update their status."
+    then
+        return
+    fi
+
+    for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
+    do
+        udc_function_list+=("$(checklist_getitem "$i")")
+    done
+    if (( $(printf "%s\n" "${udc_function_list[@]}" | grep -o "radxa-adbd@" | wc -l) > 1 ))
+    then
+        msgbox "radxa-adbd can be enabled at most on one given port. Please reduce your selection and try again."
+        return
+    fi
+
+    length=${#RSETUP_CHECKLIST[@]}
+    for ((i = 0; i < length; i+=3))
+    do
+        udc_function="${RSETUP_CHECKLIST[i+1]}"
+        status="${RSETUP_CHECKLIST[i+2]}"
+        if [[ "$status" == "ON" ]]
+        then
+            systemctl enable --now "$udc_function"
+        else
+            systemctl disable --now "$udc_function"
+        fi
+    done
+}
+
 __hardware() {
     menu_init
     menu_add __hardware_video "Video capture devices"
@@ -380,5 +437,6 @@ __hardware() {
     menu_add __hardware_thermal "Thermal governor"
     menu_add __hardware_dsi_mirror "Configure DSI display mirroring"
     menu_add __hardware_gpio "40-pin GPIO"
+    menu_add __hardware_otg "USB OTG services"
     menu_show "Manage on-board hardware"
 }
