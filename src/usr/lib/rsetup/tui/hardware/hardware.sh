@@ -423,8 +423,7 @@ Select any to update their status."
         if [[ "$status" == "ON" ]]
         then
             systemctl enable --now "$udc_function"
-        elif [[ "$status" == "OFF" ]]
-        then
+        else
             systemctl disable --now "$udc_function"
         fi
     done
