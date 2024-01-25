@@ -373,13 +373,14 @@ To return to normal mode, please use your desktop environment's display setup to
 }
 
 __check_service_status() {
-    if [[ "$(systemctl is-enabled "$1@$2")" == "enabled" ]]
-    then
-        checklist_add "$1@$2" "ON"
-    elif [[ "$(systemctl is-enabled "$1@$2")" == "disabled" ]]
-    then
-        checklist_add "$1@$2" "OFF"
-    fi
+    local service="$1@$2"
+    case "$(systemctl is-enabled "$service")" in
+    enabled)
+        checklist_add "$service" "ON"
+        ;;
+    disabled)
+        checklist_add "$service" "OFF"
+    esac
 }
 
 __hardware_otg() {
