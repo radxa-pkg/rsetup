@@ -409,10 +409,10 @@ Select any to update their status."
     do
         udc_function_list+=("$(checklist_getitem "$i")")
     done
-    if [[ $(printf "%s\n"  "${udc_function_list[@]}" | grep -o "radxa-adbd@" | wc -l) -gt 1 ]]
+    if (( $(printf "%s\n" "${udc_function_list[@]}" | grep -o "radxa-adbd@" | wc -l) > 1 ))
     then
-        msgbox "Only enable ADB on one OTG port at the same time"
-        return 1
+        msgbox "radxa-adbd can be enabled at most on one given port. Please reduce your selection and try again."
+        return
     fi
 
     length=${#RSETUP_CHECKLIST[@]}
