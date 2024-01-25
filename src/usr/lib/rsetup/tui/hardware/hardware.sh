@@ -386,7 +386,7 @@ __check_service_status() {
 __hardware_otg() {
     checklist_init
 
-    local udc udc_function udc_function_string status i
+    local udc udc_function udc_function_list status i
     for udc in /sys/class/udc/*
     do
         udc="$(basename "$udc")"
@@ -407,9 +407,9 @@ Select any to update their status."
 
     for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
     do
-        udc_function_string+="$(checklist_getitem "$i")"
+        udc_function_list+=("$(checklist_getitem "$i")")
     done
-    if [[ $(echo "$udc_function_string" | grep -o "radxa-adbd@" | wc -l) -gt 1 ]]
+    if [[ $(printf "%s\n"  "${udc_function_list[@]}" | grep -o "radxa-adbd@" | wc -l) -gt 1 ]]
     then
         msgbox "Only enable ADB on one OTG port at the same time"
         return 1
