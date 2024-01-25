@@ -375,11 +375,11 @@ To return to normal mode, please use your desktop environment's display setup to
 __check_service_status() {
     local service="$1@$2"
     case "$(systemctl is-enabled "$service")" in
-    enabled)
-        checklist_add "$service" "ON"
-        ;;
-    disabled)
-        checklist_add "$service" "OFF"
+      enabled)
+          checklist_add "$service" "ON"
+          ;;
+      disabled)
+          checklist_add "$service" "OFF"
     esac
 }
 
