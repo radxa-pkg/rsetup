@@ -3,7 +3,7 @@
 
 import threading, yaml, re, os, argparse, concurrent.futures
 
-results = []
+results = {}
 results_lock = threading.Lock()
 
 class Result:
@@ -53,11 +53,10 @@ def main():
     yaml.CLoader.add_constructor('!u8', yaml.constructor.FullConstructor.construct_yaml_seq)
 
     global results
-    results = [Result()] * len(args.filename)
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = [executor.submit(process_file, file, args, i) for i, file in enumerate(args.filename)]
         concurrent.futures.wait(futures)
-    for result in results:
+    for key, result in sorted(results.items()):
         result.print()
 
 if __name__ == "__main__":

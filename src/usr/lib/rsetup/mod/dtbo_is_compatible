@@ -4,7 +4,7 @@
 import threading, yaml, os, concurrent.futures
 from sys import argv
 
-results = []
+results = {}
 results_lock = threading.Lock()
 
 def process_file(file, compatible, index):
@@ -22,7 +22,6 @@ def process_file(file, compatible, index):
 def main():
     files = argv[1:]
     global results
-    results = [""] * len(files)
 
     try:
         compatible = open("/proc/device-tree/compatible").read().split("\x00")[0:-1]
@@ -36,7 +35,8 @@ def main():
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = [executor.submit(process_file, file, compatible, i) for i, file in enumerate(files)]
         concurrent.futures.wait(futures)
-    print("".join(results), end="")
+    for key, result in sorted(results.items()):
+        print(result)
 
 
 if __name__ == "__main__":
