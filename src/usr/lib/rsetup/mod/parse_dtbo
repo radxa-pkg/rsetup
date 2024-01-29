@@ -1,9 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
-import yaml, re, os, argparse, concurrent.futures
+import threading, yaml, re, os, argparse, concurrent.futures
 
 results = []
+results_lock = threading.Lock()
+
+class Result:
+    def __init__(self, field="", status="", basename=""):
+        self.field = field
+        self.status = status
+        self.basename = basename
+
+    def print(self):
+        print(self.field + self.status + self.basename, end="")
+
 
 def status(file):
     if ".disabled" == os.path.splitext(file)[-1]:
@@ -16,17 +27,20 @@ def basename(file):
 
 def process_file(file, args, index):
     global results
+    result = Result()
     try:
         field = yaml.load(os.popen("dtc -I dtb -O dts " + file + " 2>/dev/null | dtc -I dts -O yaml 2>/dev/null").read(), Loader=yaml.CLoader)[0]["metadata"][args.field][0].replace("\0", "\n")
-        results[index] = field + "\n"
+        result.field = field + "\n"
     except Exception as e:
         if args.default_value == "file":
-            results[index] = file + "\n"
+            result.field = file + "\n"
         else:
-            results[index] = args.default_value + "\n"
+            result.field = args.default_value + "\n"
     if args.show_overlays:
-        results[index+1] = status(file) + "\n"
-        results[index+2] = basename(file) + "\n"
+        result.status = status(file) + "\n"
+        result.basename = basename(file) + "\n"
+    with results_lock:
+        results[index] = result
 
 def main():
     parser = argparse.ArgumentParser(description='Parse dtbo metadata data')
@@ -39,11 +53,12 @@ def main():
     yaml.CLoader.add_constructor('!u8', yaml.constructor.FullConstructor.construct_yaml_seq)
 
     global results
-    results = [""] * len(args.filename) * 3
+    results = [Result()] * len(args.filename)
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        futures = [executor.submit(process_file, file, args, i * 3) for i, file in enumerate(args.filename)]
+        futures = [executor.submit(process_file, file, args, i) for i, file in enumerate(args.filename)]
         concurrent.futures.wait(futures)
-    print("".join(results), end="")
+    for result in results:
+        result.print()
 
 if __name__ == "__main__":
     main()

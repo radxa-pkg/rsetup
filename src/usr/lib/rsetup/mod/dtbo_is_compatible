@@ -1,25 +1,29 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
-import yaml, os, concurrent.futures
+import threading, yaml, os, concurrent.futures
 from sys import argv
 
 results = []
+results_lock = threading.Lock()
 
 def process_file(file, compatible, index):
     global results
     try:
         for dtbo_compatible in yaml.load(os.popen("dtc -I dtb -O dts " + file + " 2>/dev/null | dtc -I dts -O yaml 2>/dev/null").read(), Loader=yaml.CLoader)[0]["metadata"]["compatible"][0].split("\x00"):
             if dtbo_compatible in compatible:
-                results[index] = file + "\n"
+                with results_lock:
+                    results[index] = file + "\n"
                 break
     except KeyError:
-        results[index] = file + "\n"
+        with results_lock:
+            results[index] = file + "\n"
 
 def main():
     files = argv[1:]
     global results
-    results = [""] * (len(files) + 1)
+    results = [""] * len(files)
+
     try:
         compatible = open("/proc/device-tree/compatible").read().split("\x00")[0:-1]
     except FileNotFoundError:
