@@ -14,7 +14,7 @@ parser.add_argument('filename', nargs='+', metavar='filename', help='DTBO filena
 args = parser.parse_args()
 
 class Result:
-    def __init__(self,field , file):
+    def __init__(self, field, file):
         self._field = field
         if ".disabled" == os.path.splitext(file)[-1]:
             self._status = "OFF"
