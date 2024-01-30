@@ -12,8 +12,8 @@ class Result:
         self.status = status
         self.basename = basename
 
-    def print(self):
-        print(self.field + self.status + self.basename, end="")
+    def __str__(self) -> str:
+        return self.field + "\n" + self.status + "\n" + self.basename
 
 
 def status(file):
@@ -30,15 +30,15 @@ def process_file(file, args, index):
     result = Result()
     try:
         field = yaml.load(os.popen("dtc -I dtb -O dts " + file + " 2>/dev/null | dtc -I dts -O yaml 2>/dev/null").read(), Loader=yaml.CLoader)[0]["metadata"][args.field][0].replace("\0", "\n")
-        result.field = field + "\n"
+        result.field = field
     except Exception as e:
         if args.default_value == "file":
-            result.field = file + "\n"
+            result.field = file
         else:
-            result.field = args.default_value + "\n"
+            result.field = args.default_value
     if args.show_overlays:
-        result.status = status(file) + "\n"
-        result.basename = basename(file) + "\n"
+        result.status = status(file)
+        result.basename = basename(file)
     with results_lock:
         results[index] = result
 
@@ -57,7 +57,7 @@ def main():
         futures = [executor.submit(process_file, file, args, i) for i, file in enumerate(args.filename)]
         concurrent.futures.wait(futures)
     for key, result in sorted(results.items()):
-        result.print()
+        print(result)
 
 if __name__ == "__main__":
     main()
