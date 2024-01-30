@@ -12,32 +12,50 @@ class Result:
         self.status = status
         self.basename = basename
 
+    def setField(self, field):
+        self.field = field
+
+    def setStatus(self, file):
+        if ".disabled" == os.path.splitext(file)[-1]:
+            self.status = "OFF"
+        else:
+            self.status = "ON"
+
+    def setBasename(self, file):
+        self.basename = re.match(r'(.+\.dtbo)', os.path.basename(file)).group(1)
+
+    def getField(self):
+        return self.field
+
+    def getStatus(self):
+        return self.status
+
+    def getBasename(self):
+        return self.basename
+
     def __str__(self) -> str:
-        return self.field + "\n" + self.status + "\n" + self.basename
-
-
-def status(file):
-    if ".disabled" == os.path.splitext(file)[-1]:
-        return "OFF"
-    else:
-        return "ON"
-
-def basename(file):
-    return re.match(r'(.+\.dtbo)', os.path.basename(file)).group(1)
+        string = ""
+        if self.status == "" and self.basename == "":
+            string += self.field
+        else:
+            string += self.field + "\n"
+            string += self.status + "\n"
+            string += self.basename
+        return string
 
 def process_file(file, args, index):
     result = Result()
     try:
         field = yaml.load(os.popen("dtc -I dtb -O dts " + file + " 2>/dev/null | dtc -I dts -O yaml 2>/dev/null").read(), Loader=yaml.CLoader)[0]["metadata"][args.field][0].replace("\0", "\n")
-        result.field = field
+        result.setField(field)
     except Exception as e:
         if args.default_value == "file":
-            result.field = file
+            result.setField(file)
         else:
-            result.field = args.default_value
+            result.setField(args.default_value)
     if args.show_overlays:
-        result.status = status(file)
-        result.basename = basename(file)
+        result.setStatus(file)
+        result.setBasename(file)
     with results_lock:
         results[index] = result
 
