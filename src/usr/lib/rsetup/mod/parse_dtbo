@@ -6,11 +6,17 @@ import threading, yaml, re, os, argparse, concurrent.futures
 results = {}
 results_lock = threading.Lock()
 
+parser = argparse.ArgumentParser(description='Parse dtbo metadata data')
+parser.add_argument('--show-overlays', action='store_true', default=False, help='Control print DTBO title, enable status and DTBO filename')
+parser.add_argument('--default-value', metavar='string', default="null", help='error default string')
+parser.add_argument('field', metavar='string', help='Metadata field')
+parser.add_argument('filename', nargs='+', metavar='filename', help='DTBO filename list')
+args = parser.parse_args()
+
 class Result:
-    def __init__(self, field="", status="", basename=""):
-        self.field = field
-        self.status = status
-        self.basename = basename
+    def __init__(self, file = ""):
+        self.setStatus(file)
+        self.setBasename(file)
 
     def setField(self, field):
         self.field = field
@@ -34,17 +40,13 @@ class Result:
         return self.basename
 
     def __str__(self) -> str:
-        string = ""
-        if self.status == "" and self.basename == "":
-            string += self.field
+        if args.show_overlays:
+            return self.field + "\n" + self.status + "\n" + self.basename
         else:
-            string += self.field + "\n"
-            string += self.status + "\n"
-            string += self.basename
-        return string
+            return self.field
 
 def process_file(file, args, index):
-    result = Result()
+    result = Result(file)
     try:
         field = yaml.load(os.popen("dtc -I dtb -O dts " + file + " 2>/dev/null | dtc -I dts -O yaml 2>/dev/null").read(), Loader=yaml.CLoader)[0]["metadata"][args.field][0].replace("\0", "\n")
         result.setField(field)
@@ -53,20 +55,10 @@ def process_file(file, args, index):
             result.setField(file)
         else:
             result.setField(args.default_value)
-    if args.show_overlays:
-        result.setStatus(file)
-        result.setBasename(file)
     with results_lock:
         results[index] = result
 
 def main():
-    parser = argparse.ArgumentParser(description='Parse dtbo metadata data')
-    parser.add_argument('--show-overlays', action='store_true', default=False, help='Control print DTBO title, enable status and DTBO filename')
-    parser.add_argument('--default-value', metavar='string', default="null", help='error default string')
-    parser.add_argument('field', metavar='string', help='Metadata field')
-    parser.add_argument('filename', nargs='+', metavar='filename', help='DTBO filename list')
-    args = parser.parse_args()
-
     yaml.CLoader.add_constructor('!u8', yaml.constructor.FullConstructor.construct_yaml_seq)
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
