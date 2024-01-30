@@ -1,3 +1,14 @@
+rsetup (0.3.45) jammy; urgency=medium
+
+  [ CodeChenL ]
+  * Add functions "USB OTG port functions" (#32)
+  * Multithreaded dtbo parsing (#33)
+
+  [ ZHANG Yuntian ]
+  * fix: merge changes from the same author
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Tue, 30 Jan 2024 09:36:24 +0000
+
 rsetup (0.3.44) jammy; urgency=medium
 
   [ ZHANG Yuntian ]
