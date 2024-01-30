@@ -14,30 +14,25 @@ parser.add_argument('filename', nargs='+', metavar='filename', help='DTBO filena
 args = parser.parse_args()
 
 class Result:
-    def __init__(self, file):
-        self.setStatus(file)
-        self.setBasename(file)
-
-    def setField(self, field):
-        self.field = field
-
-    def setStatus(self, file):
+    def __init__(self,field , file):
+        self._field = field
         if ".disabled" == os.path.splitext(file)[-1]:
-            self.status = "OFF"
+            self._status = "OFF"
         else:
-            self.status = "ON"
+            self._status = "ON"
+        self._basename = re.match(r'(.+\.dtbo)', os.path.basename(file)).group(1)
 
-    def setBasename(self, file):
-        self.basename = re.match(r'(.+\.dtbo)', os.path.basename(file)).group(1)
+    @property
+    def field(self):
+        return self._field
 
-    def getField(self):
-        return self.field
+    @property
+    def status(self):
+        return self._status
 
-    def getStatus(self):
-        return self.status
-
-    def getBasename(self):
-        return self.basename
+    @property
+    def basename(self):
+        return self._basename
 
     def __str__(self) -> str:
         if args.show_overlays:
@@ -48,15 +43,14 @@ class Result:
 def process_file(file, args, index):
     try:
         field = yaml.load(os.popen("dtc -I dtb -O dts " + file + " 2>/dev/null | dtc -I dts -O yaml 2>/dev/null").read(), Loader=yaml.CLoader)[0]["metadata"][args.field][0].replace("\0", "\n")
-        result.setField(field)
     # If parsing a field fails, the return value will be handled according to the --default-value option
     except Exception as e:
         if args.default_value == "file":
-            result.setField(file)
+            field = file
         else:
-            result.setField(args.default_value)
+            field = args.default_value
     with results_lock:
-        results[index] = result
+        results[index] = Result(field, file)
 
 def main():
     yaml.CLoader.add_constructor('!u8', yaml.constructor.FullConstructor.construct_yaml_seq)
