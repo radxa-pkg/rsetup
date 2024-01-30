@@ -1,32 +1,42 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
-from sys import argv, stdin, stderr
-import yaml, re, os
+import threading, yaml, os, concurrent.futures
+from sys import argv
 
-def is_compatible(file, metadata, compatible):
+results = {}
+results_lock = threading.Lock()
+
+def process_file(file, compatible, index):
     try:
-        for dtbo_compatible in metadata["compatible"][0].split("\x00"):
+        for dtbo_compatible in yaml.load(os.popen("dtc -I dtb -O dts " + file + " 2>/dev/null | dtc -I dts -O yaml 2>/dev/null").read(), Loader=yaml.CLoader)[0]["metadata"]["compatible"][0].split("\x00"):
             if dtbo_compatible in compatible:
-                return True
+                with results_lock:
+                    results[index] = file
+                break
     # If the error type is KeyError it is assumed to be a third-party overlay installed by the user, which is compatible by default.
     except KeyError:
-        return True
-    return False
+        with results_lock:
+            results[index] = file
 
-files = argv[1:]
+def main():
+    files = argv[1:]
 
-# If this file does not exist, it is assumed that the image is generated inside the chroot
-try:
-    compatible= open("/proc/device-tree/compatible").read().split("\x00")[0:-1]
-except FileNotFoundError as e:
-    for file in files:
-        print(file)
-    exit(0)
+    try:
+        compatible = open("/proc/device-tree/compatible").read().split("\x00")[0:-1]
+    # If this file does not exist, it is assumed that the image is generated inside the chroot
+    except FileNotFoundError:
+        for file in files:
+            print(file)
+        exit(0)
 
-yaml.CLoader.add_constructor('!u8', yaml.constructor.FullConstructor.construct_yaml_seq)
+    yaml.CLoader.add_constructor('!u8', yaml.constructor.FullConstructor.construct_yaml_seq)
 
-for file in files:
-    metadata=yaml.load(os.popen("dtc -I dtb -O dts " + file + " 2>/dev/null | dtc -I dts -O yaml 2>/dev/null").read(), Loader=yaml.CLoader)[0]["metadata"]
-    if is_compatible(file, metadata, compatible):
-        print(file)
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = [executor.submit(process_file, file, compatible, i) for i, file in enumerate(files)]
+        concurrent.futures.wait(futures)
+    for key, result in sorted(results.items()):
+        print(result)
+
+if __name__ == "__main__":
+    main()

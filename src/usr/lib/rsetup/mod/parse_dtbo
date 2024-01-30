@@ -1,35 +1,65 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
-import yaml, re, os, argparse
+import threading, yaml, re, os, argparse, concurrent.futures
 
-def status(file):
-    if ".disabled" == os.path.splitext(file)[-1]:
-        print("OFF")
-    else:
-        print("ON")
-
-def basename(file):
-    print(re.match(r'(.+\.dtbo)',os.path.basename(file)).group(1))
+results = {}
+results_lock = threading.Lock()
 
 parser = argparse.ArgumentParser(description='Parse dtbo metadata data')
-parser.add_argument('--show-overlays', action='store_true', default=False, help='Control print DTBO title,enable status and DTBO filename')
+parser.add_argument('--show-overlays', action='store_true', default=False, help='Control print DTBO title, enable status and DTBO filename')
 parser.add_argument('--default-value', metavar='string', default="null", help='error default string')
 parser.add_argument('field', metavar='string', help='Metadata field')
 parser.add_argument('filename', nargs='+', metavar='filename', help='DTBO filename list')
 args = parser.parse_args()
 
-yaml.CLoader.add_constructor('!u8', yaml.constructor.FullConstructor.construct_yaml_seq)
-
-for file in args.filename:
-    try:
-        metadata = yaml.load(os.popen("dtc -I dtb -O dts " + file + " 2>/dev/null | dtc -I dts -O yaml 2>/dev/null").read(), Loader=yaml.CLoader)[0]["metadata"]
-        print(metadata[args.field][0].replace("\0", "\n"))
-    except Exception:
-        if args.default_value == "file":
-            basename(file)
+class Result:
+    def __init__(self, field, file):
+        self._field = field
+        if ".disabled" == os.path.splitext(file)[-1]:
+            self._status = "OFF"
         else:
-            print(args.default_value)
-    if args.show_overlays:
-        status(file)
-        basename(file)
+            self._status = "ON"
+        self._basename = re.match(r'(.+\.dtbo)', os.path.basename(file)).group(1)
+
+    @property
+    def field(self):
+        return self._field
+
+    @property
+    def status(self):
+        return self._status
+
+    @property
+    def basename(self):
+        return self._basename
+
+    def __str__(self) -> str:
+        if args.show_overlays:
+            return f'{self.field}\n{self.status}\n{self.basename}'
+        else:
+            return self.field
+
+def process_file(file, args, index):
+    try:
+        field = yaml.load(os.popen("dtc -I dtb -O dts " + file + " 2>/dev/null | dtc -I dts -O yaml 2>/dev/null").read(), Loader=yaml.CLoader)[0]["metadata"][args.field][0].replace("\0", "\n")
+    # If parsing a field fails, the return value will be handled according to the --default-value option
+    except Exception as e:
+        if args.default_value == "file":
+            field = file
+        else:
+            field = args.default_value
+    with results_lock:
+        results[index] = Result(field, file)
+
+def main():
+    yaml.CLoader.add_constructor('!u8', yaml.constructor.FullConstructor.construct_yaml_seq)
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = [executor.submit(process_file, file, args, i) for i, file in enumerate(args.filename)]
+        concurrent.futures.wait(futures)
+    for key, result in sorted(results.items()):
+        print(result)
+
+if __name__ == "__main__":
+    main()
