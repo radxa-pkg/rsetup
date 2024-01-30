@@ -38,6 +38,5 @@ def main():
     for key, result in sorted(results.items()):
         print(result)
 
-
 if __name__ == "__main__":
     main()

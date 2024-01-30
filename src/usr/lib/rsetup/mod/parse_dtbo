@@ -14,7 +14,7 @@ parser.add_argument('filename', nargs='+', metavar='filename', help='DTBO filena
 args = parser.parse_args()
 
 class Result:
-    def __init__(self, file = ""):
+    def __init__(self, file):
         self.setStatus(file)
         self.setBasename(file)
 
@@ -46,10 +46,10 @@ class Result:
             return self.field
 
 def process_file(file, args, index):
-    result = Result(file)
     try:
         field = yaml.load(os.popen("dtc -I dtb -O dts " + file + " 2>/dev/null | dtc -I dts -O yaml 2>/dev/null").read(), Loader=yaml.CLoader)[0]["metadata"][args.field][0].replace("\0", "\n")
         result.setField(field)
+    # If parsing a field fails, the return value will be handled according to the --default-value option
     except Exception as e:
         if args.default_value == "file":
             result.setField(file)
