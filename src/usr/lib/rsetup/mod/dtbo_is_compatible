@@ -26,6 +26,7 @@ def main():
 
     try:
         compatible = open("/proc/device-tree/compatible").read().split("\x00")[0:-1]
+    # If this file does not exist, it is assumed that the image is generated inside the chroot
     except FileNotFoundError:
         for file in files:
             print(file)
