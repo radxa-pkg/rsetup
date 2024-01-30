@@ -26,7 +26,6 @@ def basename(file):
     return re.match(r'(.+\.dtbo)', os.path.basename(file)).group(1)
 
 def process_file(file, args, index):
-    global results
     result = Result()
     try:
         field = yaml.load(os.popen("dtc -I dtb -O dts " + file + " 2>/dev/null | dtc -I dts -O yaml 2>/dev/null").read(), Loader=yaml.CLoader)[0]["metadata"][args.field][0].replace("\0", "\n")
@@ -52,7 +51,6 @@ def main():
 
     yaml.CLoader.add_constructor('!u8', yaml.constructor.FullConstructor.construct_yaml_seq)
 
-    global results
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = [executor.submit(process_file, file, args, i) for i, file in enumerate(args.filename)]
         concurrent.futures.wait(futures)

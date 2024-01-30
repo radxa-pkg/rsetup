@@ -8,7 +8,6 @@ results = {}
 results_lock = threading.Lock()
 
 def process_file(file, compatible, index):
-    global results
     try:
         for dtbo_compatible in yaml.load(os.popen("dtc -I dtb -O dts " + file + " 2>/dev/null | dtc -I dts -O yaml 2>/dev/null").read(), Loader=yaml.CLoader)[0]["metadata"]["compatible"][0].split("\x00"):
             if dtbo_compatible in compatible:
@@ -22,7 +21,6 @@ def process_file(file, compatible, index):
 
 def main():
     files = argv[1:]
-    global results
 
     try:
         compatible = open("/proc/device-tree/compatible").read().split("\x00")[0:-1]
