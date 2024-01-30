@@ -36,7 +36,7 @@ class Result:
 
     def __str__(self) -> str:
         if args.show_overlays:
-            return self.field + "\n" + self.status + "\n" + self.basename
+            return f'{self.field}\n{self.status}\n{self.basename}'
         else:
             return self.field
 
