@@ -117,3 +117,49 @@ rebuild_overlays() {
     mv "$old_overlays" "${old_overlays}_old"
     mv "$new_overlays" "$old_overlays"
 }
+
+enable_overlays() {
+    __parameter_count_at_least_check 1 "$@"
+
+    local enable_overlays_list i dir_name file_name input_check=true
+
+    load_u-boot_setting
+
+    for i in "$@"
+    do
+        dir_name="$(dirname "$i")"
+        file_name="$(basename "${i%.disabled}")"
+
+        if [[ "$dir_name" == "." ]]
+        then
+            dir_name="$U_BOOT_FDT_OVERLAYS_DIR"
+        fi
+
+        if [[ "$(realpath "$dir_name")" != "$(realpath "$U_BOOT_FDT_OVERLAYS_DIR")" ]]
+        then
+            echo "$i: only overlays within '$U_BOOT_FDT_OVERLAYS_DIR' can be enabled." >&2
+            input_check=false
+        elif [[ -e "$dir_name/$file_name.disabled" ]]
+        then
+            enable_overlays_list+=("$U_BOOT_FDT_OVERLAYS_DIR/$file_name")
+        elif [[ -e "$dir_name/$file_name" ]]
+        then
+            echo "$file_name: already enabled." >&2
+        else
+            echo "$file_name: cannot find such overlay in '$U_BOOT_FDT_OVERLAYS_DIR'"
+            input_check=false
+        fi
+    done
+
+    if ! $input_check
+    then
+        return "$ERROR_ILLEGAL_PARAMETERS"
+    fi
+
+    for i in "${enable_overlays_list[@]}"
+    do
+        mv "$i.disabled" "$i"
+    done
+
+    u-boot-update
+}

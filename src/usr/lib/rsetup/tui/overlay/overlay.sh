@@ -137,19 +137,29 @@ __overlay_manage() {
 
     disable_overlays
 
-    local item
+    local items=() ret
     for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
     do
-        item="$(checklist_getitem "$i")"
-        mv "$U_BOOT_FDT_OVERLAYS_DIR/$item.disabled" "$U_BOOT_FDT_OVERLAYS_DIR/$item"
+        items+=("$(checklist_getitem "$i")")
     done
 
-    if u-boot-update >/dev/null
+    if (( ${#items[@]} == 0 ))
     then
-        msgbox "Selected overlays will be enabled at next boot."
-    else
-        msgbox "Unable to update the boot config."
+        return
     fi
+
+    enable_overlays "${items[@]}"; ret="$?"
+    case "$ret" in
+        0)
+            msgbox "Selected overlays will be enabled at next boot."
+            ;;
+        "$ERROR_ILLEGAL_PARAMETERS")
+            msgbox "The selection contains non-existing overlays. Did you delete them?"
+            ;;
+        *)
+            msgbox "Unable to update the boot config."
+            ;;
+    esac
 }
 
 __overlay_info() {
