@@ -58,18 +58,6 @@ disable_overlays() {
     done
 }
 
-__rebuild_overlays_worker() {
-    local overlay="$1" new_overlays="$2"
-
-    if [[ -n "$(dtbo_is_compatible "$overlay")" ]]
-    then
-        cp "$overlay" "$new_overlays/$(basename "$overlay").disabled"
-        exec 100>>"$new_overlays/managed.list"
-        flock 100
-        basename "$overlay" >&100
-    fi
-}
-
 rebuild_overlays() {
     load_u-boot_setting
 
@@ -107,16 +95,13 @@ rebuild_overlays() {
     fi
     rm -f "$new_overlays/managed.list"
     touch "$new_overlays/managed.list"
+
+    mapfile -t dtbos < <(dtbo_is_compatible "${dtbos[@]}")
+
     for i in "${dtbos[@]}"
     do
-        if [[ ! -f /proc/device-tree/compatible ]]
-        then
-            # Assume we are running at image building stage
-            # Do not fork out so we don't trigger OOM killer
-            __rebuild_overlays_worker "$i" "$new_overlays"
-        else
-            __rebuild_overlays_worker "$i" "$new_overlays" &
-        fi
+        cp "$i" "$new_overlays/$(basename "$i").disabled"
+        basename "$i" >> "$new_overlays/managed.list"
     done
     wait
 
