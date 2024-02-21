@@ -55,7 +55,7 @@ def process_file(file, args, index):
 def main():
     yaml.CLoader.add_constructor('!u8', yaml.constructor.FullConstructor.construct_yaml_seq)
 
-    with concurrent.futures.ThreadPoolExecutor() as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:
         futures = [executor.submit(process_file, file, args, i) for i, file in enumerate(args.filename)]
         concurrent.futures.wait(futures)
     for key, result in sorted(results.items()):
