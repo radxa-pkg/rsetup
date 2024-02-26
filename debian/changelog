@@ -1,3 +1,10 @@
+rsetup (0.3.48) jammy; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * fix: force removel of conflicting package again
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Mon, 26 Feb 2024 10:31:27 +0000
+
 rsetup (0.3.47) jammy; urgency=medium
 
   [ ZHANG Yuntian ]
