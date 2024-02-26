@@ -49,27 +49,15 @@ Depends: rsetup (= ${binary:Version}),
 Description: Radxa system config - First boot configuration
  This package contains the default first boot script.
 
-Package: rsetup-config-hciattach-ttys1
-Architecture: all
-Section: admin
-Priority: standard
-Depends: rsetup (= ${binary:Version}),
-         ${misc:Depends},
-Provides: rsetup-config-managed-ttys1
-Conflicts: rsetup-config-managed-ttys1
-Replaces: rsetup-config-managed-ttys1
-Description: Radxa system config - Attach UART Bluetooth on /dev/ttyS1
- This package attaches UART Bluetooth on /dev/ttyS1 on boot.
-
 Package: rsetup-config-aic8800-ttys1
 Architecture: all
 Section: admin
 Priority: standard
 Depends: rsetup (= ${binary:Version}),
          ${misc:Depends},
-Provides: rsetup-config-managed-ttys1
-Conflicts: rsetup-config-managed-ttys1
-Replaces: rsetup-config-managed-ttys1
+Provides: rsetup-config-hciattach-ttys1 (= 0.4.0)
+Conflicts: rsetup-config-hciattach-ttys1 (<< 0.4.0)
+Replaces: rsetup-config-hciattach-ttys1 (<< 0.4.0)
 Description: Radxa system config - Attach AIC8800 Bluetooth on /dev/ttyS1
  This package attaches AIC8800 Bluetooth on /dev/ttyS1 on boot.
 
