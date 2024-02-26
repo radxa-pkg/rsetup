@@ -55,8 +55,9 @@ Section: admin
 Priority: standard
 Depends: rsetup (= ${binary:Version}),
          ${misc:Depends},
-Conflicts: rsetup-config-aic8800-ttys1
-Replaces: rsetup-config-aic8800-ttys1
+Provides: rsetup-config-managed-ttys1
+Conflicts: rsetup-config-managed-ttys1
+Replaces: rsetup-config-managed-ttys1
 Description: Radxa system config - Attach UART Bluetooth on /dev/ttyS1
  This package attaches UART Bluetooth on /dev/ttyS1 on boot.
 
@@ -66,8 +67,9 @@ Section: admin
 Priority: standard
 Depends: rsetup (= ${binary:Version}),
          ${misc:Depends},
-Conflicts: rsetup-config-hciattach-ttys1
-Replaces: rsetup-config-hciattach-ttys1
+Provides: rsetup-config-managed-ttys1
+Conflicts: rsetup-config-managed-ttys1
+Replaces: rsetup-config-managed-ttys1
 Description: Radxa system config - Attach AIC8800 Bluetooth on /dev/ttyS1
  This package attaches AIC8800 Bluetooth on /dev/ttyS1 on boot.
 
