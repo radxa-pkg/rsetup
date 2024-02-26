@@ -1,3 +1,16 @@
+rsetup (0.3.46) jammy; urgency=medium
+
+  [ CodeChenL ]
+  * perf: add a concurrency limit for parse_dtbo and dtbo_is_compatible
+  * perf: removed __rebuild_overlays_worker
+  * feat: add cli function enable_overlays
+  * fix: fixes rsetup.service running connect_wi-fi error on startup
+
+  [ ZHANG Yuntian ]
+  * fix: ttyS1 should be manage by either packages, not both
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Mon, 26 Feb 2024 09:02:27 +0000
+
 rsetup (0.3.45) jammy; urgency=medium
 
   [ CodeChenL ]
