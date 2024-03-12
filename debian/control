@@ -25,6 +25,8 @@ Depends: device-tree-compiler,
          u-boot-menu,
          ${misc:Depends},
 Suggests: aicrf-test,
+          gpiod,
+          sudo,
           x-terminal-emulator,
 Description: Radxa system setup utility
  Radxa system setup utility (rsetup) provides an user friendly menu to
