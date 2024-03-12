@@ -20,9 +20,10 @@ ALLOWED_RCONFIG_FUNC+=("factory_stress")
 #
 factory_stress() {
     __parameter_count_check 2 "$@"
-    local triggered="false" pin_name="$1" trigger_value="$2" ret="0" pin_value="-1"
+    local triggered="false" pin_name="$1" trigger_value="$2" ret="0" pin_value="-1" gpio_line=()
 
-    pin_value="$(gpioget "$(gpiofind "$pin_name")" 2>/dev/null)" || ret=$?
+    read -ra gpio_line < <(gpiofind "$pin_name") || ret=$?
+    pin_value="$(gpioget "${gpio_line[@]}" 2>/dev/null)" || ret=$?
     if (( ret != 0 ))
     then
         echo "Unable to find the trigger pin '$pin_name'. Quit."
