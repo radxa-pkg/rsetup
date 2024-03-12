@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: rsetup\n"
-"POT-Creation-Date: 2024-03-12T20:25:38+08:00\n"
+"POT-Creation-Date: 2024-03-12T21:13:57+08:00\n"
 "PO-Revision-Date: 2024-03-12 20:07+0800\n"
 "Last-Translator:  <yt@radxa.com>\n"
 "Language-Team: Language zh-CN\n"
@@ -19,7 +19,7 @@ msgstr ""
 msgid "Special topics"
 msgstr "特别话题"
 
-#: docs/SUMMARY.md:4 docs/special/stress_test.md:1
+#: docs/SUMMARY.md:5 docs/special/stress_test.md:1
 msgid "Stress test image"
 msgstr "用于压力测试的镜像"
 
