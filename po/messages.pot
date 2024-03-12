@@ -1,0 +1,127 @@
+
+msgid ""
+msgstr ""
+"Project-Id-Version: rsetup\n"
+"POT-Creation-Date: 2024-03-12T20:25:38+08:00\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: docs/SUMMARY.md:1
+msgid "Summary"
+msgstr ""
+
+#: docs/SUMMARY.md:3
+msgid "Special topics"
+msgstr ""
+
+#: docs/SUMMARY.md:4 docs/special/stress_test.md:1
+msgid "Stress test image"
+msgstr ""
+
+#: docs/special/stress_test.md:3
+msgid ""
+"As of 0.4.1, `rsetup` can be used to create stress test images. This "
+"functionality relies on proper `gpiod` pin definition, as well as correct "
+"GPIO LEDs device tree definition, both are part of the system release "
+"requirements. As such, this can be used as a unified method to create stress "
+"test images."
+msgstr ""
+
+#: docs/special/stress_test.md:8
+msgid "`factory_stress`"
+msgstr ""
+
+#: docs/special/stress_test.md:10
+msgid ""
+"This function is implemented in `factory_stress`, where the detailed command "
+"definition can be found in the source code."
+msgstr ""
+
+#: docs/special/stress_test.md:13
+msgid ""
+"To run this command, you need to supply a GPIO pin name, which will be "
+"connected to the GND/VCC pin during the device boot, as well as the default "
+"state when no wire is connected."
+msgstr ""
+
+#: docs/special/stress_test.md:17
+msgid ""
+"The factory stress test procedure begins with the pin connected, which is "
+"recognized by `factory_stress` as a signal to start the stress test, and "
+"update LEDs' pattern. The QA engineer will then disconnect the wire once the "
+"LED pattern indicates the test is started. This way, if the device fails the "
+"stress test and is rebooted, `factory_stress` will not be started again due "
+"to the GPIO value does not match the specified value."
+msgstr ""
+
+#: docs/special/stress_test.md:24
+msgid "Prepare the image"
+msgstr ""
+
+#: docs/special/stress_test.md:26
+msgid ""
+"This is generally broken into 2 stages: find the GPIO pin's default status, "
+"and update the image."
+msgstr ""
+
+#: docs/special/stress_test.md:29
+msgid "Find the default GPIO status"
+msgstr ""
+
+#: docs/special/stress_test.md:31
+msgid ""
+"While in theory any GPIO pins can be used, we should look for pins that are "
+"easy to identify. One such example is pin 40 where is at the end of the "
+"header, as well as being close to a GND pin to pull down (if the default "
+"state is high)."
+msgstr ""
+
+#: docs/special/stress_test.md:35
+msgid ""
+"For example, on Radxa ZERO, if we want to use pin 7, we should run following "
+"command on ZERO:"
+msgstr ""
+
+#: docs/special/stress_test.md:43
+msgid ""
+"Since the default state is 1, we will instruct the QA engineer to connect "
+"pin 7 and pin 9 (which is GND) at the start of the test."
+msgstr ""
+
+#: docs/special/stress_test.md:46
+msgid "Update the image with stress test config"
+msgstr ""
+
+#: docs/special/stress_test.md:48
+msgid ""
+"To run the stress test at the boot time, first, mount and systemd-nspawn "
+"into the image (you can use `bsp` with `./bsp install stress.img` for this)."
+msgstr ""
+
+#: docs/special/stress_test.md:51
+msgid ""
+"You should then install the required stress test utilities. Currently, they "
+"are `stress-ng` and `memtester`:"
+msgstr ""
+
+#: docs/special/stress_test.md:58
+msgid ""
+"You should then update `/config/config.txt`. Continuing above example of "
+"Radxa ZERO, this is what we will put in that file:"
+msgstr ""
+
+#: docs/special/stress_test.md:62
+msgid "\"factory_stress PIN_7 0\""
+msgstr ""
+
+#: docs/special/stress_test.md:65
+msgid ""
+"Save and unmount the image. You can now deliver the stress test image to the "
+"QA engineer."
+msgstr ""

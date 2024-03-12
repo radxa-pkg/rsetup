@@ -1,0 +1,148 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: rsetup\n"
+"POT-Creation-Date: 2024-03-12T20:25:38+08:00\n"
+"PO-Revision-Date: 2024-03-12 20:07+0800\n"
+"Last-Translator:  <yt@radxa.com>\n"
+"Language-Team: Language zh-CN\n"
+"Language: zh-CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: docs/SUMMARY.md:1
+msgid "Summary"
+msgstr ""
+
+#: docs/SUMMARY.md:3
+msgid "Special topics"
+msgstr "特别话题"
+
+#: docs/SUMMARY.md:4 docs/special/stress_test.md:1
+msgid "Stress test image"
+msgstr "用于压力测试的镜像"
+
+#: docs/special/stress_test.md:3
+msgid ""
+"As of 0.4.1, `rsetup` can be used to create stress test images. This "
+"functionality relies on proper `gpiod` pin definition, as well as correct "
+"GPIO LEDs device tree definition, both are part of the system release "
+"requirements. As such, this can be used as a unified method to create stress "
+"test images."
+msgstr ""
+"自0.4.1版开始，`rsetup`可被用于生成压力测试镜像。此功能依赖于有效标注的"
+"`gpiod`引脚定义，以及正确的GPIO LED设备树定义。当前这两项均为我们发布系统时所"
+"需要实现的需求。基于此，`rsetup`可被用来作为通用的压力测试镜像生成方法。"
+
+#: docs/special/stress_test.md:8
+msgid "`factory_stress`"
+msgstr ""
+
+#: docs/special/stress_test.md:10
+msgid ""
+"This function is implemented in `factory_stress`, where the detailed command "
+"definition can be found in the source code."
+msgstr ""
+"压力测试相关的功能是在`factory_stress`中实现。详细的命令使用说明请参考源代"
+"码。"
+
+#: docs/special/stress_test.md:13
+msgid ""
+"To run this command, you need to supply a GPIO pin name, which will be "
+"connected to the GND/VCC pin during the device boot, as well as the default "
+"state when no wire is connected."
+msgstr ""
+"要运行该命令，需要提供一个 GPIO 引脚名称（在设备启动期间将连接至 GND/VCC 引"
+"脚），以及未连接导线时的默认状态。"
+
+#: docs/special/stress_test.md:17
+msgid ""
+"The factory stress test procedure begins with the pin connected, which is "
+"recognized by `factory_stress` as a signal to start the stress test, and "
+"update LEDs' pattern. The QA engineer will then disconnect the wire once the "
+"LED pattern indicates the test is started. This way, if the device fails the "
+"stress test and is rebooted, `factory_stress` will not be started again due "
+"to the GPIO value does not match the specified value."
+msgstr ""
+"工厂压力测试程序从连接引脚开始，`factory_stress`会将其识别为开始压力测试的信"
+"号，并更新 LED 指示灯的模式。一旦 LED 指示灯显示测试开始，质量保证工程师就会"
+"断开连接。这样，如果设备未能通过压力测试并重新启动，`factory_stress`就不会因 "
+"GPIO 值与指定值不匹配而再次启动。"
+
+#: docs/special/stress_test.md:24
+msgid "Prepare the image"
+msgstr "准备镜像"
+
+#: docs/special/stress_test.md:26
+msgid ""
+"This is generally broken into 2 stages: find the GPIO pin's default status, "
+"and update the image."
+msgstr "这通常分为两个阶段：查找 GPIO 引脚的默认状态和更新镜像。"
+
+#: docs/special/stress_test.md:29
+msgid "Find the default GPIO status"
+msgstr "查找 GPIO 引脚的默认状态"
+
+#: docs/special/stress_test.md:31
+msgid ""
+"While in theory any GPIO pins can be used, we should look for pins that are "
+"easy to identify. One such example is pin 40 where is at the end of the "
+"header, as well as being close to a GND pin to pull down (if the default "
+"state is high)."
+msgstr ""
+"虽然理论上可以使用任何 GPIO 引脚，但我们应该寻找易于识别的引脚。容易识别的引"
+"脚。40 号引脚就是一个很好的例子，它位于针座的末端，而且靠近 GND 引脚来进行下"
+"拉（如果默认状态为高电平）。"
+
+#: docs/special/stress_test.md:35
+msgid ""
+"For example, on Radxa ZERO, if we want to use pin 7, we should run following "
+"command on ZERO:"
+msgstr ""
+"例如，在 Radxa ZERO 上，如果我们要使用引脚 7，则应在 ZERO 上运行以下命令："
+
+#: docs/special/stress_test.md:43
+msgid ""
+"Since the default state is 1, we will instruct the QA engineer to connect "
+"pin 7 and pin 9 (which is GND) at the start of the test."
+msgstr ""
+"由于默认状态为 1，我们将指示 QA 工程师在测试开始时连接引脚 7 和引脚 9（接地）"
+
+#: docs/special/stress_test.md:46
+msgid "Update the image with stress test config"
+msgstr "更新镜像"
+
+#: docs/special/stress_test.md:48
+msgid ""
+"To run the stress test at the boot time, first, mount and systemd-nspawn "
+"into the image (you can use `bsp` with `./bsp install stress.img` for this)."
+msgstr ""
+"要在启动时运行压力测试，首先要挂载并将 systemd-nspawn 添加到镜像中（可以使用 "
+"`bsp` 和 `./bsp install stress.img` 来实现）。"
+
+#: docs/special/stress_test.md:51
+msgid ""
+"You should then install the required stress test utilities. Currently, they "
+"are `stress-ng` and `memtester`:"
+msgstr ""
+"然后安装所需的压力测试实用程序。目前，它们是 `stress-ng` 和 `memtester`："
+
+#: docs/special/stress_test.md:58
+#, fuzzy
+msgid ""
+"You should then update `/config/config.txt`. Continuing above example of "
+"Radxa ZERO, this is what we will put in that file:"
+msgstr ""
+"然后，您应更新 `/config/config.txt`。继续上面 Radxa ZERO 的示例，我们将在该文"
+"件中写入以下内容："
+
+#: docs/special/stress_test.md:62
+msgid "\"factory_stress PIN_7 0\""
+msgstr ""
+
+#: docs/special/stress_test.md:65
+msgid ""
+"Save and unmount the image. You can now deliver the stress test image to the "
+"QA engineer."
+msgstr "保存并卸载映像。现在就可以将压力测试镜像交付给 QA 工程师了。"

@@ -15,9 +15,6 @@ ALLOWED_RCONFIG_FUNC+=("factory_stress")
 # Commands:
 #   factory_stress <trigger_gpiod_name> <trigger_value>
 #
-# May need to manually install stress-ng first:
-#   sudo apt-get update && sudo apt-get install -y stress-ng memtester
-#
 factory_stress() {
     __parameter_count_check 2 "$@"
     local triggered="false" pin_name="$1" trigger_value="$2" ret="0" pin_value="-1" gpio_line=()

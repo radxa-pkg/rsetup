@@ -1,0 +1,26 @@
+[book]
+authors = ["Radxa Limited"]
+language = "en"
+multilingual = true
+src = "docs"
+title = "rsetup"
+
+[build]
+extra-watch-dirs = ["po"]
+
+[output.html]
+git-repository-url = "https://github.com/radxa-repo/rsetup/tree/main"
+edit-url-template = "https://github.com/radxa-repo/rsetup/edit/main/{path}"
+additional-css = [
+    "./theme/css/mdbook-admonish.css",
+    "./theme/css/language-picker.css",
+]
+
+[preprocessor]
+
+[preprocessor.gettext]
+after = ["links"]
+
+[preprocessor.admonish]
+command = "mdbook-admonish"
+assets_version = "3.0.0" # do not edit: managed by `mdbook-admonish install`
