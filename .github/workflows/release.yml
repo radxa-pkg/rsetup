@@ -2,7 +2,25 @@ name: Build & Release
 on:
   workflow_dispatch:
   pull_request:
+    paths-ignore:
+      - "**.md"
+      - .gitignore
+      - "docs/**"
+      - "theme/**"
+      - "po/**"
+      - book.toml
+      - .github/workflows/docs.yaml
   push:
+    branches:
+      - main
+    paths-ignore:
+      - "**.md"
+      - .gitignore
+      - "docs/**"
+      - "theme/**"
+      - "po/**"
+      - book.toml
+      - .github/workflows/docs.yaml
 
 permissions:
   contents: write
