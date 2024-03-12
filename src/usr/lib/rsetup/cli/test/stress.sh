@@ -3,20 +3,20 @@
 ALLOWED_RCONFIG_FUNC+=("factory_stress")
 
 
-# Run stress-ng for factory test
+# Run factory stress test
 #
 # Test will only run when a trigger GPIO is set to
 # Test status is reflected by on-board LEDs:
 # LED behaviours:
-#   500ms On-Off blink                          stress-ng running
-#   Solid On/Off                                stress-ng failed / not running
+#   500ms On-Off blink                          stress test running
+#   Solid On/Off                                stress test failed / not running
 #   Device default                              incorrect GPIO trigger pin
 #
 # Commands:
 #   factory_stress <trigger_gpiod_name> <trigger_value>
 #
 # May need to manually install stress-ng first:
-#   sudo apt-get update && sudo apt-get install -y stress-ng
+#   sudo apt-get update && sudo apt-get install -y stress-ng memtester
 #
 factory_stress() {
     __parameter_count_check 2 "$@"
@@ -55,9 +55,23 @@ factory_stress() {
     fi
 
     local available_memory core_count
-    available_memory=$(( $(grep MemAvailable /proc/meminfo | awk '{print $2}') / 1024 ))
+    available_memory=$(( $(grep MemAvailable /proc/meminfo | awk '{print $2}') ))
     core_count="$(nproc)"
 
-    echo "Factory stress now running in the background..."
-    stress-ng --cpu $((core_count)) --vm-bytes $((available_memory * 9 / 10 / core_count))M --vm $((core_count)) --io $((core_count / 4))
+    stress-ng --cpu $((core_count)) --io $((core_count / 4)) &
+    memtester $(( available_memory * 95 / 100 ))K &
+    echo "Factory stress test now running in the background..."
+    wait -n
+
+    echo "Factory stress test ended unexpectedly."
+    echo "Stop remaining tests and disable LEDs to report this."
+
+    for i in "$RBUILD_DRIVER_ROOT_PATH/$RBUILD_LED_GPIO_DRIVER"/*/leds/*
+    do
+        if [[ -f "$i/trigger" ]]
+        then
+            set_led_trigger "$(basename "$i")" "none"
+        fi
+    done
+    return 1
 }
