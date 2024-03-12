@@ -64,3 +64,19 @@ echo "factory_stress PIN_7 0" | sudo tee -a /config/config.txt
 
 Save and unmount the image. You can now deliver the stress test image to the QA
 engineer.
+
+## Usage
+
+It is recommended that the first boot (if using removable storage) should NOT
+set GPIO. This will allow `rsetup` service to complete the first boot configuration,
+and delete `before.txt`. LEDs should be off when the above preparation is completed.
+Otherwise, it will repeat the first boot configuration every boot, significantly
+increasing the wait time before the QA engineer can move on to the next device.
+
+QA engineer should then connect the GPIO pin as instructed. The status LED should
+be heart beating (quick 2 blinks then some delay) initially before `rsetup` service
+is started, then either switch to a consistent on-off pattern (when stress is running),
+or off (when stress failed to launch).
+
+If the stress is running, QA engineer should remove the jump wire. The stress
+running status can be checked a few hours later.
