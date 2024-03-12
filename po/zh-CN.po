@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: rsetup\n"
-"POT-Creation-Date: 2024-03-12T21:13:57+08:00\n"
+"POT-Creation-Date: 2024-03-12T22:35:15+08:00\n"
 "PO-Revision-Date: 2024-03-12 20:07+0800\n"
 "Last-Translator:  <yt@radxa.com>\n"
 "Language-Team: Language zh-CN\n"
@@ -65,9 +65,9 @@ msgid ""
 "stress test and is rebooted, `factory_stress` will not be started again due "
 "to the GPIO value does not match the specified value."
 msgstr ""
-"工厂压力测试程序从连接引脚开始，`factory_stress`会将其识别为开始压力测试的信"
-"号，并更新 LED 指示灯的模式。一旦 LED 指示灯显示测试开始，质量保证工程师就会"
-"断开连接。这样，如果设备未能通过压力测试并重新启动，`factory_stress`就不会因 "
+"工厂压力测试程序需首先连接指定引脚，`factory_stress`会将其识别为开始压力测试的信"
+"号，并更新 LED 指示灯的模式。一旦 LED 指示灯显示测试开始，质量保证工程师应当"
+"断开连接。如此，若设备未能通过压力测试并重新启动，`factory_stress`就不会因 "
 "GPIO 值与指定值不匹配而再次启动。"
 
 #: docs/special/stress_test.md:24
@@ -91,9 +91,9 @@ msgid ""
 "header, as well as being close to a GND pin to pull down (if the default "
 "state is high)."
 msgstr ""
-"虽然理论上可以使用任何 GPIO 引脚，但我们应该寻找易于识别的引脚。容易识别的引"
-"脚。40 号引脚就是一个很好的例子，它位于针座的末端，而且靠近 GND 引脚来进行下"
-"拉（如果默认状态为高电平）。"
+"虽然理论上可以使用任何 GPIO 引脚，但我们应该使用易于识别的引脚。"
+"40 号引脚就是一个很好的例子，它位于针座的末端，而且靠近 GND 引脚来进行下"
+"拉（如果默认状态为高电平的话）。"
 
 #: docs/special/stress_test.md:35
 msgid ""
@@ -107,7 +107,7 @@ msgid ""
 "Since the default state is 1, we will instruct the QA engineer to connect "
 "pin 7 and pin 9 (which is GND) at the start of the test."
 msgstr ""
-"由于默认状态为 1，我们将指示 QA 工程师在测试开始时连接引脚 7 和引脚 9（接地）"
+"由于默认状态为 1，我们需指示 QA 工程师在测试开始时连接引脚 7 和引脚 9（接地）"
 
 #: docs/special/stress_test.md:46
 msgid "Update the image with stress test config"
@@ -119,22 +119,21 @@ msgid ""
 "into the image (you can use `bsp` with `./bsp install stress.img` for this)."
 msgstr ""
 "要在启动时运行压力测试，首先要挂载并将 systemd-nspawn 添加到镜像中（可以使用 "
-"`bsp` 和 `./bsp install stress.img` 来实现）。"
+"`bsp` 和 `./bsp install stress.img` 来完成这个操作）。"
 
 #: docs/special/stress_test.md:51
 msgid ""
 "You should then install the required stress test utilities. Currently, they "
 "are `stress-ng` and `memtester`:"
 msgstr ""
-"然后安装所需的压力测试实用程序。目前，它们是 `stress-ng` 和 `memtester`："
+"然后安装所需的压力测试工具。目前所使用的是 `stress-ng` 和 `memtester`："
 
 #: docs/special/stress_test.md:58
-#, fuzzy
 msgid ""
 "You should then update `/config/config.txt`. Continuing above example of "
 "Radxa ZERO, this is what we will put in that file:"
 msgstr ""
-"然后，您应更新 `/config/config.txt`。继续上面 Radxa ZERO 的示例，我们将在该文"
+"然后，您应更新 `/config/config.txt`。继续此前 Radxa ZERO 的示例，我们将在该文"
 "件中写入以下内容："
 
 #: docs/special/stress_test.md:62
@@ -145,4 +144,38 @@ msgstr ""
 msgid ""
 "Save and unmount the image. You can now deliver the stress test image to the "
 "QA engineer."
-msgstr "保存并卸载映像。现在就可以将压力测试镜像交付给 QA 工程师了。"
+msgstr "保存并解除镜像挂载。您现在可以将压力测试镜像交付给 QA 工程师了。"
+
+#: docs/special/stress_test.md:68
+msgid "Usage"
+msgstr "使用"
+
+#: docs/special/stress_test.md:70
+msgid ""
+"It is recommended that the first boot (if using removable storage) should "
+"NOT set GPIO. This will allow `rsetup` service to complete the first boot "
+"configuration, and delete `before.txt`. LEDs should be off when the above "
+"preparation is completed. Otherwise, it will repeat the first boot "
+"configuration every boot, significantly increasing the wait time before the "
+"QA engineer can move on to the next device."
+msgstr ""
+"如果使用可移动存储设备来重复使用压力测试镜像，第一次启动时建议不要连接 GPIO。这将允许 `rsetup` 服务"
+"完成首次启动配置，并删除 `before.txt`。配置完成后，LED 会自动关闭。否则，系统将在每"
+"次启动时重复首次启动配置，这将大大增加 QA 工程师转到下一个设备前的等待时间。"
+
+#: docs/special/stress_test.md:76
+msgid ""
+"QA engineer should then connect the GPIO pin as instructed. The status LED "
+"should be heart beating (quick 2 blinks then some delay) initially before "
+"`rsetup` service is started, then either switch to a consistent on-off "
+"pattern (when stress is running), or off (when stress failed to launch)."
+msgstr ""
+"完成首次启动配置后，质量保证工程师应按指示连接 GPIO 引脚。在启动 `rsetup` 服务之前，LED 状态指示灯最初应"
+"该是心跳模式（快速闪烁 2 次，然后稍有延迟）。此后，该指示灯要么切换为稳定的开-关切换状态（此时压力测试正在正常运行），要"
+"么熄灭（此时压力测试启动失败）。"
+
+#: docs/special/stress_test.md:81
+msgid ""
+"If the stress is running, QA engineer should remove the jump wire. The "
+"stress running status can be checked a few hours later."
+msgstr "如果压力测试正在正常运行，质量保证工程师应拆除跳线。压力测试的结果可在若干小时后再来查看。"

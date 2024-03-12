@@ -10,7 +10,6 @@ all: build
 #
 # Development
 #
-
 .PHONY: overlay
 overlay:
 	$(eval OVERLAY_DIR := $(shell mktemp -d))
@@ -63,6 +62,25 @@ $(SRC-DOC):
 .PHONY: $(SRC-DOC)/SOURCE
 $(SRC-DOC)/SOURCE: $(SRC-DOC)
 	echo -e "git clone $(shell git remote get-url origin)\ngit checkout $(shell git rev-parse HEAD)" > "$@"
+
+#
+# Documentation
+#
+.PHONY: serve
+serve:
+	mdbook serve
+
+.PHONY: serve_zh-CN
+serve_zh-CN:
+	MDBOOK_BOOK__LANGUAGE=zh-CN mdbook serve -d book/zh-CN
+
+.PHONY: translate
+translate:
+	MDBOOK_OUTPUT='{"xgettext": {"pot-file": "messages.pot"}}' mdbook build -d po
+	for i in po/*.po; \
+	do \
+		msgmerge --update $$i po/messages.pot; \
+	done
 
 #
 # Clean
