@@ -29,11 +29,11 @@ update the image.
 ### Find the default GPIO status
 
 While in theory any GPIO pins can be used, we should look for pins that are easy
-to identify. One such example is pin 40 where is at the end of the header, as well
+to identify. One such example is pin 40 which is at the end of the header, as well
 as being close to a GND pin to pull down (if the default state is high).
 
-For example, on Radxa ZERO, if we want to use pin 7, we should run following command
-on ZERO:
+For example, on Radxa ZERO, if we want to use pin 7, we should run the following
+command on ZERO:
 
 ```bash
 radxa@radxa-zero:~$ gpioget $(gpiofind PIN_7)
@@ -45,8 +45,8 @@ and pin 9 (which is GND) at the start of the test.
 
 ### Update the image with stress test config
 
-To run the stress test at the boot time, first, mount and systemd-nspawn into the
-image (you can use `bsp` with `./bsp install stress.img` for this).
+To run the stress test at the boot time, first, mount and `systemd-nspawn` into
+the image (you can use `bsp` with `./bsp install stress.img` for this).
 
 You should then install the required stress test utilities. Currently, they are
 `stress-ng` and `memtester`:
@@ -55,11 +55,20 @@ You should then install the required stress test utilities. Currently, they are
 sudo apt-get update && sudo apt-get install -y stress-ng memtester
 ```
 
-You should then update `/config/config.txt`. Continuing above example of Radxa
-ZERO, this is what we will put in that file:
+You should then delete `/config/before.txt`, which will cause a long boot delay
+due to the need to complete the first boot configuration. You can put a very basic
+system configuration there (so you can log in to check the issue), and then start
+the stress test. Continuing the above example of Radxa ZERO, this is the command
+we will use:
 
 ```bash
-echo "factory_stress PIN_7 0" | sudo tee -a /config/config.txt
+sudo rm /config/before.txt
+cat << EOF | sudo tee -a /config/config.txt
+no_fail
+add_user radxa radxa
+user_append_group radxa sudo
+factory_stress PIN_7 0
+EOF
 ```
 
 Save and unmount the image. You can now deliver the stress test image to the QA
@@ -67,16 +76,22 @@ engineer.
 
 ## Usage
 
-It is recommended that the first boot (if using removable storage) should NOT
-set GPIO. This will allow `rsetup` service to complete the first boot configuration,
-and delete `before.txt`. LEDs should be off when the above preparation is completed.
-Otherwise, it will repeat the first boot configuration every boot, significantly
-increasing the wait time before the QA engineer can move on to the next device.
+1. Connect the GPIO jumper wire as instructed, and boot the system.
 
-QA engineer should then connect the GPIO pin as instructed. The status LED should
-be heart beating (quick 2 blinks then some delay) initially before `rsetup` service
-is started, then either switch to a consistent on-off pattern (when stress is running),
-or off (when stress failed to launch).
+2. The device will power on normally. Once it reaches the Linux kernel, the LED
+   should be heartbeating: quick 2 blinks then after some delay, repeat.
 
-If the stress is running, QA engineer should remove the jump wire. The stress
-running status can be checked a few hours later.
+3. The stress service will then start after the system is fully booted. It will
+   change the light pattern in 2 ways:
+
+   - Off: This indicates the stress test has failed to start. Please contact for
+     support.
+   - Switching at 0.5s interval: This indicates the stress is running.
+
+4. Disconnect the GPIO jumper wire. The device status can be checked in a few hours.
+
+## Final LED status
+
+- Switching at 0.5s interval: This indicates the stress is running. **PASS**
+- On: This indicates the system was locked up and unable to reboot. **FAIL**
+- Off: Either the system was locked up and unable to reboot, or the device rebooted. **FAIL**
