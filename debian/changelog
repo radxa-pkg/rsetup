@@ -1,3 +1,24 @@
+rsetup (0.4.1) jammy; urgency=medium
+
+  [ dependabot[bot] ]
+  * Bump softprops/action-gh-release from 1 to 2
+
+  [ ZHANG Yuntian ]
+  * refactor: reorder make dch's argument ordering
+  * feat: add factory_stress command
+  * fix: need to split gpiofind's output into 2 arguments
+  * feat: using memtester to stress memory instead of stress-ng
+  * feat: add documentation
+  * fix: use correct MDBOOK_OUTPUT__HTML__SITE_URL
+  * fix: do not trigger code build if we are only update documentation
+  * fix: bump POT-Creation-Date
+  * doc: stress: add usage
+  * doc: stress: update translation
+  * doc: stress: make the state change more clear
+  * doc: stress: update zh-CN translation
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Fri, 15 Mar 2024 10:10:48 +0000
+
 rsetup (0.4.0) jammy; urgency=medium
 
   [ ZHANG Yuntian ]
