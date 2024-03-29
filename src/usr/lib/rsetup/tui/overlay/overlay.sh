@@ -145,6 +145,7 @@ __overlay_manage() {
 
     if (( ${#items[@]} == 0 ))
     then
+        u-boot-update
         return
     fi
 
