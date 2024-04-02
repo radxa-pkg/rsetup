@@ -1,3 +1,13 @@
+rsetup (0.4.2) jammy; urgency=medium
+
+  [ CodeChenL ]
+  * fix: add missing u-boot-update in _overlay_manage
+
+  [ dependabot[bot] ]
+  * build(deps): bump actions/configure-pages from 4 to 5
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Tue, 02 Apr 2024 08:23:41 +0000
+
 rsetup (0.4.1) jammy; urgency=medium
 
   [ dependabot[bot] ]
