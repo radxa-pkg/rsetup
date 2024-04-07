@@ -81,9 +81,8 @@ rebuild_overlays() {
             if [[ -f "$new_overlays/$i" ]]
             then
                 enabled_overlays+=( "$i" )
-                rm -f "$new_overlays/$i"
             fi
-            rm -f "$new_overlays/$i.disabled"
+            rm -f "$new_overlays/$i" "$new_overlays/$i.disabled"
         done
     fi
 
@@ -98,20 +97,41 @@ rebuild_overlays() {
 
     mapfile -t dtbos < <(dtbo_is_compatible "${dtbos[@]}")
 
+    # This loop is a bottleneck due to expensive operations
+    # Enabling parallelism brings total execution time from 38.453s to 21.633s
+    local nproc
+    nproc=$(( $(nproc) ))
     for i in "${dtbos[@]}"
     do
-        cp "$i" "$new_overlays/$(basename "$i").disabled"
-        basename "$i" >> "$new_overlays/managed.list"
+        while (( $(jobs -r | wc -l) > nproc ))
+        do
+            sleep 0.1
+        done
+        (
+            cp "$i" "$new_overlays/$(basename "$i").disabled"
+            exec 100>>"$new_overlays/managed.list"
+            flock 100
+            basename "$i" >&100
+        ) &
     done
     wait
 
+    # This loop is not a bottleneck
+    # We add parallelism to make it uniform
     for i in "${enabled_overlays[@]}"
     do
-        if [[ -f "$new_overlays/${i}.disabled" ]]
-        then
-            mv -- "$new_overlays/${i}.disabled" "$new_overlays/$i"
-        fi
+        while (( $(jobs -r | wc -l) > nproc ))
+        do
+            sleep 0.1
+        done
+        (
+            if [[ -f "$new_overlays/${i}.disabled" ]]
+            then
+                mv -- "$new_overlays/${i}.disabled" "$new_overlays/$i"
+            fi
+        ) &
     done
+    wait
 
     rm -rf "${old_overlays}_old"
     mv "$old_overlays" "${old_overlays}_old"
