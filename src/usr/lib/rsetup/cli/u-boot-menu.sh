@@ -65,6 +65,9 @@ rebuild_overlays() {
     local old_overlays new_overlays enabled_overlays=()
     old_overlays="$(realpath "$U_BOOT_FDT_OVERLAYS_DIR")"
     new_overlays="${old_overlays}_new"
+
+    echo "Rebuilding overlay data folder for '$version'..."
+
     if [[ -d "$old_overlays" ]]
     then
         cp -aR "$old_overlays" "$new_overlays"
@@ -74,6 +77,7 @@ rebuild_overlays() {
 
     if [[ -f "$new_overlays/managed.list" ]]
     then
+        echo "Removing managed overlays..."
         mapfile -t RSETUP_MANAGED_OVERLAYS < "$new_overlays/managed.list"
 
         for i in "${RSETUP_MANAGED_OVERLAYS[@]}"
@@ -95,12 +99,14 @@ rebuild_overlays() {
     rm -f "$new_overlays/managed.list"
     touch "$new_overlays/managed.list"
 
+    echo "Building list of compatible overlays..."
     mapfile -t dtbos < <(dtbo_is_compatible "${dtbos[@]}")
 
     # This loop is a bottleneck due to expensive operations
     # Enabling parallelism brings total execution time from 38.453s to 21.633s
     local nproc
     nproc=$(( $(nproc) ))
+    echo "Installing compatible overlays..."
     for i in "${dtbos[@]}"
     do
         while (( $(jobs -r | wc -l) > nproc ))
@@ -118,6 +124,7 @@ rebuild_overlays() {
 
     # This loop is not a bottleneck
     # We add parallelism to make it uniform
+    echo "Reenable previously enabled overlays..."
     for i in "${enabled_overlays[@]}"
     do
         while (( $(jobs -r | wc -l) > nproc ))
@@ -133,9 +140,12 @@ rebuild_overlays() {
     done
     wait
 
+    echo "Commiting changes..."
     rm -rf "${old_overlays}_old"
     mv "$old_overlays" "${old_overlays}_old"
     mv "$new_overlays" "$old_overlays"
+
+    echo "Overlay data folder has been successfully rebuilt."
 }
 
 enable_overlays() {

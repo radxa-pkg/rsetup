@@ -11,7 +11,6 @@ __yz-update-overlays() {
 
     case $ACTION in
         configure)
-            echo "Updating overlays for $ABI ..."
             if ! rebuild_overlays "$ABI" "$(get_soc_vendor)"
             then
                 echo "Failed to update overlays."
