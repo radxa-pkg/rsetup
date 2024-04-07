@@ -1,3 +1,13 @@
+rsetup (0.4.3) jammy; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * ci: sync with recent projects
+  * fix: vendor is an optional argument for rebuild_overlays
+  * fix: reintroduce parallelism to speed up rebuild_overlays
+  * feat: add logging for rebuild_overlays
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Sun, 07 Apr 2024 12:01:07 +0000
+
 rsetup (0.4.2) jammy; urgency=medium
 
   [ CodeChenL ]
