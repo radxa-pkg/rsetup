@@ -107,7 +107,7 @@ __overlay_show() {
 __overlay_validate() {
     local i item
     check_overlay_conflict_init
-    for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
+    for i in "${RTUI_CHECKLIST_STATE_NEW[@]}"
     do
         item="$(checklist_getitem "$i")"
         if ! check_overlay_conflict "$U_BOOT_FDT_OVERLAYS_DIR/$item"*
@@ -138,7 +138,7 @@ __overlay_manage() {
     disable_overlays
 
     local items=() ret
-    for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
+    for i in "${RTUI_CHECKLIST_STATE_NEW[@]}"
     do
         items+=("$(checklist_getitem "$i")")
     done
@@ -170,7 +170,7 @@ __overlay_info() {
     fi
 
     local item title category description exclusive package i
-    for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
+    for i in "${RTUI_CHECKLIST_STATE_NEW[@]}"
     do
         item="$(checklist_getitem "$i")"
         mapfile -t title < <(parse_dtbo "title" "$U_BOOT_FDT_OVERLAYS_DIR/$item"*)
