@@ -10,7 +10,7 @@ __hardware_gstreamer_test_picture() {
     local temp
     temp="$(mktemp tmp.XXXXXXXXXX.jpg)"
 
-    if gst-launch-1.0 v4l2src "device=/dev/$RSETUP_MENU_SELECTED" io-mode=4 ! \
+    if gst-launch-1.0 v4l2src "device=/dev/$RTUI_MENU_SELECTED" io-mode=4 ! \
                       autovideoconvert ! \
                       video/x-raw,format=UYVY,width=1920,height=1080 ! \
                       jpegenc ! \
@@ -19,13 +19,13 @@ __hardware_gstreamer_test_picture() {
         msgbox "Test image is saved at $temp."
     else
         rm -f "$temp"
-        msgbox "Unable to capture an image with $RSETUP_MENU_SELECTED device.
+        msgbox "Unable to capture an image with $RTUI_MENU_SELECTED device.
 Please check if you have the required libraries installed."
     fi
 }
 
 __hardware_gstreamer_test_live() {
-    gst-launch-1.0 v4l2src "device=/dev/$RSETUP_MENU_SELECTED" io-mode=4 ! \
+    gst-launch-1.0 v4l2src "device=/dev/$RTUI_MENU_SELECTED" io-mode=4 ! \
                    autovideoconvert ! \
                    video/x-raw,format=NV12,width=1920,height=1080,framerate=30/1 ! \
                    xvimagesink
@@ -68,7 +68,7 @@ __hardware_gpio_leds() {
 
 Please make sure they are enabled first."
     if ! checklist_show "Below are the available LEDs and their triggers.
-Select any to update their trigger." || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 0 ))
+Select any to update their trigger." || (( ${#RTUI_CHECKLIST_STATE_NEW[@]} == 0 ))
     then
         return
     fi
@@ -81,17 +81,17 @@ Select any to update their trigger." || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 
     do
         radiolist_add "$i" "OFF"
     done
-    if ! radiolist_show "Please select the new trigger:" || (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} == 0 ))
+    if ! radiolist_show "Please select the new trigger:" || (( ${#RTUI_RADIOLIST_STATE_NEW[@]} == 0 ))
     then
         return
     fi
 
     config_transaction_start
-    for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
+    for i in "${RTUI_CHECKLIST_STATE_NEW[@]}"
     do
         read -r -a i <<< "$(checklist_getitem "$i")"
         remove_config set_led_trigger "${i[0]}"
-        enable_config set_led_trigger "${i[0]}" "$(radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}")"
+        enable_config set_led_trigger "${i[0]}" "$(radiolist_getitem "${RTUI_RADIOLIST_STATE_NEW[0]}")"
     done
     config_transaction_commit
 
@@ -191,7 +191,7 @@ __hardware_rgb_leds() {
 
 Please make sure they are enabled first."
     if ! checklist_show "Below are the available LEDs.
-Select any to update their pattern." || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 0 ))
+Select any to update their pattern." || (( ${#RTUI_CHECKLIST_STATE_NEW[@]} == 0 ))
     then
         return
     fi
@@ -201,20 +201,20 @@ Select any to update their pattern." || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 
     do
         radiolist_add "$i" "OFF"
     done
-    if ! radiolist_show "Please select the new pattern:" || (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} == 0 ))
+    if ! radiolist_show "Please select the new pattern:" || (( ${#RTUI_RADIOLIST_STATE_NEW[@]} == 0 ))
     then
         return
     fi
 
     local patterns=()
-    mapfile -t patterns < <(__pattern_"$(radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}")")
+    mapfile -t patterns < <(__pattern_"$(radiolist_getitem "${RTUI_RADIOLIST_STATE_NEW[0]}")")
     if (( ${#patterns[@]} == 0 ))
     then
         return
     fi
 
     config_transaction_start
-    for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
+    for i in "${RTUI_CHECKLIST_STATE_NEW[@]}"
     do
         read -r -a i <<< "$(checklist_getitem "$i")"
         remove_config set_led_trigger "${i[0]}-red"
@@ -255,12 +255,12 @@ __hardware_thermal() {
     radiolist_emptymsg "No thermal governor is available."
 
     if ! radiolist_show "Please select the thermal governor.
-Recommendation: fanless or DC fan => power_allocator | PWM fan => step_wise" || (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} == 0 ))
+Recommendation: fanless or DC fan => power_allocator | PWM fan => step_wise" || (( ${#RTUI_RADIOLIST_STATE_NEW[@]} == 0 ))
     then
         return
     fi
 
-    selected_governor="$(radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}")"
+    selected_governor="$(radiolist_getitem "${RTUI_RADIOLIST_STATE_NEW[0]}")"
     if enable_unique_config set_thermal_governor "$selected_governor"
     then
         msgbox "Thermal governor has been updated."
@@ -311,11 +311,11 @@ Please check if the screen is connected and powered on."
         do
             radiolist_add "$i" "OFF"
         done
-        if ! radiolist_show "Please select the DSI monitor to be mirrored:" || (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} == 0 ))
+        if ! radiolist_show "Please select the DSI monitor to be mirrored:" || (( ${#RTUI_RADIOLIST_STATE_NEW[@]} == 0 ))
         then
             return
         fi
-        selected_dsi="$(radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}")"
+        selected_dsi="$(radiolist_getitem "${RTUI_RADIOLIST_STATE_NEW[0]}")"
     fi
 
     if (( ${#external_monitors[@]} > 1 ))
@@ -325,12 +325,12 @@ Please check if the screen is connected and powered on."
         do
             checklist_add "$i" "OFF"
         done
-        if ! checklist_show "Please select external monitors to mirror the DSI monitor:" || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 0 ))
+        if ! checklist_show "Please select external monitors to mirror the DSI monitor:" || (( ${#RTUI_CHECKLIST_STATE_NEW[@]} == 0 ))
         then
             return
         fi
         selected_external=()
-        for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
+        for i in "${RTUI_CHECKLIST_STATE_NEW[@]}"
         do
             selected_external+=( "$(checklist_getitem "$i")" )
         done
@@ -405,7 +405,7 @@ Select any to update their status."
         return
     fi
 
-    for i in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
+    for i in "${RTUI_CHECKLIST_STATE_NEW[@]}"
     do
         udc_function_list+=("$(checklist_getitem "$i")")
     done
@@ -415,11 +415,11 @@ Select any to update their status."
         return
     fi
 
-    length=${#RSETUP_CHECKLIST[@]}
+    length=${#RTUI_CHECKLIST[@]}
     for ((i = 0; i < length; i+=3))
     do
-        udc_function="${RSETUP_CHECKLIST[i+1]}"
-        status="${RSETUP_CHECKLIST[i+2]}"
+        udc_function="${RTUI_CHECKLIST[i+1]}"
+        status="${RTUI_CHECKLIST[i+2]}"
         if [[ "$status" == "ON" ]]
         then
             systemctl enable --now "$udc_function"

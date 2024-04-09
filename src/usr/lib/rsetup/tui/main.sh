@@ -1,20 +1,23 @@
 # shellcheck shell=bash
 
-# shellcheck source=src/usr/lib/rsetup/tui/main.sh
-source "/usr/lib/rsetup/mod/tui.sh"
 
+# shellcheck source=externals/librtui/src/tui.sh
+source "/usr/lib/librtui/tui.sh"
+
+# shellcheck source=src/usr/lib/rsetup/tui/overlay/overlay.sh
 source "/usr/lib/rsetup/tui/overlay/overlay.sh"
+# shellcheck source=src/usr/lib/rsetup/tui/comm/comm.sh
 source "/usr/lib/rsetup/tui/comm/comm.sh"
+# shellcheck source=src/usr/lib/rsetup/tui/hardware/hardware.sh
 source "/usr/lib/rsetup/tui/hardware/hardware.sh"
+# shellcheck source=src/usr/lib/rsetup/tui/local/local.sh
 source "/usr/lib/rsetup/tui/local/local.sh"
+# shellcheck source=src/usr/lib/rsetup/tui/system/system.sh
 source "/usr/lib/rsetup/tui/system/system.sh"
+# shellcheck source=src/usr/lib/rsetup/tui/task/task.sh
 source "/usr/lib/rsetup/tui/task/task.sh"
+# shellcheck source=src/usr/lib/rsetup/tui/user/user.sh
 source "/usr/lib/rsetup/tui/user/user.sh"
-
-if $DEBUG
-then
-    source "/usr/lib/rsetup/tui/test/test.sh"
-fi
 
 __tui_about() {
     msgbox "rsetup - Radxa system setup utility
@@ -33,7 +36,6 @@ __tui_main() {
     if $DEBUG
     then
         menu_add __task "Common Tasks"
-        menu_add __test "TUI Test"
     fi
     menu_add __tui_about "About"
     menu_show "Please select an option below:"

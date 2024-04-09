@@ -39,12 +39,12 @@ __system_select_compatible_bootloader() {
     done
     radiolist_emptymsg "No compatible bootloader is available."
 
-    if ! radiolist_show "Please select the bootloader to be installed:" || (( ${#RSETUP_RADIOLIST_STATE_NEW[@]} == 0 ))
+    if ! radiolist_show "Please select the bootloader to be installed:" || (( ${#RTUI_RADIOLIST_STATE_NEW[@]} == 0 ))
     then
         return 1
     fi
 
-    radiolist_getitem "${RSETUP_RADIOLIST_STATE_NEW[0]}"
+    radiolist_getitem "${RTUI_RADIOLIST_STATE_NEW[0]}"
 }
 
 __system_bootloader_helper() {

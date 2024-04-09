@@ -58,7 +58,7 @@ __user_enable_auto_login (){
     do
         checklist_add "$(basename "$i")" "OFF"
     done
-    if ! checklist_show "Please select the interface(s) you want to enable auto login:" || (( ${#RSETUP_CHECKLIST_STATE_NEW[@]} == 0))
+    if ! checklist_show "Please select the interface(s) you want to enable auto login:" || (( ${#RTUI_CHECKLIST_STATE_NEW[@]} == 0))
     then
         return
     fi
@@ -69,10 +69,10 @@ Are you sure to continue?"
         return
     fi
 
-    for selected_tty_shrinked_index in "${RSETUP_CHECKLIST_STATE_NEW[@]}"
+    for selected_tty_shrinked_index in "${RTUI_CHECKLIST_STATE_NEW[@]}"
     do
         selected_tty_real_index=$((3*${selected_tty_shrinked_index//\"}+1))
-        selected_tty_device=${RSETUP_CHECKLIST[${selected_tty_real_index}]}
+        selected_tty_device=${RTUI_CHECKLIST[${selected_tty_real_index}]}
         SYSTEMD_OVERRIDE=/etc/systemd/system/getty.target.wants/$selected_tty_device.d
         mkdir -p "$SYSTEMD_OVERRIDE"
         cat << EOF > "$SYSTEMD_OVERRIDE/override.conf"

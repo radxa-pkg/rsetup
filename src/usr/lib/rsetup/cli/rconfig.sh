@@ -4,7 +4,7 @@
 # shellcheck source=src/usr/lib/rsetup/mod/pkg.sh
 source "/usr/lib/rsetup/mod/pkg.sh"
 
-ALLOWED_RCONFIG_FUNC+=("request_reboot" "headless" "no_fail")
+ALLOWED_RCONFIG_FUNC+=("request_reboot" "headless" "no_fail" "log")
 
 RCONFIG_REBOOT="false"
 
@@ -98,4 +98,8 @@ __on_boot() {
     then
         reboot
     fi
+}
+
+log() {
+	printf "%s\n" "$*" >&2
 }
