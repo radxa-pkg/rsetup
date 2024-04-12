@@ -44,6 +44,9 @@ resize_root
 disable_service ssh
 disable_service smbd
 disable_service nmbd
+# Disable systemd-networkd due to systemd-networkd-wait-online blocking network.target
+# We use NetworkManger, so systemd-networkd can be safely disabled
+disable_service systemd-networkd
 
 # Generate unique hardware fingerprint
 #
