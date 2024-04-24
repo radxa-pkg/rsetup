@@ -51,11 +51,21 @@ jobs:
           fi
       - name: Test
         run: |
-          make test
-      - name: Build
-        run: |
           sudo apt-get update
           sudo apt-get build-dep --no-install-recommends -y .
+          sudo apt-get install --no-install-recommends -y git-buildpackage
+          export DEBEMAIL="dev@radxa.com"
+          export DEBFULLNAME='"Radxa Computer Co., Ltd"'
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git branch -m GITHUB_RUNNER || true
+          git branch -D main || true
+          git switch -c main || true
+          make dch
+          make test all deb
+          git reset --hard HEAD~1
+      - name: Build
+        run: |
           make all deb
       - name: Workaround actions/upload-artifact#176
         run: |
