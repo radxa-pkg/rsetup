@@ -14,7 +14,8 @@ all: build
 overlay:
 	$(eval OVERLAY_DIR := $(shell mktemp -d))
 	sudo mount -t overlay overlay -o lowerdir=/:./src:./overlay "$(OVERLAY_DIR)"
-	sudo mount -o ro --bind ./externals/librtui/src "$(OVERLAY_DIR)/usr/lib/librtui"
+	sudo mount -o ro --bind ./externals/librtui/src/lib/librtui "$(OVERLAY_DIR)/usr/lib/librtui"
+	sudo mount -o ro --bind ./externals/librtui/src/share/librtui "$(OVERLAY_DIR)/usr/share/librtui"
 	sudo systemd-nspawn --link-journal no -D $(OVERLAY_DIR) $(OVERLAY_CMD) || true
 	sudo umount -R $(OVERLAY_DIR)
 	rmdir $(OVERLAY_DIR)

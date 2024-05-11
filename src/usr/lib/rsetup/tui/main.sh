@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 
-# shellcheck source=externals/librtui/src/tui.sh
+# shellcheck source=externals/librtui/src/lib/librtui/tui.sh
 source "/usr/lib/librtui/tui.sh"
 
 # shellcheck source=src/usr/lib/rsetup/tui/overlay/overlay.sh
