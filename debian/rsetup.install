@@ -2,3 +2,4 @@ src/usr/bin /usr
 src/usr/lib/rsetup /usr/lib
 src/usr/share/applications /usr/share
 src/usr/share/man/man8/rsetup.8 /usr/share/man/man8
+src/usr/share/bash-completion /usr/share
