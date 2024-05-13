@@ -17,13 +17,13 @@ __local_wifi_country() {
     iface=$(iw dev | grep Interface | awk '{print $2}')
     if [[ -z "$iface" ]]
     then
-        msgbox "No wireless interface found."
+        msgbox "No wireless interface found." "$RTUI_PALETTE_ERROR"
         return 1
     fi
 
     if ! wpa_cli -i "$iface" status &>/dev/null
     then
-        msgbox "Could not communicate with wpa_supplicant."
+        msgbox "Could not communicate with wpa_supplicant." "$RTUI_PALETTE_ERROR"
         return 1
     fi
 
