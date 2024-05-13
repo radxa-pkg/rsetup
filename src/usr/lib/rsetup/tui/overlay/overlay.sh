@@ -122,7 +122,7 @@ __overlay_validate() {
         then
             if ! __depends_package "${title[0]}" "${package[@]}"
             then
-                msgbox "Failed to install required packages for '${title[0]}'."
+                msgbox "Failed to install required packages for '${title[0]}'." "$RTUI_PALETTE_ERROR"
                 return 1
             fi
         fi
