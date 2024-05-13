@@ -151,9 +151,48 @@ You still need a valid bootloader on another location for the system to work.
 Are you sure you want to erase the bootloader?"
 }
 
-__system() {
+__system_set_target(){
+    radiolist_init
+
+    local current_target available_targets i new_target
+    current_target="$(systemctl get-default)"
+    available_targets=(multi-user.target graphical.target)
+
+    for i in "${available_targets[@]}"
+    do
+        if [[ -z "$(systemctl list-units --legend=false "$i")" ]]
+        then
+            continue
+        elif [[ "$i" == "$current_target" ]]
+        then
+            radiolist_add "$i" "ON"
+        else
+            radiolist_add "$i" "OFF"
+        fi
+    done
+
+    if ! radiolist_show "Please select the default boot target:
+
+For CLI system, please choose 'multi-user.target'.
+For desktop system, please choose 'graphical.target'." || (( ${#RTUI_RADIOLIST_STATE_NEW[@]} == 0 ))
+    then
+        return
+    fi
+
+    new_target="$(radiolist_getitem "${RTUI_RADIOLIST_STATE_NEW[0]}")"
+
+    if systemctl set-default "$new_target"
+    then
+        msgbox "The default target has been set to '$new_target'."
+        return
+    else
+        msgbox "Failed to set the default target to '$new_target'." "$RTUI_PALETTE_ERROR"
+        return 1
+    fi
+}
+
+__system_bootloader_menu() {
     menu_init
-    menu_add __system_system_update "System Update"
     menu_add __system_update_bootloader "Update Bootloader"
     menu_add __system_update_spinor "Update SPI Bootloader"
     menu_add __system_update_emmc_boot "Update eMMC Boot partition"
@@ -161,4 +200,13 @@ __system() {
     menu_add __system_erase_spinor "Erase SPI Bootloader"
     menu_add __system_erase_emmc_boot "Erase eMMC Boot partition"
     menu_show "System Maintenance"
+}
+
+__system() {
+    menu_init
+    menu_add __system_system_update "System Update"
+    menu_add __system_set_target "Change default boot target"
+    menu_add_separator
+    menu_add __system_bootloader_menu "Bootloader Management"
+    menu_show "System"
 }
