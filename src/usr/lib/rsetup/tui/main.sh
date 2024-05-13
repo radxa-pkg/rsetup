@@ -27,7 +27,7 @@ Copyright 2022-$(date +%Y) Radxa Computer Co., Ltd"
 
 __tui_main() {
     menu_init
-    menu_add __system "System Maintenance"
+    menu_add __system "System"
     menu_add __hardware "Hardware"
     menu_add __overlay "Overlays"
     menu_add __comm "Connectivity"
