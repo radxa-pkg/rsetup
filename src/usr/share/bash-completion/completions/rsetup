@@ -1,0 +1,22 @@
+# Bash completion for rsetup.
+#
+# Copyright (C) 2024 Radxa Computer Co., Ltd <dev@radxa.com>
+
+_rsetup_completions() {
+
+	case "$COMP_CWORD" in
+	0) : ;;
+	1)
+		local subcommands=(mpp_play mpp_gst_play mpp_chromium)
+
+		mapfile -t COMPREPLY < <(compgen -W "${subcommands[*]}" -- "${COMP_WORDS[COMP_CWORD]}")
+		;;
+	*)
+		if [[ "$(type -t "_rsdk_${COMP_WORDS[1]}_completions")" == "function" ]]; then
+			"_rsetup_${COMP_WORDS[1]}_completions"
+		fi
+		;;
+	esac
+}
+
+complete -o default -F _rsetup_completions rsetup
