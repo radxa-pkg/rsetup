@@ -7,7 +7,12 @@ _rsetup_completions() {
 	case "$COMP_CWORD" in
 	0) : ;;
 	1)
-		local subcommands=(mpp_play mpp_gst_play mpp_chromium)
+		local subcommands=(
+			mpp_chromium
+			mpp_enable_kernel_logging
+			mpp_gst_play
+			mpp_play
+		)
 
 		mapfile -t COMPREPLY < <(compgen -W "${subcommands[*]}" -- "${COMP_WORDS[COMP_CWORD]}")
 		;;

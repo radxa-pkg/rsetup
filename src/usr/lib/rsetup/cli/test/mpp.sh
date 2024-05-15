@@ -1,5 +1,10 @@
 # shellcheck shell=bash
 
+mpp_enable_kernel_logging() {
+    sudo tee /sys/module/rk_vcodec/parameters/mpp_dev_debug <<<"0x100" >/dev/null
+    echo "Please check dmesg output for kernel debug output."
+}
+
 mpp_enable_logging() {
     export mpi_debug=1
     export mpp_debug=1
