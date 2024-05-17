@@ -42,6 +42,7 @@ resize_root
 #   disable_service <systemd unit name>
 #
 disable_service ssh
+disable_service ssh.socket
 disable_service smbd
 disable_service nmbd
 # Disable systemd-networkd due to systemd-networkd-wait-online blocking network.target
