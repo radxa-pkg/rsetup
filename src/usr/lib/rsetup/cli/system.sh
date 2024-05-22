@@ -154,6 +154,9 @@ set_led_trigger() {
 set_led_pattern() {
     local led="$1" node
     shift
+
+    set_led_trigger "$led" pattern
+
     for node in "$RBUILD_DRIVER_ROOT_PATH/$RBUILD_LED_GPIO_DRIVER"/*/leds/"$led"/pattern "$RBUILD_DRIVER_ROOT_PATH/$RBUILD_LED_PWM_DRIVER"/*/leds/"$led"/pattern
     do
         echo "$*" > "$node"
