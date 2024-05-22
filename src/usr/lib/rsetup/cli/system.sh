@@ -13,6 +13,7 @@ ALLOWED_RCONFIG_FUNC+=(
     "set_thermal_governor"
     "set_led_trigger"
     "set_led_pattern"
+    "set_led_netdev"
 )
 
 update_bootloader() {
@@ -160,5 +161,19 @@ set_led_pattern() {
     for node in "$RBUILD_DRIVER_ROOT_PATH/$RBUILD_LED_GPIO_DRIVER"/*/leds/"$led"/pattern "$RBUILD_DRIVER_ROOT_PATH/$RBUILD_LED_PWM_DRIVER"/*/leds/"$led"/pattern
     do
         echo "$*" > "$node"
+    done
+}
+
+set_led_netdev() {
+    __parameter_count_check 2 "$@"
+    local led="$1" netdev="$2"
+
+    set_led_trigger "$led" netdev
+
+    for node in "$RBUILD_DRIVER_ROOT_PATH/$RBUILD_LED_GPIO_DRIVER"/*/leds/"$led"; do
+        echo "$netdev" > "$node/device_name"
+        echo "1" > "$node/link"
+        echo "1" > "$node/tx"
+        echo "1" > "$node/rx"
     done
 }
