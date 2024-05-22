@@ -68,7 +68,7 @@ __hardware_gpio_leds() {
 
 Please make sure they are enabled first."
     if ! checklist_show "Below are the available LEDs and their triggers.
-Select any to update their trigger." || (( ${#RTUI_CHECKLIST_STATE_NEW[@]} == 0 ))
+Select any to update their trigger." || checklist_is_selection_empty
     then
         return
     fi
@@ -81,7 +81,7 @@ Select any to update their trigger." || (( ${#RTUI_CHECKLIST_STATE_NEW[@]} == 0 
     do
         radiolist_add "$i" "OFF"
     done
-    if ! radiolist_show "Please select the new trigger:" || (( ${#RTUI_RADIOLIST_STATE_NEW[@]} == 0 ))
+    if ! radiolist_show "Please select the new trigger:" || radiolist_is_selection_empty
     then
         return
     fi
@@ -191,7 +191,7 @@ __hardware_rgb_leds() {
 
 Please make sure they are enabled first."
     if ! checklist_show "Below are the available LEDs.
-Select any to update their pattern." || (( ${#RTUI_CHECKLIST_STATE_NEW[@]} == 0 ))
+Select any to update their pattern." || checklist_is_selection_empty
     then
         return
     fi
@@ -201,7 +201,7 @@ Select any to update their pattern." || (( ${#RTUI_CHECKLIST_STATE_NEW[@]} == 0 
     do
         radiolist_add "$i" "OFF"
     done
-    if ! radiolist_show "Please select the new pattern:" || (( ${#RTUI_RADIOLIST_STATE_NEW[@]} == 0 ))
+    if ! radiolist_show "Please select the new pattern:" || radiolist_is_selection_empty
     then
         return
     fi
@@ -255,7 +255,7 @@ __hardware_thermal() {
     radiolist_emptymsg "No thermal governor is available."
 
     if ! radiolist_show "Please select the thermal governor.
-Recommendation: fanless or DC fan => power_allocator | PWM fan => step_wise" || (( ${#RTUI_RADIOLIST_STATE_NEW[@]} == 0 ))
+Recommendation: fanless or DC fan => power_allocator | PWM fan => step_wise" || radiolist_is_selection_empty
     then
         return
     fi
@@ -311,7 +311,7 @@ Please check if the screen is connected and powered on."
         do
             radiolist_add "$i" "OFF"
         done
-        if ! radiolist_show "Please select the DSI monitor to be mirrored:" || (( ${#RTUI_RADIOLIST_STATE_NEW[@]} == 0 ))
+        if ! radiolist_show "Please select the DSI monitor to be mirrored:" || radiolist_is_selection_empty
         then
             return
         fi
@@ -325,7 +325,7 @@ Please check if the screen is connected and powered on."
         do
             checklist_add "$i" "OFF"
         done
-        if ! checklist_show "Please select external monitors to mirror the DSI monitor:" || (( ${#RTUI_CHECKLIST_STATE_NEW[@]} == 0 ))
+        if ! checklist_show "Please select external monitors to mirror the DSI monitor:" || checklist_is_selection_empty
         then
             return
         fi

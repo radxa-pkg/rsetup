@@ -39,7 +39,7 @@ __system_select_compatible_bootloader() {
     done
     radiolist_emptymsg "No compatible bootloader is available."
 
-    if ! radiolist_show "Please select the bootloader to be installed:" || (( ${#RTUI_RADIOLIST_STATE_NEW[@]} == 0 ))
+    if ! radiolist_show "Please select the bootloader to be installed:" || radiolist_is_selection_empty
     then
         return 1
     fi
@@ -170,11 +170,12 @@ __system_set_target(){
             radiolist_add "$i" "OFF"
         fi
     done
+    radiolist_emptymsg "No target is available."
 
     if ! radiolist_show "Please select the default boot target:
 
 For CLI system, please choose 'multi-user.target'.
-For desktop system, please choose 'graphical.target'." || (( ${#RTUI_RADIOLIST_STATE_NEW[@]} == 0 ))
+For desktop system, please choose 'graphical.target'." || radiolist_is_selection_empty
     then
         return
     fi

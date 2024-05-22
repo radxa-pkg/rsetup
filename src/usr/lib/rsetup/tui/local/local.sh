@@ -38,7 +38,7 @@ __local_wifi_country() {
         radiolist_add "$REPLY" "OFF"
     done < /usr/share/zoneinfo/iso3166.tab
 
-    if radiolist_show "Select your Wi-Fi country:" && (( ${#RTUI_RADIOLIST_STATE_NEW[@]} > 0 ))
+    if radiolist_show "Select your Wi-Fi country:" && ! radiolist_is_selection_empty
     then
         local only_shrinked_index=${RTUI_RADIOLIST_STATE_NEW}
         trimmed_index=${only_shrinked_index//\"}

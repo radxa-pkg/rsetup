@@ -58,7 +58,7 @@ __user_enable_auto_login (){
     do
         checklist_add "$(basename "$i")" "OFF"
     done
-    if ! checklist_show "Please select the interface(s) you want to enable auto login:" || (( ${#RTUI_CHECKLIST_STATE_NEW[@]} == 0))
+    if ! checklist_show "Please select the interface(s) you want to enable auto login:" || checklist_is_selection_empty
     then
         return
     fi
