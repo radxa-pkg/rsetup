@@ -1,3 +1,30 @@
+rsetup (0.4.4) jammy; urgency=medium
+
+  [ dependabot[bot] ]
+  * build(deps): bump peaceiris/actions-mdbook from 1 to 2
+
+  [ CodeChenL ]
+  * refactor: replace tui dependency with librtui
+  * refactor: update dependency librtui
+  * fix: use RTUI_PALETTE_ERROR palette before return 1
+  * feat: add function to switch default target
+  * feat: add test/mpp bash-completion
+
+  [ Nascs Fang ]
+  * fix: disable service systemd-networkd
+
+  [ ZHANG Yuntian ]
+  * ci: sync with radxa-firmware
+  * feat: add mpp_enable_kernel_logging
+  * fix: disable ssh.socket as well
+  * feat: add gst_audio_resample test
+  * fix: make sure LED's trigger is as specified
+  * feat: add set_led_netdev
+  * chore: update librtui
+  * refactor: use empty selection helpers
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Wed, 22 May 2024 09:09:42 +0000
+
 rsetup (0.4.3) jammy; urgency=medium
 
   [ ZHANG Yuntian ]
