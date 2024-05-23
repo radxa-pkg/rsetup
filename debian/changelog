@@ -1,3 +1,10 @@
+rsetup (0.4.5) jammy; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * fix: include utils for CLI usage
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Thu, 23 May 2024 10:25:17 +0000
+
 rsetup (0.4.4) jammy; urgency=medium
 
   [ dependabot[bot] ]
