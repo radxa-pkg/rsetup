@@ -1,5 +1,8 @@
 # shellcheck shell=bash
 
+# shellcheck source=externals/librtui/src/lib/librtui/utils/utils.sh
+source "/usr/lib/librtui/utils/utils.sh"
+
 # shellcheck source=src/usr/lib/rsetup/mod/aic8800.sh
 source "/usr/lib/rsetup/mod/aic8800.sh"
 

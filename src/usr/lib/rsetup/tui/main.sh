@@ -1,6 +1,5 @@
 # shellcheck shell=bash
 
-
 # shellcheck source=externals/librtui/src/lib/librtui/tui.sh
 source "/usr/lib/librtui/tui.sh"
 
