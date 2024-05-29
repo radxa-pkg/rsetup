@@ -261,17 +261,16 @@ Recommendation: fanless or DC fan => power_allocator | PWM fan => step_wise" || 
     fi
 
     selected_governor="$(radiolist_getitem "${RTUI_RADIOLIST_STATE_NEW[0]}")"
-    if enable_unique_config set_thermal_governor "$selected_governor"
+
+    if [[ $selected_governor == "power_allocator" ]] && grep -q "pwm-fan" "/sys/class/thermal/cooling_device"*/type <<< ""
+    then
+        msgbox "power_allocator governor is incompatible with pwm_fan driver.
+Please disable it and try again." "$RTUI_PALETTE_ERROR"
+    elif enable_unique_config set_thermal_governor "$selected_governor"
     then
         msgbox "Thermal governor has been updated."
     else
-        if [[ "$selected_governor" == "power_allocator" ]] && ( lsmod | grep pwm_fan )
-        then
-            msgbox "power_allocator governor is incompatible with pwm_fan driver.
-Please disable it and try again."
-        else
-            msgbox "Thermal governor could not be updated."
-        fi
+        msgbox "Thermal governor could not be updated." "$RTUI_PALETTE_ERROR"
     fi
 }
 
