@@ -8,7 +8,7 @@ source "/usr/lib/rsetup/tui/hardware/gpio.sh"
 
 __hardware_gstreamer_test_picture() {
     local temp
-    temp="$(mktemp tmp.XXXXXXXXXX.jpg)"
+    temp="$(mktemp "${TEMPDIR:-/tmp}/tmp.XXXXXXXXXX.jpg")"
 
     if gst-launch-1.0 v4l2src "device=/dev/$RSETUP_GSTREAMER_DEVICE" io-mode=4 ! \
                       autovideoconvert ! \
