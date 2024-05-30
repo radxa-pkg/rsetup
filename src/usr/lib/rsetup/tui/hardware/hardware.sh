@@ -10,7 +10,7 @@ __hardware_gstreamer_test_picture() {
     local temp
     temp="$(mktemp tmp.XXXXXXXXXX.jpg)"
 
-    if gst-launch-1.0 v4l2src "device=/dev/$RTUI_MENU_SELECTED" io-mode=4 ! \
+    if gst-launch-1.0 v4l2src "device=/dev/$RSETUP_GSTREAMER_DEVICE" io-mode=4 ! \
                       autovideoconvert ! \
                       video/x-raw,format=UYVY,width=1920,height=1080 ! \
                       jpegenc ! \
@@ -19,20 +19,20 @@ __hardware_gstreamer_test_picture() {
         msgbox "Test image is saved at $temp."
     else
         rm -f "$temp"
-        msgbox "Unable to capture an image with $RTUI_MENU_SELECTED device.
-Please check if you have the required libraries installed."
+        msgbox "Unable to capture an image with $RSETUP_GSTREAMER_DEVICE device.
+Please check if you have the required libraries installed." "$RTUI_PALETTE_ERROR"
     fi
 }
 
 __hardware_gstreamer_test_live() {
-    gst-launch-1.0 v4l2src "device=/dev/$RTUI_MENU_SELECTED" io-mode=4 ! \
+    gst-launch-1.0 v4l2src "device=/dev/$RSETUP_GSTREAMER_DEVICE" io-mode=4 ! \
                    autovideoconvert ! \
                    video/x-raw,format=NV12,width=1920,height=1080,framerate=30/1 ! \
                    xvimagesink
 }
 
 __hardware_gstreamer_test() {
-
+    RSETUP_GSTREAMER_DEVICE="$RTUI_MENU_SELECTED"
     menu_init
     if [[ -n "${DISPLAY:-}" ]]
     then
