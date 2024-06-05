@@ -21,9 +21,11 @@ __system_system_update() {
 }
 
 __system_select_compatible_bootloader() {
+    __parameter_count_check 1 "$@"
+
     radiolist_init
 
-    local products i p
+    local products i p title="$1"
     mapfile -t products < <(get_product_ids)
     for i in /usr/lib/u-boot/*
     do
@@ -39,7 +41,7 @@ __system_select_compatible_bootloader() {
     done
     radiolist_emptymsg "No compatible bootloader is available."
 
-    if ! radiolist_show "Please select the bootloader to be installed:" || radiolist_is_selection_empty
+    if ! radiolist_show "$title" || radiolist_is_selection_empty
     then
         return 1
     fi
@@ -55,8 +57,16 @@ __system_bootloader_helper() {
         return
     fi
 
-    local bootloader
-    if ! bootloader="$(__system_select_compatible_bootloader)"
+    local bootloader title
+
+    if [[ "$bootloader_method" == "erase_"* ]]
+    then
+        title="Please select the bootloader to be erased:"
+    else
+        title="Please select the bootloader to be installed:"
+    fi
+
+    if ! bootloader="$(__system_select_compatible_bootloader "$title")"
     then
         return
     fi
