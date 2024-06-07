@@ -1,3 +1,17 @@
+rsetup (0.4.6) jammy; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * chore: bump local libtrui submodule
+
+  [ CodeChenL ]
+  * fix: preserve video device name
+  * fix: modify the camera picture save path
+  * fix: check thermal governor compatibility first
+  * fix: modify options for querying available_targets
+  * fix: correct the erase bootloader prompt message
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Fri, 07 Jun 2024 03:02:44 +0000
+
 rsetup (0.4.5) jammy; urgency=medium
 
   [ ZHANG Yuntian ]
