@@ -26,7 +26,7 @@ then
     fi
     # shellcheck source=src/usr/lib/rsetup/tui/main.sh
     source "/usr/lib/rsetup/tui/main.sh"
-    tui_start __tui_main
+    tui_start __tui_main "RSETUP"
 else
     if [[ "$RSETUP_EXEC_NAME" == "rsetup" ]]
     then
