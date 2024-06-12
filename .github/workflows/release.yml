@@ -122,6 +122,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           target_commitish: ${{ github.ref_name }}
           draft: false
+          prerelease: false
           fail_on_unmatched_files: false
           files: |
             .artifacts/**/*.deb
