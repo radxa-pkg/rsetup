@@ -32,10 +32,7 @@ __tui_main() {
     menu_add __comm "Connectivity"
     menu_add __user "User Settings"
     menu_add __local "Localization"
-    if $DEBUG
-    then
-        menu_add __task "Common Tasks"
-    fi
+    menu_add __task "Common Tasks"
     menu_add __tui_about "About"
     menu_show "Please select an option below:"
 }
