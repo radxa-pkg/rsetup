@@ -33,7 +33,8 @@ __system_select_compatible_bootloader() {
 
         for p in "${products[@]}"
         do
-            if [[ "$(sed -E "s/[-_]//g" <<< "$i")" == "$(sed -E "s/[-_]//g" <<< "$p")" ]]
+            if [[ "$(sed -E "s/[-_]//g" <<< "$i")" == "$(sed -E "s/[-_]//g" <<< "$p")" ]] || \
+               [[ "$(sed -E "s/[-_]//g" <<< "$i-spi")" == "$(sed -E "s/[-_]//g" <<< "$p")" ]]
             then
                 radiolist_add "$i" "OFF"
             fi
