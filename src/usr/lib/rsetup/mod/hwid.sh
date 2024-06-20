@@ -18,13 +18,20 @@ get_product_ids() {
 
         while read -r
         do
-            REPLY="$(cut -d "," -f 2 <<< "$REPLY")"
-            if [[ $REPLY =~ ^rock ]]
-            then
-                echo "$REPLY"
-            else
-                echo "radxa-$REPLY"
-            fi
+            case "$(cut -d "," -f 1 <<< "$REPLY")" in
+            radxa)
+                REPLY="$(cut -d "," -f 2 <<< "$REPLY")"
+                if [[ $REPLY =~ ^rock ]]
+                then
+                    echo "$REPLY"
+                else
+                    echo "radxa-$REPLY"
+                fi
+                ;;
+            *)
+                echo "${REPLY//,/-}"
+                ;;
+            esac
         done < <(tr $"\0" $"\n" < /proc/device-tree/compatible)
     fi
 }
