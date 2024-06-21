@@ -1,26 +1,26 @@
 # shellcheck shell=bash
-
+set -e
 get_user_home() {
     if [ -n "${PKEXEC_UID:-}" ]; then
         getent passwd "${PKEXEC_UID}" | cut -d: -f6
     elif [ -n "${SUDO_USER:-}" ]; then
         getent passwd "${SUDO_USER}" | cut -d: -f6
     else
-        echo "/home/$(whoami)"
+        getent passwd "${USER}" | cut -d: -f6
     fi
 }
 
 install_box64() {
-    wget https://ryanfortner.github.io/box64-debs/box64.list -O /etc/apt/sources.list.d/box64.list
-    wget -qO- https://ryanfortner.github.io/box64-debs/KEY.gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/box64-debs-archive-keyring.gpg
-    apt update -y && apt install -y box64-rk3588
+    curl https://ryanfortner.github.io/box64-debs/box64.list -o /etc/apt/sources.list.d/box64.list
+    curl -s https://ryanfortner.github.io/box64-debs/KEY.gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/box64-debs-archive-keyring.gpg
+    apt-get update -y && apt-get install -y box64-rk3588
 }
 
 install_box86() {
     dpkg --add-architecture armhf
-    wget https://itai-nelken.github.io/weekly-box86-debs/debian/box86.list -O /etc/apt/sources.list.d/box86.list
-    wget -qO- https://itai-nelken.github.io/weekly-box86-debs/debian/KEY.gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/box86-debs-archive-keyring.gpg
-    apt update -y && apt install -y box86
+    curl https://itai-nelken.github.io/weekly-box86-debs/debian/box86.list -o /etc/apt/sources.list.d/box86.list
+    curl -s https://itai-nelken.github.io/weekly-box86-debs/debian/KEY.gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/box86-debs-archive-keyring.gpg
+    apt-get update -y && apt-get install -y box86
 }
 
 # shellcheck disable=SC2120
@@ -145,7 +145,7 @@ export DBUS_FATAL_WARNINGS=0
     # make script executable and move
     chmod +x steam
     mv steam /usr/local/bin/
-    apt install -y libc6:armhf libsdl2-2.0-0:armhf libsdl2-image-2.0-0:armhf libsdl2-mixer-2.0-0:armhf libsdl2-ttf-2.0-0:armhf libopenal1:armhf libpng16-16:armhf libfontconfig1:armhf libxcomposite1:armhf libbz2-1.0:armhf libxtst6:armhf libsm6:armhf libice6:armhf libxinerama1:armhf libxdamage1:armhf libibus-1.0-5 libdrm2:armhf libgbm1:armhf
+    apt-get install -y libc6:armhf libsdl2-2.0-0:armhf libsdl2-image-2.0-0:armhf libsdl2-mixer-2.0-0:armhf libsdl2-ttf-2.0-0:armhf libopenal1:armhf libpng16-16:armhf libfontconfig1:armhf libxcomposite1:armhf libbz2-1.0:armhf libxtst6:armhf libsm6:armhf libice6:armhf libxinerama1:armhf libxdamage1:armhf libibus-1.0-5 libdrm2:armhf libgbm1:armhf
 
 }
 
@@ -155,12 +155,12 @@ uninstall_steam() {
     # Remove Box64
     rm /etc/apt/sources.list.d/box64.list
     rm /etc/apt/trusted.gpg.d/box64-debs-archive-keyring.gpg
-    apt-get purge -y box64-rk3588
+    apt-get autoremove -y box64-rk3588
 
     # Remove Box86
     rm /etc/apt/sources.list.d/box86.list
     rm /etc/apt/trusted.gpg.d/box86-debs-archive-keyring.gpg
-    apt-get purge -y box86
+    apt-get autoremove -y box86
 
     # Remove Wine related files and directories
     rm -rf "${user_home}/.wine" "${user_home}/wine"
@@ -173,15 +173,17 @@ uninstall_steam() {
     rm -f /usr/local/bin/steam
 
     # Remove additional packages installed for Steam
-    apt-get purge -y libc6:armhf libsdl2-2.0-0:armhf libsdl2-image-2.0-0:armhf \
+    apt-get autoremove -y libc6:armhf libsdl2-2.0-0:armhf libsdl2-image-2.0-0:armhf \
         libsdl2-mixer-2.0-0:armhf libsdl2-ttf-2.0-0:armhf libopenal1:armhf \
         libpng16-16:armhf libfontconfig1:armhf libxcomposite1:armhf \
         libbz2-1.0:armhf libxtst6:armhf libsm6:armhf libice6:armhf \
         libxinerama1:armhf libxdamage1:armhf libgbm1:armhf libdrm2:armhf
 
 
-    # Remove Box86 architecture
-    dpkg --remove-architecture armhf
+    # Remove armhf architecture
+    if ! dpkg --remove-architecture armhf; then
+        echo "Failed to remove the armhf architecture. There might be some packages that are still using it."
+    fi
 
     # Update apt repositories and clean up
     apt-get update -y
