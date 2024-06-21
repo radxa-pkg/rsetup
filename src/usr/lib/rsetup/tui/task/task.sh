@@ -4,6 +4,7 @@
 source "/usr/lib/rsetup/tui/task/docker/docker.sh"
 source "/usr/lib/rsetup/tui/task/ssh/ssh.sh"
 source "/usr/lib/rsetup/tui/task/baota/baota.sh"
+source "/usr/lib/rsetup/tui/task/steam/steam.sh"
 
 __task() {
     menu_init
@@ -13,5 +14,6 @@ __task() {
         menu_add __task_ssh             "SSH"
     fi
     menu_add __task_baota           "Baota"
+    menu_add __task_steam           "Steam"
     menu_show "Please select an option below:"
 }
