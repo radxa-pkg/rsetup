@@ -15,14 +15,17 @@ Architecture: all
 Section: admin
 Priority: standard
 Essential: yes
-Depends: device-tree-compiler,
+Depends: curl,
+         device-tree-compiler,
          gdisk,
+         jq,
          librtui (>= 0.1.2),
          parted,
          pkexec | policykit-1 (<< 122-1),
          python3,
          python3-yaml,
          u-boot-menu,
+         xz-utils,
          ${misc:Depends},
 Suggests: aicrf-test,
           gpiod,

@@ -15,6 +15,7 @@ source "/usr/lib/rsetup/cli/docker.sh"
 source "/usr/lib/rsetup/cli/u-boot-menu.sh"
 source "/usr/lib/rsetup/cli/wi-fi.sh"
 source "/usr/lib/rsetup/cli/kernel.sh"
+source "/usr/lib/rsetup/cli/steam.sh"
 
 source "/usr/lib/rsetup/cli/test/main.sh"
 
