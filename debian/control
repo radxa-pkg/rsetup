@@ -81,6 +81,24 @@ Depends: rsetup (= ${binary:Version}),
 Description: Radxa system config - Set wan-led LED's netdev to eth0
  This package set wan-led LED's netdev to eth0 on boot.
 
+Package: rsetup-config-wan-led-enp1s0
+Architecture: all
+Section: admin
+Priority: standard
+Depends: rsetup (= ${binary:Version}),
+         ${misc:Depends},
+Description: Radxa system config - Set wan-led LED's netdev to enp1s0
+ This package set wan-led LED's netdev to enp1s0 on boot.
+
+Package: rsetup-config-lan-led-eth0
+Architecture: all
+Section: admin
+Priority: standard
+Depends: rsetup (= ${binary:Version}),
+         ${misc:Depends},
+Description: Radxa system config - Set lan-led LED's netdev to eth0
+ This package set lan-led LED's netdev to eth0 on boot.
+
 Package: rsetup-config-lan-led-enp1s0
 Architecture: all
 Section: admin

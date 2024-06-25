@@ -1,0 +1,1 @@
+config/00-lan-led_eth0.conf /usr/lib/rsetup/conf.d/on_boot
