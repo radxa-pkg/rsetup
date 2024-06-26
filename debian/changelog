@@ -1,3 +1,23 @@
+rsetup (0.4.7) jammy; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * fix: add application title
+  * ci: explicitly set prerelease as false
+  * ci: support tlide in version number
+  * fix: get_product_ids only apply conversion to radxa compatible
+  * feat: support SPI bootloader variant
+  * fix: suffix should be added to product id
+  * feat: add more lan/wan LED configs
+  * fix: add virtual package for network LEDs
+
+  [ RadxaPanda ]
+  * feat: Add support for Baota
+
+  [ CodeChenL ]
+  * chore: update librtui
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Wed, 26 Jun 2024 10:59:56 +0000
+
 rsetup (0.4.6) jammy; urgency=medium
 
   [ ZHANG Yuntian ]
