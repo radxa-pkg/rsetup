@@ -16,6 +16,25 @@ ALLOWED_RCONFIG_FUNC+=(
     "set_led_netdev"
 )
 
+system_update() {
+    echo -e "\n======================="
+    if ! apt-get update
+    then
+        echo "Unable to update package list."
+        return 1
+    fi
+    if ! apt-get dist-upgrade --allow-downgrades
+    then
+        echo "Unable to upgrade packages."
+        return 2
+    fi
+    if ! apt-get dist-upgrade --allow-downgrades
+    then
+        echo "Unable to upgrade pinned packages."
+        return 3
+    fi
+}
+
 update_bootloader() {
     local pid device
     pid="${1:-$(get_product_id)}"
