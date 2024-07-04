@@ -1,23 +1,25 @@
 # shellcheck shell=bash
 
 __system_system_update() {
-    echo -e "\n======================="
-    if ! apt-get update
+    if yesno "System will be updated, continue?"
     then
-        msgbox "Unable to update package list."
-        return
+        local ret=0
+        system_update || ret=$?
+        case "$ret" in
+        1)
+            msgbox "Unable to update package list." "$RTUI_PALETTE_ERROR"
+            ;;
+        2)
+            msgbox "Unable to upgrade packages." "$RTUI_PALETTE_ERROR"
+            ;;
+        3)
+            msgbox "Unable to upgrade pinned packages." "$RTUI_PALETTE_ERROR"
+            ;;
+        *)
+            msgbox "Unknown error." "$RTUI_PALETTE_ERROR"
+            ;;
+        esac
     fi
-    if ! apt-get dist-upgrade --allow-downgrades
-    then
-        msgbox "Unable to upgrade packages."
-        return
-    fi
-    if ! apt-get dist-upgrade --allow-downgrades
-    then
-        msgbox "Unable to upgrade pinned packages."
-        return
-    fi
-    read -rp "Press enter to continue..."
 }
 
 __system_select_compatible_bootloader() {
