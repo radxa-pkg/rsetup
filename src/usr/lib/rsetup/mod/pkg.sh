@@ -7,7 +7,7 @@ __depends_package() {
     shift
     for p in "$@"
     do
-        if ! dpkg -l "$p" &>/dev/null
+        if [[ "$(dpkg --get-selections "$p"  | awk '{print $2}')" != "install" ]]
         then
             missing_packages+=( "$p" )
         fi
