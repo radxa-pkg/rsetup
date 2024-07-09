@@ -379,6 +379,7 @@ __check_service_status() {
           ;;
       disabled)
           checklist_add "$service" "OFF"
+          ;;
     esac
 }
 
