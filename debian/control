@@ -18,7 +18,6 @@ Essential: yes
 Depends: curl,
          device-tree-compiler,
          gdisk,
-         jq,
          librtui (>= 0.1.2),
          parted,
          pkexec | policykit-1 (<< 122-1),
