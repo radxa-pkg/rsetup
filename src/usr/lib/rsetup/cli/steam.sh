@@ -145,7 +145,11 @@ export DBUS_FATAL_WARNINGS=0
     # make script executable and move
     chmod +x steam
     mv steam /usr/local/bin/
-    apt-get install -y libc6:armhf libsdl2-2.0-0:armhf libsdl2-image-2.0-0:armhf libsdl2-mixer-2.0-0:armhf libsdl2-ttf-2.0-0:armhf libopenal1:armhf libpng16-16:armhf libfontconfig1:armhf libxcomposite1:armhf libbz2-1.0:armhf libxtst6:armhf libsm6:armhf libice6:armhf libxinerama1:armhf libxdamage1:armhf libibus-1.0-5 libdrm2:armhf libgbm1:armhf
+    apt-get install -y libc6:armhf libsdl2-2.0-0:armhf libsdl2-image-2.0-0:armhf \
+        libsdl2-mixer-2.0-0:armhf libsdl2-ttf-2.0-0:armhf libopenal1:armhf \
+        libpng16-16:armhf libfontconfig1:armhf libxcomposite1:armhf \
+        libbz2-1.0:armhf libxtst6:armhf libsm6:armhf libice6:armhf \
+        libxinerama1:armhf libxdamage1:armhf libdrm2:armhf libgbm1:armhf libibus-1.0-5
 
 }
 
@@ -155,12 +159,12 @@ uninstall_steam() {
     # Remove Box64
     rm /etc/apt/sources.list.d/box64.list
     rm /etc/apt/trusted.gpg.d/box64-debs-archive-keyring.gpg
-    apt-get autoremove -y box64-rk3588
+    apt-get remove -y box64-rk3588
 
     # Remove Box86
     rm /etc/apt/sources.list.d/box86.list
     rm /etc/apt/trusted.gpg.d/box86-debs-archive-keyring.gpg
-    apt-get autoremove -y box86
+    apt-get remove -y box86
 
     # Remove Wine related files and directories
     rm -rf "${user_home}/.wine" "${user_home}/wine"
@@ -173,7 +177,7 @@ uninstall_steam() {
     rm -f /usr/local/bin/steam
 
     # Remove additional packages installed for Steam
-    apt-get autoremove -y libc6:armhf libsdl2-2.0-0:armhf libsdl2-image-2.0-0:armhf \
+    apt-get remove -y libc6:armhf libsdl2-2.0-0:armhf libsdl2-image-2.0-0:armhf \
         libsdl2-mixer-2.0-0:armhf libsdl2-ttf-2.0-0:armhf libopenal1:armhf \
         libpng16-16:armhf libfontconfig1:armhf libxcomposite1:armhf \
         libbz2-1.0:armhf libxtst6:armhf libsm6:armhf libice6:armhf \
@@ -187,5 +191,5 @@ uninstall_steam() {
 
     # Update apt repositories and clean up
     apt-get update -y
-    apt-get autoremove -y
+    apt-get remove -y
 }
