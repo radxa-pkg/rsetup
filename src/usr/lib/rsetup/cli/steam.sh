@@ -11,15 +11,15 @@ get_user_home() {
 }
 
 install_box64() {
-    curl https://ryanfortner.github.io/box64-debs/box64.list -o /etc/apt/sources.list.d/box64.list
-    curl -s https://ryanfortner.github.io/box64-debs/KEY.gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/box64-debs-archive-keyring.gpg
+    curl -Ls https://ryanfortner.github.io/box64-debs/box64.list -o /etc/apt/sources.list.d/box64.list
+    curl -Ls https://ryanfortner.github.io/box64-debs/KEY.gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/box64-debs-archive-keyring.gpg
     apt-get update -y && apt-get install -y box64-rk3588
 }
 
 install_box86() {
     dpkg --add-architecture armhf
-    curl https://itai-nelken.github.io/weekly-box86-debs/debian/box86.list -o /etc/apt/sources.list.d/box86.list
-    curl -s https://itai-nelken.github.io/weekly-box86-debs/debian/KEY.gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/box86-debs-archive-keyring.gpg
+    curl -Ls https://itai-nelken.github.io/weekly-box86-debs/debian/box86.list -o /etc/apt/sources.list.d/box86.list
+    curl -Ls https://itai-nelken.github.io/weekly-box86-debs/debian/KEY.gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/box86-debs-archive-keyring.gpg
     apt-get update -y && apt-get install -y box86
 }
 
@@ -74,8 +74,8 @@ EOF
     # cp libwine.so ${user_home}/wine/lib/
     # cp libwine.so.1 ${user_home}/wine/lib/
     cd "${user_home}/wine/" || exit
-    latest_version=$(curl -s https://api.github.com/repos/Kron4ek/Wine-Builds/releases/latest | jq -r .tag_name)
-    curl -L -o "wine-latest-x86.tar.xz" "https://github.com/Kron4ek/Wine-Builds/releases/download/$latest_version/wine-$latest_version-x86.tar.xz"
+    latest_version=$(curl -Ls https://api.github.com/repos/Kron4ek/Wine-Builds/releases/latest | jq -r .tag_name)
+    curl -Lso "wine-latest-x86.tar.xz" "https://github.com/Kron4ek/Wine-Builds/releases/download/$latest_version/wine-$latest_version-x86.tar.xz"
     xz -d wine-latest-x86.tar.xz
     tar -xf wine-latest-x86.tar
     cd "wine-$latest_version-x86/" || exit
