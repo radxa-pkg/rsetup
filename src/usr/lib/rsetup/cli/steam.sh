@@ -12,14 +12,14 @@ get_user_home() {
 
 install_box64() {
     curl -Ls https://ryanfortner.github.io/box64-debs/box64.list -o /etc/apt/sources.list.d/box64.list
-    curl -Ls https://ryanfortner.github.io/box64-debs/KEY.gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/box64-debs-archive-keyring.gpg
+    curl -Ls https://ryanfortner.github.io/box64-debs/KEY.gpg | gpg --dearmor --batch --yes -o /etc/apt/trusted.gpg.d/box64-debs-archive-keyring.gpg
     apt-get update -y && apt-get install -y box64-rk3588
 }
 
 install_box86() {
     dpkg --add-architecture armhf
     curl -Ls https://itai-nelken.github.io/weekly-box86-debs/debian/box86.list -o /etc/apt/sources.list.d/box86.list
-    curl -Ls https://itai-nelken.github.io/weekly-box86-debs/debian/KEY.gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/box86-debs-archive-keyring.gpg
+    curl -Ls https://itai-nelken.github.io/weekly-box86-debs/debian/KEY.gpg | gpg --dearmor --batch --yes -o /etc/apt/trusted.gpg.d/box86-debs-archive-keyring.gpg
     apt-get update -y && apt-get install -y box86
 }
 
