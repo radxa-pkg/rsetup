@@ -17,7 +17,6 @@ install_box64() {
 }
 
 install_box86() {
-    dpkg --add-architecture armhf
     curl -Ls https://itai-nelken.github.io/weekly-box86-debs/debian/box86.list > /etc/apt/sources.list.d/box86.list
     curl -Ls https://itai-nelken.github.io/weekly-box86-debs/debian/KEY.gpg | gpg --dearmor --batch --yes -o /etc/apt/trusted.gpg.d/box86-debs-archive-keyring.gpg
     apt-get update -y && apt-get install -y box86
@@ -114,6 +113,7 @@ EOF
 install_steam() {
     __parameter_count_check 0 "$@"
     local -r user_home="$(get_user_home)"
+    dpkg --add-architecture armhf
     install_box86
     install_box64
     install_winex86
