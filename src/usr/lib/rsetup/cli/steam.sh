@@ -73,7 +73,7 @@ EOF
     # cp libwine.so ${user_home}/wine/lib/
     # cp libwine.so.1 ${user_home}/wine/lib/
     cd "${user_home}/wine/" || exit
-    latest_version="$(basename "$(curl -Ls -o /dev/null -w "%{url_effective}" https://github.com/Kron4ek/Wine-Builds/releases/latest)")"
+    latest_version="$(basename "$(curl -ILs -o /dev/null -w "%{url_effective}" https://github.com/Kron4ek/Wine-Builds/releases/latest)")"
     curl -Ls "https://github.com/Kron4ek/Wine-Builds/releases/download/$latest_version/wine-$latest_version-x86.tar.xz" > "wine-latest-x86.tar.xz"
     xz -d wine-latest-x86.tar.xz
     tar -xf wine-latest-x86.tar
