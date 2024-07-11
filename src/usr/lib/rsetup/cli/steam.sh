@@ -1,13 +1,7 @@
 # shellcheck shell=bash
 set -e
 get_user_home() {
-    if [ -n "${PKEXEC_UID:-}" ]; then
-        getent passwd "${PKEXEC_UID}" | cut -d: -f6
-    elif [ -n "${SUDO_USER:-}" ]; then
-        getent passwd "${SUDO_USER}" | cut -d: -f6
-    else
-        getent passwd "${USER}" | cut -d: -f6
-    fi
+    getent passwd "$(logname)" | cut -d: -f6
 }
 
 install_box64() {
