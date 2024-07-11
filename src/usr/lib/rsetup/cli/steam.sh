@@ -37,8 +37,8 @@ EOF
     chmod +x /usr/local/bin/winetricks
     chmod +x /usr/local/bin/wineserver
     chmod +x /usr/local/bin/wine
-    mkdir -p "${user_home}/.local/share/applications/"
-    cat <<EOF > "${user_home}/.local/share/applications/wine-config.desktop"
+    sudo -u "$(logname)" mkdir -p "${user_home}/.local/share/applications/"
+    cat <<EOF | sudo -u "$(logname)" tee "${user_home}/.local/share/applications/wine-config.desktop"
 [Desktop Entry]
 Version=1.0
 Type=Application
@@ -49,7 +49,7 @@ box86 Exec=/usr/local/bin/wine winecfg
 Categories=Game;
 Terminal=false
 EOF
-    cat <<EOF > "${user_home}/.local/share/applications/wine-desktop.desktop"
+    cat <<EOF | sudo -u "$(logname)" tee "${user_home}/.local/share/applications/wine-desktop.desktop"
 [Desktop Entry]
 Version=1.0
 Type=Application
@@ -61,24 +61,21 @@ Categories=Game;
 Terminal=false
 EOF
 
-    mkdir "${user_home}/wine/"
-    mkdir "${user_home}/wine/lib/"
+    sudo -u "$(logname)" mkdir -p  "${user_home}/wine/lib/"
     # cp libwine.so ${user_home}/wine/lib/
     # cp libwine.so.1 ${user_home}/wine/lib/
-    pushd "${user_home}/wine/" || return 1
+    local wine_pkg
+    wine_pkg="$(sudo -u "$(logname)" mktemp -d)"
+    pushd "$wine_pkg" || return 1
     latest_version="$(basename "$(curl -ILs -o /dev/null -w "%{url_effective}" https://github.com/Kron4ek/Wine-Builds/releases/latest)")"
-    curl -Ls "https://github.com/Kron4ek/Wine-Builds/releases/download/$latest_version/wine-$latest_version-x86.tar.xz" > "wine-latest-x86.tar.xz"
-    xz -d wine-latest-x86.tar.xz
-    tar -xf wine-latest-x86.tar
+    curl -Lso "wine-$latest_version-x86.tar.xz" "https://github.com/Kron4ek/Wine-Builds/releases/download/$latest_version/wine-$latest_version-x86.tar.xz"
+    sudo -u "$(logname)" tar xf "wine-$latest_version-x86.tar.xz"
     popd || return 1
-    pushd "${user_home}/wine/wine-$latest_version-x86/" || return 1
-    cp -R ./* "${user_home}/wine"
+    sudo -u "$(logname)" cp -R "$wine_pkg/wine-$latest_version-x86"/* "${user_home}/wine"
     # ln -s "${user_home}/wine/bin/wine" /usr/local/bin/wine
     # ln -s "${user_home}/wine/bin/winecfg" /usr/local/bin/winecfg
     # ln -s "${user_home}/wine/bin/wineserver" /usr/local/bin/wineserver
-    # #try to chown using either sudo_user or pkexec_uid
-    chown -R "${SUDO_USER:-${PKEXEC_UID}}" "${user_home}/wine"
-    popd || return 1
+    rm -rf "$wine_pkg"
     echo "Run wine winecfg to let wine configure itself"
 }
 
