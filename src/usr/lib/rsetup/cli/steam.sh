@@ -1,5 +1,4 @@
 # shellcheck shell=bash
-set -e
 get_user_home() {
     getent passwd "$(logname)" | cut -d: -f6
 }
@@ -118,7 +117,7 @@ install_steam() {
 
     rm -rf "$steam_dir"
     mkdir -p "$steam_dir"
-    pushd "$temp_dir"
+    pushd "$temp_dir" || return 1
 
     # download latest deb and unpack
     wget https://cdn.cloudflare.steamstatic.com/client/installer/steam.deb
@@ -127,7 +126,7 @@ install_steam() {
 
     # move deb contents to steam folder
     mv ./usr/* "$steam_dir"
-    popd
+    popd || return 1
     rm -rf "$temp_dir"
 
     # create run script
