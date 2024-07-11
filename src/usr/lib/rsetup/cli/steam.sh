@@ -140,11 +140,10 @@ install_steam() {
 export STEAMOS=1
 export STEAM_RUNTIME=1
 export DBUS_FATAL_WARNINGS=0
-~/steam/bin/steam $@' > steam
+~/steam/bin/steam $@' > /usr/local/bin/steam
 
-    # make script executable and move
-    chmod +x steam
-    mv steam /usr/local/bin/
+    # make script executable
+    chmod +x /usr/local/bin/steam
     apt-get install -y libc6:armhf libsdl2-2.0-0:armhf libsdl2-image-2.0-0:armhf \
         libsdl2-mixer-2.0-0:armhf libsdl2-ttf-2.0-0:armhf libopenal1:armhf \
         libpng16-16:armhf libfontconfig1:armhf libxcomposite1:armhf \
