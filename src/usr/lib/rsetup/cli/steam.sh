@@ -119,21 +119,22 @@ install_steam() {
     install_winex86
     # install_wine64
     # create necessary directories
-    mkdir -p "${user_home}/steam"
-    mkdir -p "${user_home}/steam/tmp"
-    cd "${user_home}/steam/tmp" || exit
+    local steam_dir="${user_home}/steam" temp_dir
+    temp_dir="$(mktemp -d)"
+
+    rm -rf "$steam_dir"
+    mkdir -p "$steam_dir"
+    pushd "$temp_dir"
 
     # download latest deb and unpack
     wget https://cdn.cloudflare.steamstatic.com/client/installer/steam.deb
     ar x steam.deb
     tar xf data.tar.xz
 
-    # remove deb archives, not needed anymore
-    rm ./*.tar.xz ./steam.deb
-
     # move deb contents to steam folder
-    mv ./usr/* ../
-    cd ../ && rm -rf ./tmp/
+    mv ./usr/* "$steam_dir"
+    popd
+    rm -rf "$temp_dir"
 
     # create run script
     echo '#!/bin/bash
