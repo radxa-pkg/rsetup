@@ -65,18 +65,20 @@ EOF
     mkdir "${user_home}/wine/lib/"
     # cp libwine.so ${user_home}/wine/lib/
     # cp libwine.so.1 ${user_home}/wine/lib/
-    cd "${user_home}/wine/" || exit
+    pushd "${user_home}/wine/" || return 1
     latest_version="$(basename "$(curl -ILs -o /dev/null -w "%{url_effective}" https://github.com/Kron4ek/Wine-Builds/releases/latest)")"
     curl -Ls "https://github.com/Kron4ek/Wine-Builds/releases/download/$latest_version/wine-$latest_version-x86.tar.xz" > "wine-latest-x86.tar.xz"
     xz -d wine-latest-x86.tar.xz
     tar -xf wine-latest-x86.tar
-    cd "wine-$latest_version-x86/" || exit
+    popd || return 1
+    pushd "${user_home}/wine/wine-$latest_version-x86/" || return 1
     cp -R ./* "${user_home}/wine"
     # ln -s "${user_home}/wine/bin/wine" /usr/local/bin/wine
     # ln -s "${user_home}/wine/bin/winecfg" /usr/local/bin/winecfg
     # ln -s "${user_home}/wine/bin/wineserver" /usr/local/bin/wineserver
     # #try to chown using either sudo_user or pkexec_uid
     chown -R "${SUDO_USER:-${PKEXEC_UID}}" "${user_home}/wine"
+    popd || return 1
     echo "Run wine winecfg to let wine configure itself"
 }
 
