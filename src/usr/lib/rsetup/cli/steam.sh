@@ -21,18 +21,18 @@ install_winex86() {
     local -r user_home="$(get_user_home)"
     rm -rf "${user_home}/.wine/" "${user_home}/wine/"
     # cp wine /usr/local/bin/
-    cat <<EOF > /usr/local/bin/wine
+    cat <<\EOF > /usr/local/bin/wine
 #!/bin/bash
 #export GALLIUM_HUD=simple,fps
-setarch linux32 -L box86 ~/wine/bin/wine "$@"
+setarch linux32 -L box86 $HOME/wine/bin/wine "$@"
 EOF
-    cat <<EOF > /usr/local/bin/wineserver
+    cat <<\EOF > /usr/local/bin/wineserver
 #!/bin/bash
-box86 ~/wine/bin/wineserver "$@"
+box86 $HOME/wine/bin/wineserver "$@"
 EOF
-    cat <<EOF > /usr/local/bin/winetricks
+    cat <<\EOF > /usr/local/bin/winetricks
 #!/bin/bash
-env BOX86_NOBANNER=1 box86 ~/wine/winetricks "$@"
+env BOX86_NOBANNER=1 box86 $HOME/wine/winetricks "$@"
 EOF
     chmod +x /usr/local/bin/winetricks
     chmod +x /usr/local/bin/wineserver
@@ -139,7 +139,7 @@ export STEAMOS=1
 export STEAM_RUNTIME=1
 export DBUS_FATAL_WARNINGS=0
 export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
-~/steam/bin/steam $@' > /usr/local/bin/steam
+$HOME/steam/bin/steam $@' > /usr/local/bin/steam
 
     # .desktop file
     sudo -u "$(logname)" mkdir -p "${user_home}/.local/share/applications/"
