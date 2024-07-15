@@ -134,6 +134,8 @@ install_steam() {
     rm -rf "$temp_dir"
 
     # create run script
+    # We don't want the expression to expand so disable the check
+    # shellcheck disable=SC2016
     echo '#!/bin/bash
 export STEAMOS=1
 export STEAM_RUNTIME=1
