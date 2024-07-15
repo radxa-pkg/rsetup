@@ -24,15 +24,15 @@ install_winex86() {
     cat <<EOF > /usr/local/bin/wine
 #!/bin/bash
 #export GALLIUM_HUD=simple,fps
-setarch linux32 -L box86 $HOME/wine/bin/wine "$@"
+setarch linux32 -L box86 ~/wine/bin/wine "$@"
 EOF
     cat <<EOF > /usr/local/bin/wineserver
 #!/bin/bash
-box86 $HOME/wine/bin/wineserver "$@"
+box86 ~/wine/bin/wineserver "$@"
 EOF
     cat <<EOF > /usr/local/bin/winetricks
 #!/bin/bash
-env BOX86_NOBANNER=1 box86 $HOME/wine/winetricks "$@"
+env BOX86_NOBANNER=1 box86 ~/wine/winetricks "$@"
 EOF
     chmod +x /usr/local/bin/winetricks
     chmod +x /usr/local/bin/wineserver
@@ -61,6 +61,12 @@ Categories=Game;
 Terminal=false
 EOF
 
+    cat <<EOF > /etc/binfmt.d/wine.conf
+package wine
+interpreter /usr/bin/wine
+magic MZ
+EOF
+
     sudo -u "$(logname)" mkdir -p  "${user_home}/wine/lib/"
     # cp libwine.so ${user_home}/wine/lib/
     # cp libwine.so.1 ${user_home}/wine/lib/
@@ -76,7 +82,6 @@ EOF
     # ln -s "${user_home}/wine/bin/winecfg" /usr/local/bin/winecfg
     # ln -s "${user_home}/wine/bin/wineserver" /usr/local/bin/wineserver
     rm -rf "$wine_pkg"
-    echo "Run wine winecfg to let wine configure itself"
 }
 
 # install_wine64() {
@@ -133,7 +138,13 @@ install_steam() {
 export STEAMOS=1
 export STEAM_RUNTIME=1
 export DBUS_FATAL_WARNINGS=0
+export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 ~/steam/bin/steam $@' > /usr/local/bin/steam
+
+    # .desktop file
+    sudo -u "$(logname)" mkdir -p "${user_home}/.local/share/applications/"
+    sed -i 's|/usr/bin/steam|/usr/local/bin/steam|' "${steam_dir}/lib/steam/steam.desktop"
+    cp "${steam_dir}/lib/steam/steam.desktop" "${user_home}/.local/share/applications/"
 
     # make script executable
     chmod +x /usr/local/bin/steam
@@ -141,7 +152,8 @@ export DBUS_FATAL_WARNINGS=0
         libsdl2-mixer-2.0-0:armhf libsdl2-ttf-2.0-0:armhf libopenal1:armhf \
         libpng16-16:armhf libfontconfig1:armhf libxcomposite1:armhf \
         libbz2-1.0:armhf libxtst6:armhf libsm6:armhf libice6:armhf \
-        libxinerama1:armhf libxdamage1:armhf libdrm2:armhf libgbm1:armhf libibus-1.0-5
+        libxinerama1:armhf libxdamage1:armhf libdrm2:armhf libgbm1:armhf libibus-1.0-5 \
+        zenity libgl1:armhf libgl1-mesa-dri:armhf binfmt-support
 
 }
 
@@ -163,6 +175,8 @@ uninstall_steam() {
     rm -f /usr/local/bin/wine /usr/local/bin/wineserver /usr/local/bin/winetricks
     rm -f "${user_home}/.local/share/applications/wine-config.desktop"
     rm -f "${user_home}/.local/share/applications/wine-desktop.desktop"
+    rm -f "${user_home}/.local/share/applications/steam.desktop"
+    rm -f /etc/binfmt.d/wine.conf
 
     # Remove Steam related files and directories
     rm -rf "${user_home}/steam"
@@ -173,7 +187,8 @@ uninstall_steam() {
         libsdl2-mixer-2.0-0:armhf libsdl2-ttf-2.0-0:armhf libopenal1:armhf \
         libpng16-16:armhf libfontconfig1:armhf libxcomposite1:armhf \
         libbz2-1.0:armhf libxtst6:armhf libsm6:armhf libice6:armhf \
-        libxinerama1:armhf libxdamage1:armhf libgbm1:armhf libdrm2:armhf
+        libxinerama1:armhf libxdamage1:armhf libdrm2:armhf libgbm1:armhf libibus-1.0-5 \
+        zenity libgl1:armhf libgl1-mesa-dri:armhf binfmt-support
 
 
     # Remove armhf architecture
