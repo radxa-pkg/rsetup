@@ -134,14 +134,14 @@ install_steam() {
     rm -rf "$temp_dir"
 
     # create run script
-    # We don't want the expression to expand so disable the check
-    # shellcheck disable=SC2016
-    echo '#!/bin/bash
+    cat <<EOF >/usr/local/bin/steam
+'#!/bin/bash
 export STEAMOS=1
 export STEAM_RUNTIME=1
 export DBUS_FATAL_WARNINGS=0
 export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
-$HOME/steam/bin/steam $@' > /usr/local/bin/steam
+"\$HOME/steam/bin/steam" "$@"
+EOF
 
     # .desktop file
     sudo -u "$(logname)" mkdir -p "${user_home}/.local/share/applications/"
