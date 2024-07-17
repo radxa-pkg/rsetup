@@ -62,9 +62,7 @@ Terminal=false
 EOF
 
     cat <<EOF > /etc/binfmt.d/wine.conf
-package wine
-interpreter /usr/bin/wine
-magic MZ
+:wine:M::MZ::/usr/local/bin/wine:
 EOF
 
     sudo -u "$(logname)" mkdir -p  "${user_home}/wine/lib/"
