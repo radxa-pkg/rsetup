@@ -135,7 +135,7 @@ install_steam() {
 
     # create run script
     cat <<EOF >/usr/local/bin/steam
-'#!/bin/bash
+#!/bin/bash
 export STEAMOS=1
 export STEAM_RUNTIME=1
 export DBUS_FATAL_WARNINGS=0
