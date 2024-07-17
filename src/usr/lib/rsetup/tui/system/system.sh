@@ -171,7 +171,7 @@ __system_set_target(){
 
     for i in "${available_targets[@]}"
     do
-        if [[ -z "$(systemctl list-units --no-legend "$i")" ]]
+        if [[ -z "$(systemctl list-units --all --no-legend "$i")" ]]
         then
             continue
         elif [[ "$i" == "$current_target" ]]
