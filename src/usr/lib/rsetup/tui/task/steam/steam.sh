@@ -13,7 +13,12 @@ __task_steam_uninstall() {
 }
 
 __task_steam_install() {
-    if yesno "Are you sure you want to install Steam?"
+    if lsmod | grep -q panthor; then
+        text="Are you sure you want to install Steam?"
+    else
+        text="You are using a device that has an incompatible gpu, you may experience stutters or crashes, do you still want to install Steam?"
+    fi
+    if yesno "$text"
     then
         install_steam
     fi
