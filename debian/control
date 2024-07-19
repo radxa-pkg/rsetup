@@ -17,7 +17,7 @@ Priority: standard
 Essential: yes
 Depends: device-tree-compiler,
          gdisk,
-         librtui (>= 0.1.4),
+         librtui (>= 0.1.5),
          parted,
          pkexec | policykit-1 (<< 122-1),
          python3,
