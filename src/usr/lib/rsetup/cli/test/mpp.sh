@@ -14,7 +14,7 @@ mpp_enable_logging() {
     export mpp_log_level=6
     export GST_DEBUG="2,*mpp*:4,*fps*:7"
     export LIBV4L_RKMPP_LOG_LEVEL=6
-    export DISPLAY=":0"
+    export DISPLAY="${DISPLAY:-:0}"
 }
 
 mpp_play() {
