@@ -74,7 +74,8 @@ __system_bootloader_helper() {
         return
     fi
 
-    if "$bootloader_method" "$bootloader"
+    if __external_script_type_check "/usr/lib/u-boot/$bootloader/setup.sh" "$bootloader_method" "function" && \
+        "$bootloader_method" "$bootloader"
     then
         msgbox "The $bootloader_type has been updated successfully."
     else
