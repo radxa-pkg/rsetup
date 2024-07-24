@@ -79,7 +79,7 @@ __system_bootloader_helper() {
         msgbox "The $bootloader_type has been updated successfully."
     else
         ret=$?
-        case "$ret" in
+        case "$(( ret - 256 ))" in
             "$ERROR_ILLEGAL_PARAMETERS")
                 msgbox "This product does not support the current operation for the selected $bootloader_type."
                 ;;

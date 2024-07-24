@@ -149,18 +149,20 @@ __overlay_manage() {
         return
     fi
 
-    enable_overlays "${items[@]}"; ret="$?"
-    case "$ret" in
-        0)
-            msgbox "Selected overlays will be enabled at next boot."
-            ;;
-        "$ERROR_ILLEGAL_PARAMETERS")
-            msgbox "The selection contains non-existing overlays. Did you delete them?"
-            ;;
-        *)
-            msgbox "Unable to update the boot config."
-            ;;
-    esac
+    if enable_overlays "${items[@]}"
+    then
+        msgbox "Selected overlays will be enabled at next boot."
+    else
+        ret="$?"
+        case "$(( ret - 256 ))" in
+            "$ERROR_ILLEGAL_PARAMETERS")
+                msgbox "The selection contains non-existing overlays. Did you delete them?"
+                ;;
+            *)
+                msgbox "Unable to update the boot config."
+                ;;
+        esac
+    fi
 }
 
 __overlay_info() {
