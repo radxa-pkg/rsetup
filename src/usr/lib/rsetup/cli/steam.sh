@@ -183,11 +183,11 @@ uninstall_steam() {
     rm -f /usr/local/bin/steam
 
     # Remove additional packages installed for Steam
-    apt-get remove -y libc6:armhf libsdl2-2.0-0:armhf libsdl2-image-2.0-0:armhf \
+    apt-get remove -y --allow-remove-essential libc6:armhf libgcc-s1:armhf libsdl2-2.0-0:armhf libsdl2-image-2.0-0:armhf \
         libsdl2-mixer-2.0-0:armhf libsdl2-ttf-2.0-0:armhf libopenal1:armhf \
         libpng16-16:armhf libfontconfig1:armhf libxcomposite1:armhf \
         libbz2-1.0:armhf libxtst6:armhf libsm6:armhf libice6:armhf \
-        libxinerama1:armhf libxdamage1:armhf libdrm2:armhf libgbm1:armhf libibus-1.0-5 \
+        libxinerama1:armhf libxdamage1:armhf libdrm2:armhf libgbm1:armhf \
         zenity libgl1:armhf libgl1-mesa-dri:armhf binfmt-support
 
 
