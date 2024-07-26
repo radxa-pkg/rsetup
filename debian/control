@@ -17,6 +17,7 @@ Priority: standard
 Essential: yes
 Depends: device-tree-compiler,
          gdisk,
+         jq,
          librtui (>= 0.1.5),
          parted,
          pkexec | policykit-1 (<< 122-1),

@@ -372,7 +372,7 @@ To return to normal mode, please use your desktop environment's display setup to
 }
 
 __check_service_status() {
-    local service="$1@$2"
+    local service="$1$2"
     case "$(systemctl is-enabled "$service")" in
       enabled)
           checklist_add "$service" "ON"
@@ -386,11 +386,12 @@ __check_service_status() {
 __hardware_otg() {
     checklist_init
 
-    local udc udc_function udc_function_list status i
+    local udc udc_function udc_function_list services status i
+    readarray -t services < <(jq -er '.[]' /usr/share/radxa-otgutils/services.json || echo -en "radxa-adbd@\nradxa-usbnet@")
     for udc in /sys/class/udc/*
     do
         udc="$(basename "$udc")"
-        for i in radxa-adbd radxa-usbnet
+        for i in "${services[@]}"
         do
             __check_service_status "$i" "$udc"
         done
