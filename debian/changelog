@@ -1,3 +1,22 @@
+rsetup (0.4.8) jammy; urgency=medium
+
+  [ CodeChenL ]
+  * feat: add system_update at cli function
+  * fix: use reliable method to check package status
+  * fix: add --all options for available_targets check
+  * feat: cli: add some autologin functions
+  * feat: user: supports autologin for more session types
+  * fix: repair DISPLAY was forced to assign a value of :0
+  * chore: update Depends librtui
+  * fix: recover the correct error return value
+  * fix: bootloader: add support judgment for operations
+  * fix: use services.json to identify available udc services
+
+  [ ZHANG Yuntian ]
+  * fix: add missing semicolons
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Wed, 31 Jul 2024 06:23:04 +0000
+
 rsetup (0.4.7) jammy; urgency=medium
 
   [ ZHANG Yuntian ]
