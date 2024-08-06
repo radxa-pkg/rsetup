@@ -421,11 +421,18 @@ Select any to update their status."
     do
         udc_function="${RTUI_CHECKLIST[i+1]}"
         status="${RTUI_CHECKLIST[i+2]}"
+        if [[ "$status" == "OFF" ]]
+        then
+            systemctl disable --now "$udc_function"
+        fi
+    done
+    for ((i = 0; i < length; i+=3))
+    do
+        udc_function="${RTUI_CHECKLIST[i+1]}"
+        status="${RTUI_CHECKLIST[i+2]}"
         if [[ "$status" == "ON" ]]
         then
             systemctl enable --now "$udc_function"
-        else
-            systemctl disable --now "$udc_function"
         fi
     done
 }
