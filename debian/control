@@ -15,7 +15,8 @@ Architecture: all
 Section: admin
 Priority: standard
 Essential: yes
-Depends: device-tree-compiler,
+Depends: curl,
+         device-tree-compiler,
          gdisk,
          jq,
          librtui (>= 0.1.5),
@@ -24,6 +25,7 @@ Depends: device-tree-compiler,
          python3,
          python3-yaml,
          u-boot-menu,
+         xz-utils,
          ${misc:Depends},
 Suggests: aicrf-test,
           gpiod,
