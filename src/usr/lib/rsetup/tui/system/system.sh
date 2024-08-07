@@ -3,22 +3,15 @@
 __system_system_update() {
     if yesno "System will be updated, continue?"
     then
-        local ret=0
-        system_update || ret=$?
-        case "$ret" in
-        1)
-            msgbox "Unable to update package list." "$RTUI_PALETTE_ERROR"
-            ;;
-        2)
-            msgbox "Unable to upgrade packages." "$RTUI_PALETTE_ERROR"
-            ;;
-        3)
-            msgbox "Unable to upgrade pinned packages." "$RTUI_PALETTE_ERROR"
-            ;;
-        *)
-            msgbox "Unknown error." "$RTUI_PALETTE_ERROR"
-            ;;
-        esac
+        if ! system_update; then
+            cat <<EOF
+==================
+Update has failed.
+This may be caused by network issue, or clock out of sync.
+You can try update again later.
+EOF
+        fi
+        read -rp "Press enter to continue..."
     fi
 }
 
