@@ -1,3 +1,13 @@
+rsetup (0.4.9) jammy; urgency=medium
+
+  [ CodeChenL ]
+  * fix: hardware: otg: modify to disable function before enable
+  * chore: update Depends librtui
+  * fix: update Baota install and uninstall function
+  * fix: task: change to use checklist
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Wed, 07 Aug 2024 08:48:07 +0000
+
 rsetup (0.4.8) jammy; urgency=medium
 
   [ CodeChenL ]
