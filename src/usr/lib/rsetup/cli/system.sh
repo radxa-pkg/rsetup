@@ -220,7 +220,9 @@ EOF
         rm -f "$config_dir/50-rsetup-autologin.conf"
     fi
 
-    systemctl daemon-reload
+    if ! systemctl daemon-reload; then
+        echo "If you are running in chroot environment, where systemd is not running, then you can ignore above error." >&2
+    fi
 }
 
 set_sddm_autologin() {
