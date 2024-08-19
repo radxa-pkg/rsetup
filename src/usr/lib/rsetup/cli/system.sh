@@ -243,7 +243,7 @@ EOF
 
 set_gdm_autologin() {
     local user="$1" switch="$2"
-    local config_dir="/etc/gdm3/"
+    local config_dir="/etc/gdm3"
 
     if [[ "$switch" == "ON" ]]; then
         mkdir -p "$config_dir"
