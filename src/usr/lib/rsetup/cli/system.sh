@@ -245,8 +245,12 @@ set_gdm_autologin() {
     local user="$1" switch="$2"
     local config_dir="/etc/gdm3"
 
+    if [[ ! -f $config_dir/daemon.conf ]]; then
+        echo "gdm is not installed. Auto login will not be configured." >&2
+        return 1
+    fi
+
     if [[ "$switch" == "ON" ]]; then
-        mkdir -p "$config_dir"
         sed -i '/^# Rsetup/,/# Rsetup$/d' $config_dir/daemon.conf
         cat << EOF | tee -a $config_dir/daemon.conf >/dev/null
 # Rsetup
