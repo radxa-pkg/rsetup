@@ -83,9 +83,6 @@ __user() {
     menu_init
     menu_add __user_change_password "Change Password"
     menu_add __user_change_hostname "Change Hostname"
-    if $DEBUG
-    then
-        menu_add __user_enable_auto_login "Enable Auto Login"
-    fi
+    menu_add __user_enable_auto_login "Configure auto login"
     menu_show "User Settings"
 }
