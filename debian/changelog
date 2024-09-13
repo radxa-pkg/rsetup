@@ -1,3 +1,16 @@
+rsetup (0.4.11) jammy; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * fix: remove extra slash
+  * fix: check if gdm config file exist before editing
+  * format: explicitly quote strings with variables
+  * fix: do not fail if we are not inside a systemd environment
+
+  [ Chen Jiali ]
+  * fix: user: enable "Configure auto login" menu item
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Fri, 13 Sep 2024 10:40:45 +0000
+
 rsetup (0.4.10) jammy; urgency=medium
 
   [ ZHANG Yuntian ]
