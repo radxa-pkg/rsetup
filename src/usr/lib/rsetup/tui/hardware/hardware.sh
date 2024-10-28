@@ -10,7 +10,7 @@ __hardware_gstreamer_test_picture() {
     local temp
     temp="$(mktemp "${TEMPDIR:-/tmp}/tmp.XXXXXXXXXX.jpg")"
 
-    if gst-launch-1.0 v4l2src "device=/dev/$RSETUP_GSTREAMER_DEVICE" io-mode=4 ! \
+    if gst-launch-1.0 v4l2src "device=/dev/$RSETUP_GSTREAMER_DEVICE" io-mode=4 num-buffers=30 ! \
                       autovideoconvert ! \
                       video/x-raw,format=UYVY,width=1920,height=1080 ! \
                       jpegenc ! \
