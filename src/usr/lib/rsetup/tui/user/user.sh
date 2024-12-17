@@ -58,7 +58,7 @@ __user_enable_auto_login (){
         service="$(awk '{print $1}' <<< "$REPLY")"
         checklist_add "$service" "$(get_autologin_status "$service")"
     done < <(systemctl list-units --state running --no-legend -- "*getty@*.service" sddm.service gdm.service lightdm.service)
-    if ! checklist_show "Please select the service(s) you want to enable auto login:" || checklist_is_selection_empty
+    if ! checklist_show "Please select the service(s) you want to enable auto login:"
     then
         return
     fi
