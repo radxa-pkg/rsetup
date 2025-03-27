@@ -5,6 +5,7 @@ source "/usr/lib/rsetup/mod/block_helpers.sh"
 source "/usr/lib/rsetup/mod/hwid.sh"
 
 ALLOWED_RCONFIG_FUNC+=(
+    "update_generic_hostname"
     "update_hostname"
     "update_locale"
     "enable_service"
@@ -81,6 +82,18 @@ update_emmc_boot() {
     do
         "/usr/lib/u-boot/$pid/setup.sh" update_emmc_boot "$device"
     done
+}
+
+update_generic_hostname() {
+    __parameter_count_at_least_check 1 "$@"
+
+    local current_hostname
+    current_hostname="$(hostname)"
+
+    if __in_array "$current_hostname" "$@" >/dev/null
+        then
+            update_hostname "$(get_product_id)"
+    fi
 }
 
 update_hostname() {
