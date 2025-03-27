@@ -6,6 +6,11 @@
 no_fail
 log "Running before.txt as first boot configuration"
 
+# Update generic hostname
+# Command:
+#   update_generic_hostname <generic hostname>
+update_generic_hostname rock-2 radxa-rk3528 radxa-rk3576
+
 # Create default accounts
 # Commands:
 #   add_user <user name> <password>
