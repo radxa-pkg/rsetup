@@ -5,6 +5,3 @@ rsetup: improbable-bug-number-in-closes
 rsetup: desktop-command-not-in-package
 
 rsetup: groff-message
-
-# rsetup needs to be installed early for mmdebstrap
-rsetup: new-essential-package
