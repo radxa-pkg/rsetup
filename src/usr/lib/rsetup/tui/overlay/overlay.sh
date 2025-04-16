@@ -106,6 +106,15 @@ __overlay_show() {
 
 __overlay_validate() {
     local i item
+
+    if is_overlay_unchanged; then
+        if ! yesno "You did not make any changes to overlay selection.
+
+Are you sure to continue?"; then
+            return 1
+        fi
+    fi
+
     check_overlay_conflict_init
     for i in "${RTUI_CHECKLIST_STATE_NEW[@]}"
     do

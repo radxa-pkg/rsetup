@@ -5,6 +5,11 @@ source "/usr/lib/rsetup/mod/overlay.sh"
 
 ALLOWED_RCONFIG_FUNC+=("load_u-boot_setting")
 
+is_overlay_unchanged() {
+    [[ "$(__array_to_ordered_text "${RTUI_CHECKLIST_STATE_NEW[@]}")" == \
+       "$(__array_to_ordered_text "${RTUI_CHECKLIST_STATE_OLD[@]}")" ]]
+}
+
 check_overlay_conflict_init() {
     RSETUP_OVERLAY_RESOURCES=()
     RSETUP_OVERLAY_RESOURCE_OWNER=()
