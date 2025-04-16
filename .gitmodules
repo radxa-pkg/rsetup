@@ -1,3 +1,4 @@
 [submodule "externals/librtui"]
 	path = externals/librtui
 	url = https://github.com/radxa-pkg/librtui
+	branch = main
