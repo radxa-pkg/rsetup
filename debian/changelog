@@ -1,3 +1,11 @@
+rsetup (0.4.14) noble; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * chore: bump librtui to 0.2.0
+  * feat: add warning when user did not make any overlay change
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Thu, 17 Apr 2025 09:06:58 +0000
+
 rsetup (0.4.13) noble; urgency=medium
 
   [ Nascs Fang ]
