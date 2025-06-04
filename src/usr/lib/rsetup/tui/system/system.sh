@@ -32,6 +32,7 @@ __system_select_compatible_bootloader() {
                [[ "$(sed -E "s/[-_]//g" <<< "$i")" == "$(sed -E "s/[-_]//g" <<< "$p-spi")" ]]
             then
                 radiolist_add "$i" "OFF"
+                break
             fi
         done
     done
