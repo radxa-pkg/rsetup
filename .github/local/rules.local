@@ -1,0 +1,4 @@
+override_dh_installsystemd:
+	dh_installsystemd --name=rsetup-aic8800-reset@
+	dh_installsystemd --name=rsetup-hciattach@
+	dh_installsystemd --name=rsetup

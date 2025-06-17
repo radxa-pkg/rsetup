@@ -2,14 +2,10 @@
 
 include /usr/share/dpkg/pkg-info.mk
 include /usr/share/dpkg/architecture.mk
+-include .github/local/rules.local
 
 %:
 	dh $@
 
 override_dh_builddeb:
 	dh_builddeb -- -Zxz
-
-override_dh_installsystemd:
-	dh_installsystemd --name=rsetup-aic8800-reset@
-	dh_installsystemd --name=rsetup-hciattach@
-	dh_installsystemd --name=rsetup
