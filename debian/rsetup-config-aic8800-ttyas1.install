@@ -1,0 +1,1 @@
+config/00-aic8800-reset-ttyas1.conf /usr/lib/rsetup/conf.d/on_boot

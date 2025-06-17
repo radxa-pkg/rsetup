@@ -51,6 +51,15 @@ Depends: rsetup (= ${binary:Version}),
 Description: Radxa system config - First boot configuration
  This package contains the default first boot script.
 
+Package: rsetup-config-aic8800-ttyas1
+Architecture: all
+Section: admin
+Priority: standard
+Depends: rsetup (= ${binary:Version}),
+         ${misc:Depends},
+Description: Radxa system config - Attach AIC8800 Bluetooth on /dev/ttyAS1
+ This package attaches AIC8800 Bluetooth on /dev/ttyAS1 on boot.
+
 Package: rsetup-config-aic8800-ttys1
 Architecture: all
 Section: admin
