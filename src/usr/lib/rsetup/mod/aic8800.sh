@@ -18,7 +18,7 @@ __aic8800_reset() {
                 return 1
                 ;;
         esac
-    done < <(timeout 1 bt_test -s uart 1500000 "/dev/$1")
+    done < <(stdbuf -oL timeout 2 bt_test -s uart 1500000 "/dev/$1")
 
     echo "Command timed out."
     return 2
