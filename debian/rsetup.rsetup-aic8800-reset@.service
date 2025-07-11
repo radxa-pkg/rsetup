@@ -5,6 +5,7 @@ Wants=rsetup-hciattach@%i.service
 Before=rsetup-hciattach@%i.service
 
 [Service]
+Type=oneshot
 ExecStart=/usr/bin/rsetup __aic8800_reset %I
 
 [Install]
