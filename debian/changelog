@@ -1,3 +1,11 @@
+rsetup (0.4.16) noble; urgency=medium
+
+  [ Jiali Chen ]
+  * fix: set `Type=oneshot` of rsetup-aic8800-reset@.service
+  * fix: __aic8800_reset: improve reset success rate
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Mon, 14 Jul 2025 07:47:43 +0000
+
 rsetup (0.4.15) noble; urgency=medium
 
   [ Jiali Chen ]
