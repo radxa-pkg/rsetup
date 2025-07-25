@@ -129,7 +129,12 @@ enable_service() {
     __parameter_count_check 1 "$@"
 
     local service="$1"
-    systemctl enable --now "$service"
+    if systemctl is-enabled "$service" &>/dev/null; then
+        echo "Service '$service' is already enabled."
+    else
+        echo "Service '$service' is not enabled. Enabling and starting now."
+        systemctl enable --now "$service"
+    fi
 }
 
 disable_service() {
