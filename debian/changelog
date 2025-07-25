@@ -1,3 +1,12 @@
+rsetup (0.4.17) noble; urgency=medium
+
+  [ Jiali Chen ]
+  * fix: enable_service: add service enable status judgment
+  * fix: __aic8800_reset: increase the timeout parameter
+  * refactor: rsetup-config-aic8800: replace systemd with udev
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Fri, 25 Jul 2025 09:06:20 +0000
+
 rsetup (0.4.16) noble; urgency=medium
 
   [ Jiali Chen ]
