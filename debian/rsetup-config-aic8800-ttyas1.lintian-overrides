@@ -1,0 +1,2 @@
+# Workaround Debian bug: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=801822
+rsetup-config-aic8800-ttyas1: maintainer-script-calls-systemctl

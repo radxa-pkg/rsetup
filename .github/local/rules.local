@@ -2,3 +2,7 @@ override_dh_installsystemd:
 	dh_installsystemd --name=rsetup-aic8800-reset@
 	dh_installsystemd --name=rsetup-hciattach@
 	dh_installsystemd --name=rsetup
+
+override_dh_installudev:
+	dh_installudev -prsetup-config-aic8800-ttyas1 --name=aic8800-reset-ttyas1 --priority=99
+	dh_installudev -prsetup-config-aic8800-ttys1 --name=aic8800-reset-ttys1 --priority=99

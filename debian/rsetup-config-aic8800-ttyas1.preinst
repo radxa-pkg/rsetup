@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -e
+
+action="$1"
+if [ "$action" = upgrade ]
+then
+    # Needs to disable the services enabled in the old version to ensure that the new version of udev rules operates as expected.
+    for i in $(deb-systemd-invoke list-units --all rsetup-aic8800-reset@ttyAS1.service | awk '$3 == "not-found" {printf("%s ",$2)}') \
+             $(deb-systemd-invoke list-units --all rsetup-aic8800-reset@ttyAS1.service | awk '$2 == "loaded" && $3 != "units" {printf("%s ",$1)}'); do
+        systemctl disable "$i" || true
+    done
+fi
+
+#DEBHELPER#
+
+exit 0
