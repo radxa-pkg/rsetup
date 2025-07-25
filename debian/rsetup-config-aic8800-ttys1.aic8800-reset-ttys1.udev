@@ -1,0 +1,2 @@
+# Run reset only after checking that aicwf_sdio is loaded normally to avoid communication timeouts
+ACTION=="add", SUBSYSTEM=="net", ENV{ID_NET_DRIVER}=="aicwf_sdio", TAG+="systemd", ENV{SYSTEMD_WANTS}="rsetup-aic8800-reset@ttyS1.service"
