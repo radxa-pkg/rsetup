@@ -10,9 +10,10 @@ __hardware_gstreamer_test_picture() {
     local temp
     temp="$(mktemp "${TEMPDIR:-/tmp}/tmp.XXXXXXXXXX.jpg")"
 
-    if gst-launch-1.0 v4l2src "device=/dev/$RSETUP_GSTREAMER_DEVICE" io-mode=4 num-buffers=30 ! \
-                      autovideoconvert ! \
-                      video/x-raw,format=UYVY,width=1920,height=1080 ! \
+    if gst-launch-1.0 v4l2src "device=/dev/$RSETUP_GSTREAMER_DEVICE" \
+                      num-buffers=30 ! \
+                      videoconvert ! \
+                      video/x-raw,format=NV12 ! \
                       jpegenc ! \
                       multifilesink "location=$temp"
     then
@@ -25,9 +26,10 @@ Please check if you have the required libraries installed." "$RTUI_PALETTE_ERROR
 }
 
 __hardware_gstreamer_test_live() {
-    gst-launch-1.0 v4l2src "device=/dev/$RSETUP_GSTREAMER_DEVICE" io-mode=4 ! \
-                   autovideoconvert ! \
-                   video/x-raw,format=NV12,width=1920,height=1080,framerate=30/1 ! \
+    gst-launch-1.0 v4l2src "device=/dev/$RSETUP_GSTREAMER_DEVICE" ! \
+                   videoconvert ! \
+                   video/x-raw,format=NV12 ! \
+                   videoconvert ! \
                    xvimagesink
 }
 
