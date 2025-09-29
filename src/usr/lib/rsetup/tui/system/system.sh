@@ -1,5 +1,8 @@
 # shellcheck shell=bash
 
+# shellcheck source=src/usr/lib/rsetup/mod/get_setup_script.sh
+source "/usr/lib/rsetup/mod/get_setup_script.sh"
+
 __system_system_update() {
     if yesno "System will be updated, continue?"
     then
@@ -22,7 +25,7 @@ __system_select_compatible_bootloader() {
 
     local products i p title="$1"
     mapfile -t products < <(get_product_ids)
-    for i in /usr/lib/u-boot/*
+    for i in /usr/lib/{u-boot,edk2/*}/*
     do
         i="$(basename "$i")"
 
@@ -68,7 +71,14 @@ __system_bootloader_helper() {
         return
     fi
 
-    if __external_script_type_check "/usr/lib/u-boot/$bootloader/setup.sh" "$bootloader_method" "function" && \
+    local setup_script
+
+    if ! setup_script="$(get_setup_script "$bootloader")"; then
+        msgbox "The setup script does not exist, please check your installation."
+        return
+    fi
+
+    if __external_script_type_check "$setup_script" "$bootloader_method" "function" && \
         "$bootloader_method" "$bootloader"
     then
         msgbox "The $bootloader_type has been updated successfully."

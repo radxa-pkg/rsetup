@@ -3,6 +3,7 @@
 # shellcheck source=src/usr/lib/rsetup/mod/block_helpers.sh
 source "/usr/lib/rsetup/mod/block_helpers.sh"
 source "/usr/lib/rsetup/mod/hwid.sh"
+source "/usr/lib/rsetup/mod/get_setup_script.sh"
 
 ALLOWED_RCONFIG_FUNC+=(
     "update_generic_hostname"
@@ -37,50 +38,59 @@ system_update() {
 }
 
 update_bootloader() {
-    local pid device
-    pid="${1:-$(get_product_id)}"
-    __assert_f "/usr/lib/u-boot/$pid/setup.sh"
+    local device setup_script
+    if ! setup_script="$(get_setup_script "${1:-}")"; then
+        echo "${FUNCNAME[0]} requires a setup script to work!" >&2
+        return 1
+    fi
 
     device="${2:-$(__get_block_dev)}"
-
-    "/usr/lib/u-boot/$pid/setup.sh" update_bootloader "$device"
+    "$setup_script" update_bootloader "$device"
 }
 
 erase_spinor() {
-    local pid
-    pid="${1:-$(get_product_id)}"
-    __assert_f "/usr/lib/u-boot/$pid/setup.sh"
+    local setup_script
+    if ! setup_script="$(get_setup_script "${1:-}")"; then
+        echo "${FUNCNAME[0]} requires a setup script to work!" >&2
+        return 1
+    fi
 
-    "/usr/lib/u-boot/$pid/setup.sh" erase_spinor
+    "$setup_script" erase_spinor
 }
 
 update_spinor() {
-    local pid
-    pid="${1:-$(get_product_id)}"
-    __assert_f "/usr/lib/u-boot/$pid/setup.sh"
+    local setup_script
+    if ! setup_script="$(get_setup_script "${1:-}")"; then
+        echo "${FUNCNAME[0]} requires a setup script to work!" >&2
+        return 1
+    fi
 
-    "/usr/lib/u-boot/$pid/setup.sh" update_spinor
+    "$setup_script" update_spinor
 }
 
 erase_emmc_boot() {
-    local pid device
-    pid="${1:-$(get_product_id)}"
-    __assert_f "/usr/lib/u-boot/$pid/setup.sh"
+    local device setup_script
+    if ! setup_script="$(get_setup_script "${1:-}")"; then
+        echo "${FUNCNAME[0]} requires a setup script to work!" >&2
+        return 1
+    fi
 
     for device in /dev/mmcblk*boot0
     do
-        "/usr/lib/u-boot/$pid/setup.sh" erase_emmc_boot "$device"
+        "$setup_script" erase_emmc_boot "$device"
     done
 }
 
 update_emmc_boot() {
-    local pid device
-    pid="${1:-$(get_product_id)}"
-    __assert_f "/usr/lib/u-boot/$pid/setup.sh"
+    local device setup_script
+    if ! setup_script="$(get_setup_script "${1:-}")"; then
+        echo "${FUNCNAME[0]} requires a setup script to work!" >&2
+        return 1
+    fi
 
     for device in /dev/mmcblk*boot0
     do
-        "/usr/lib/u-boot/$pid/setup.sh" update_emmc_boot "$device"
+        "$setup_script" update_emmc_boot "$device"
     done
 }
 
