@@ -5,196 +5,46 @@ source "/usr/lib/rsetup/mod/overlay.sh"
 
 ALLOWED_RCONFIG_FUNC+=("load_u-boot_setting")
 
-is_overlay_unchanged() {
-    [[ "$(__array_to_ordered_text "${RTUI_CHECKLIST_STATE_NEW[@]}")" == \
-       "$(__array_to_ordered_text "${RTUI_CHECKLIST_STATE_OLD[@]}")" ]]
-}
-
-check_overlay_conflict_init() {
-    RSETUP_OVERLAY_RESOURCES=()
-    RSETUP_OVERLAY_RESOURCE_OWNER=()
-}
-
-check_overlay_conflict() {
-    local name resources res i
-    mapfile -t resources < <(parse_dtbo "exclusive" "$1")
-    mapfile -t name < <(parse_dtbo --default-value "file" "title" "$1")
-
-    for res in "${resources[@]}"
-    do
-        if [[ "$res" == "null" ]]
-        then
-            continue
-        fi
-        if i="$(__in_array "$res" "${RSETUP_OVERLAY_RESOURCES[@]}")"
-        then
-            msgbox "Resource conflict detected!
-
-'${name[0]}' and '${RSETUP_OVERLAY_RESOURCE_OWNER[$i]}' both require the exclusive ownership of the following resource:
-
-${RSETUP_OVERLAY_RESOURCES[$i]}
-
-Please only enable one of them."
-            return 1
-        else
-            RSETUP_OVERLAY_RESOURCES+=("$res")
-            RSETUP_OVERLAY_RESOURCE_OWNER+=("${name[0]}")
-        fi
-    done
-}
-
 load_u-boot_setting() {
     # shellcheck source=/dev/null
     source "/etc/default/u-boot"
 
-    if [[ -z "${U_BOOT_FDT_OVERLAYS_DIR:-}" ]]
-    then
+    if [[ -z "${U_BOOT_FDT_OVERLAYS_DIR:-}" ]]; then
         eval "$(grep "^U_BOOT_FDT_OVERLAYS_DIR" "$(which u-boot-update)")"
         U_BOOT_FDT_OVERLAYS_DIR="${U_BOOT_FDT_OVERLAYS_DIR:-}"
     fi
+
+    FDT_OVERLAYS_DIR="${U_BOOT_FDT_OVERLAYS_DIR:-}"
+
+    if [[ -z "$FDT_OVERLAYS_DIR" ]]; then
+        echo "Warning: U-Boot overlays directory not found." >&2
+        return 1
+    fi
 }
 
-disable_overlays() {
-    load_u-boot_setting
-
-    for i in "$U_BOOT_FDT_OVERLAYS_DIR"/*.dtbo
-    do
-        mv -- "$i" "${i}.disabled"
-    done
+is_u-boot_exist() {
+    command -v u-boot-update &>/dev/null && load_u-boot_setting
 }
 
-rebuild_overlays() {
-    load_u-boot_setting
-
-    local version="$1" vendor="${2:-}" dtbos i
-    local old_overlays new_overlays enabled_overlays=()
-    old_overlays="$(realpath "$U_BOOT_FDT_OVERLAYS_DIR")"
-    new_overlays="${old_overlays}_new"
-
-    echo "Rebuilding overlay data folder for '$version'..."
-
-    if [[ -d "$old_overlays" ]]
-    then
-        cp -aR "$old_overlays" "$new_overlays"
-    else
-        mkdir -p "$old_overlays" "$new_overlays"
+disable_u-boot_overlays() {
+    if ! load_u-boot_setting; then
+        return 1
     fi
-
-    if [[ -f "$new_overlays/managed.list" ]]
-    then
-        echo "Removing managed overlays..."
-        mapfile -t RSETUP_MANAGED_OVERLAYS < "$new_overlays/managed.list"
-
-        for i in "${RSETUP_MANAGED_OVERLAYS[@]}"
-        do
-            if [[ -f "$new_overlays/$i" ]]
-            then
-                enabled_overlays+=( "$i" )
-            fi
-            rm -f "$new_overlays/$i" "$new_overlays/$i.disabled"
-        done
-    fi
-
-    if [[ -n "$vendor" ]]
-    then
-        dtbos=( "/usr/lib/linux-image-$version/$vendor/overlays/"*.dtbo* )
-    else
-        dtbos=( "/usr/lib/linux-image-$version/"*"/overlays/"*.dtbo* )
-    fi
-    rm -f "$new_overlays/managed.list"
-    touch "$new_overlays/managed.list"
-
-    echo "Building list of compatible overlays..."
-    mapfile -t dtbos < <(dtbo_is_compatible "${dtbos[@]}")
-
-    # This loop is a bottleneck due to expensive operations
-    # Enabling parallelism brings total execution time from 38.453s to 21.633s
-    local nproc
-    nproc=$(( $(nproc) ))
-    echo "Installing compatible overlays..."
-    for i in "${dtbos[@]}"
-    do
-        while (( $(jobs -r | wc -l) > nproc ))
-        do
-            sleep 0.1
-        done
-        (
-            cp "$i" "$new_overlays/$(basename "$i").disabled"
-            exec 100>>"$new_overlays/managed.list"
-            flock 100
-            basename "$i" >&100
-        ) &
-    done
-    wait
-
-    # This loop is not a bottleneck
-    # We add parallelism to make it uniform
-    echo "Reenable previously enabled overlays..."
-    for i in "${enabled_overlays[@]}"
-    do
-        while (( $(jobs -r | wc -l) > nproc ))
-        do
-            sleep 0.1
-        done
-        (
-            if [[ -f "$new_overlays/${i}.disabled" ]]
-            then
-                mv -- "$new_overlays/${i}.disabled" "$new_overlays/$i"
-            fi
-        ) &
-    done
-    wait
-
-    echo "Commiting changes..."
-    rm -rf "${old_overlays}_old"
-    mv "$old_overlays" "${old_overlays}_old"
-    mv "$new_overlays" "$old_overlays"
-
-    echo "Overlay data folder has been successfully rebuilt."
+    disable_overlays_general
 }
 
-enable_overlays() {
+rebuild_u-boot_overlays() {
+    if ! load_u-boot_setting; then
+        return 1
+    fi
+    rebuild_overlays_general "$@"
+}
+
+enable_u-boot_overlays() {
     __parameter_count_at_least_check 1 "$@"
-
-    local enable_overlays_list i dir_name file_name input_check=true
-
-    load_u-boot_setting
-
-    for i in "$@"
-    do
-        dir_name="$(dirname "$i")"
-        file_name="$(basename "${i%.disabled}")"
-
-        if [[ "$dir_name" == "." ]]
-        then
-            dir_name="$U_BOOT_FDT_OVERLAYS_DIR"
-        fi
-
-        if [[ "$(realpath "$dir_name")" != "$(realpath "$U_BOOT_FDT_OVERLAYS_DIR")" ]]
-        then
-            echo "$i: only overlays within '$U_BOOT_FDT_OVERLAYS_DIR' can be enabled." >&2
-            input_check=false
-        elif [[ -e "$dir_name/$file_name.disabled" ]]
-        then
-            enable_overlays_list+=("$U_BOOT_FDT_OVERLAYS_DIR/$file_name")
-        elif [[ -e "$dir_name/$file_name" ]]
-        then
-            echo "$file_name: already enabled." >&2
-        else
-            echo "$file_name: cannot find such overlay in '$U_BOOT_FDT_OVERLAYS_DIR'"
-            input_check=false
-        fi
-    done
-
-    if ! $input_check
-    then
-        return "$ERROR_ILLEGAL_PARAMETERS"
+    if ! load_u-boot_setting; then
+        return 1
     fi
-
-    for i in "${enable_overlays_list[@]}"
-    do
-        mv "$i.disabled" "$i"
-    done
-
+    enable_overlay_general "$@"
     u-boot-update
 }

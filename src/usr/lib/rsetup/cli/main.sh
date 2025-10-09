@@ -12,7 +12,7 @@ source "/usr/lib/rsetup/cli/baota.sh"
 source "/usr/lib/rsetup/cli/system.sh"
 source "/usr/lib/rsetup/cli/account.sh"
 source "/usr/lib/rsetup/cli/docker.sh"
-source "/usr/lib/rsetup/cli/u-boot-menu.sh"
+source "/usr/lib/rsetup/cli/overlay-menu.sh"
 source "/usr/lib/rsetup/cli/wi-fi.sh"
 source "/usr/lib/rsetup/cli/kernel.sh"
 

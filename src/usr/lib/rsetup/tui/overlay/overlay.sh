@@ -27,18 +27,36 @@ Are you sure?"
         return
     fi
 
-    load_u-boot_setting
+    load_overlay_setting
 
     basename="$(basename "$item")"
 
     case $basename in
         *.dtbo)
-            cp "$item" "$U_BOOT_FDT_OVERLAYS_DIR/$basename"
+            if [[ -n "$U_BOOT_FDT_OVERLAYS_DIR" ]]
+            then
+                cp "$item" "$U_BOOT_FDT_OVERLAYS_DIR/$basename"
+            fi
+
+            if [[ -n "$FDT_OVERLAYS_DIR" ]] && [[ "$FDT_OVERLAYS_DIR" != "$U_BOOT_FDT_OVERLAYS_DIR" ]]
+            then
+                cp "$item" "$FDT_OVERLAYS_DIR/$basename"
+            fi
             ;;
         *.dts|*.dtso)
             basename="${basename%.dts*}.dtbo"
+            err=0
 
-            compile_dtb "$item" "$U_BOOT_FDT_OVERLAYS_DIR/$basename" || err=$?
+            if [[ -n "$U_BOOT_FDT_OVERLAYS_DIR" ]]
+            then
+                compile_dtb "$item" "$U_BOOT_FDT_OVERLAYS_DIR/$basename"; err=$?
+            fi
+
+            if [[ $err -eq 0 ]] && [[ -n "$FDT_OVERLAYS_DIR" ]] && [[ "$FDT_OVERLAYS_DIR" != "$U_BOOT_FDT_OVERLAYS_DIR" ]]
+            then
+                compile_dtb "$item" "$FDT_OVERLAYS_DIR/$basename"; err=$?
+            fi
+
             case $err in
                 0) : ;;
                 1)
@@ -61,7 +79,7 @@ Are you sure?"
             ;;
     esac
 
-    if u-boot-update >/dev/null
+    if update_overlay_entry >/dev/null
     then
         msgbox "Selected overlays will be enabled at next boot."
     else
@@ -72,9 +90,9 @@ Are you sure?"
 __overlay_show() {
     local validation="${1:-true}"
     infobox "Searching available overlays may take a while, please wait..."
-    load_u-boot_setting
+    load_overlay_setting
 
-    local dtbos=( "$U_BOOT_FDT_OVERLAYS_DIR"/*.dtbo* )
+    local dtbos=( "$FDT_OVERLAYS_DIR"/*.dtbo* )
     mapfile -t dtbos < <(dtbo_is_compatible "${dtbos[@]}")
 
     checklist_init
@@ -88,7 +106,7 @@ __overlay_show() {
         items=("${items[@]:3}")
     done
 
-    checklist_emptymsg "Unable to find any compatible overlay under $U_BOOT_FDT_OVERLAYS_DIR."
+    checklist_emptymsg "Unable to find any compatible overlay under $FDT_OVERLAYS_DIR."
 
     while true
     do
@@ -119,14 +137,14 @@ Are you sure to continue?"; then
     for i in "${RTUI_CHECKLIST_STATE_NEW[@]}"
     do
         item="$(checklist_getitem "$i")"
-        if ! check_overlay_conflict "$U_BOOT_FDT_OVERLAYS_DIR/$item"*
+        if ! check_overlay_conflict "$FDT_OVERLAYS_DIR/$item"*
         then
             return 1
         fi
 
         local title package
-        mapfile -t title < <(parse_dtbo --default-value "file"  "title" "$U_BOOT_FDT_OVERLAYS_DIR/$item"*)
-        mapfile -t package < <(parse_dtbo "package" "$U_BOOT_FDT_OVERLAYS_DIR/$item"*)
+        mapfile -t title < <(parse_dtbo --default-value "file"  "title" "$FDT_OVERLAYS_DIR/$item"*)
+        mapfile -t package < <(parse_dtbo "package" "$FDT_OVERLAYS_DIR/$item"*)
         if [[ "${package[0]}" != "null" ]]
         then
             if ! __depends_package "${title[0]}" "${package[@]}"
@@ -154,7 +172,7 @@ __overlay_manage() {
 
     if (( ${#items[@]} == 0 ))
     then
-        u-boot-update
+        update_overlay_entry
         return
     fi
 
@@ -184,11 +202,11 @@ __overlay_info() {
     for i in "${RTUI_CHECKLIST_STATE_NEW[@]}"
     do
         item="$(checklist_getitem "$i")"
-        mapfile -t title < <(parse_dtbo "title" "$U_BOOT_FDT_OVERLAYS_DIR/$item"*)
-        mapfile -t category < <(parse_dtbo "category" "$U_BOOT_FDT_OVERLAYS_DIR/$item"*)
-        mapfile -t exclusive < <(parse_dtbo "exclusive" "$U_BOOT_FDT_OVERLAYS_DIR/$item"*)
-        mapfile -t package < <(parse_dtbo "package" "$U_BOOT_FDT_OVERLAYS_DIR/$item"*)
-        description="$(parse_dtbo "description" "$U_BOOT_FDT_OVERLAYS_DIR/$item"*)"
+        mapfile -t title < <(parse_dtbo "title" "$FDT_OVERLAYS_DIR/$item"*)
+        mapfile -t category < <(parse_dtbo "category" "$FDT_OVERLAYS_DIR/$item"*)
+        mapfile -t exclusive < <(parse_dtbo "exclusive" "$FDT_OVERLAYS_DIR/$item"*)
+        mapfile -t package < <(parse_dtbo "package" "$FDT_OVERLAYS_DIR/$item"*)
+        description="$(parse_dtbo "description" "$FDT_OVERLAYS_DIR/$item"*)"
         if (( ${#title[@]} == 1 )) && [[ "${title[0]}" == "null" ]]
         then
             title=( "$item" )
@@ -243,7 +261,7 @@ Otherwise, select No to go back to previous menu."
         return
     fi
 
-    load_u-boot_setting
+    load_overlay_setting
 
     if [[ -n "${U_BOOT_FDT_OVERLAYS:-}" ]]
     then
