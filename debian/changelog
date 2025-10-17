@@ -1,3 +1,17 @@
+rsetup (0.4.18) noble; urgency=medium
+
+  [ HarryLoong ]
+  * feat: add recommends gstreamer1.0-tools
+
+  [ xzl ]
+  * fix: fix some errors when using USB cameras
+
+  [ Guoguo ]
+  * feat: add edk2 support for bootloader management
+  * feat: add edk2 support for dt overlays
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Fri, 17 Oct 2025 07:07:33 +0000
+
 rsetup (0.4.17) noble; urgency=medium
 
   [ Jiali Chen ]
