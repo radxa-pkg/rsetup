@@ -6,8 +6,12 @@ source "/usr/lib/rsetup/mod/overlay.sh"
 ALLOWED_RCONFIG_FUNC+=("load_edk2_setting")
 
 load_edk2_setting() {
-    local version="${1:-$(uname -r)}"
-    local boot_kernel_dir="/boot/efi/$(< /etc/kernel/entry-token)/$version"
+    local version boot_kernel_dir
+    version="${1:-$(uname -r)}"
+    if ! boot_kernel_dir="/boot/efi/$(< /etc/kernel/entry-token)/$version"; then
+        return 1
+    fi
+
     if [[ -d "$boot_kernel_dir" ]]; then
         FDT_OVERLAYS_DIR="$boot_kernel_dir/dtbo"
     fi
@@ -60,7 +64,8 @@ update_entry_overlays() {
     fi
 
     cp "$dtb" "$entry_dir_abs/"
-    local dtb_path="$entry_dir/$(basename "$dtb")"
+    local dtb_path
+    dtb_path="$entry_dir/$(basename "$dtb")"
 
     local tries_file="/etc/kernel/tries"
     local loader_entry
