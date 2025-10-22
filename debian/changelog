@@ -1,3 +1,10 @@
+rsetup (0.4.20) noble; urgency=medium
+
+  [ Ken Wang ]
+  * feat: add rock-5t hostname
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Wed, 22 Oct 2025 10:25:30 +0000
+
 rsetup (0.4.19) noble; urgency=medium
 
   [ Jiali Chen ]
