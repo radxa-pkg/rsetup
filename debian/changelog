@@ -1,3 +1,11 @@
+rsetup (0.4.19) noble; urgency=medium
+
+  [ Jiali Chen ]
+  * fix: edk2-menu: declare and assign separately
+  * fix: is_edk2_exist: hide stderr for running load_edk2_setting
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Wed, 22 Oct 2025 06:35:28 +0000
+
 rsetup (0.4.18) noble; urgency=medium
 
   [ HarryLoong ]
