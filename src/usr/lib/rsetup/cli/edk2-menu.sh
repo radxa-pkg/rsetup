@@ -23,7 +23,7 @@ load_edk2_setting() {
 }
 
 is_edk2_exist() {
-    command -v bootctl &>/dev/null && bootctl list &>/dev/null && load_edk2_setting
+    command -v bootctl &>/dev/null && bootctl list &>/dev/null && load_edk2_setting &>/dev/null
 }
 
 update_entry_overlays() {
