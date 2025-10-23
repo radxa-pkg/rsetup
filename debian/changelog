@@ -1,3 +1,10 @@
+rsetup (0.4.21) noble; urgency=medium
+
+  [ Jiali Chen ]
+  * fix: load_edk2_setting: use `cat` instead of `<`
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Thu, 23 Oct 2025 07:52:10 +0000
+
 rsetup (0.4.20) noble; urgency=medium
 
   [ Ken Wang ]
