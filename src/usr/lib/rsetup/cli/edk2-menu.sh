@@ -8,7 +8,7 @@ ALLOWED_RCONFIG_FUNC+=("load_edk2_setting")
 load_edk2_setting() {
     local version boot_kernel_dir
     version="${1:-$(uname -r)}"
-    if ! boot_kernel_dir="/boot/efi/$(< /etc/kernel/entry-token)/$version"; then
+    if ! boot_kernel_dir="/boot/efi/$(cat /etc/kernel/entry-token)/$version"; then
         return 1
     fi
 
