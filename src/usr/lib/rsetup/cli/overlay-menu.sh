@@ -36,11 +36,14 @@ disable_overlays() {
 }
 
 rebuild_overlays() {
+    local version
+    version="${1:-}"
+
     if is_u-boot_exist; then
         rebuild_u-boot_overlays "$@"
     fi
 
-    if is_edk2_exist; then
+    if is_edk2_exist "$version"; then
         rebuild_edk2_overlays "$@"
     fi
 }

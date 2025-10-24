@@ -23,7 +23,10 @@ load_edk2_setting() {
 }
 
 is_edk2_exist() {
-    command -v bootctl &>/dev/null && bootctl list &>/dev/null && load_edk2_setting &>/dev/null
+    local version
+    version="${1:-}"
+
+    command -v bootctl &>/dev/null && bootctl list &>/dev/null && load_edk2_setting "$version" &>/dev/null
 }
 
 update_entry_overlays() {
