@@ -1,3 +1,13 @@
+rsetup (0.4.22) noble; urgency=medium
+
+  [ Feng Zhang ]
+  * feat: add a733 generic hostname
+
+  [ HE Zhengyu ]
+  * fix: pass version to is_edk2_exist in rebuild_overlays
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Mon, 27 Oct 2025 02:08:31 +0000
+
 rsetup (0.4.21) noble; urgency=medium
 
   [ Jiali Chen ]
