@@ -111,7 +111,7 @@ update_hostname() {
 
     local hostname="$1"
 
-    echo "$hostname" > "/etc/hostname"
+    hostnamectl set-hostname "$hostname"
     cat << EOF > "/etc/hosts"
 127.0.0.1 localhost
 127.0.1.1 $hostname
