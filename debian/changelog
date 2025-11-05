@@ -1,3 +1,13 @@
+rsetup (0.4.23) noble; urgency=medium
+
+  [ xzl ]
+  * fix(system): support custom.conf as fallback for gdm autologin
+
+  [ Jiali Chen ]
+  * fix: update_hostname: change to use `hostnamectl` update hostname
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Wed, 05 Nov 2025 10:20:45 +0000
+
 rsetup (0.4.22) noble; urgency=medium
 
   [ Feng Zhang ]
