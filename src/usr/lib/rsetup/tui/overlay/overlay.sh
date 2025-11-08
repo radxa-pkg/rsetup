@@ -156,6 +156,75 @@ Are you sure to continue?"; then
     done
 }
 
+__overlay_delete() {
+    infobox "Searching available overlays may take a while, please wait..."
+    load_overlay_setting
+
+    local dtbos=( "$FDT_OVERLAYS_DIR"/*.dtbo* )
+    mapfile -t dtbos < <(dtbo_is_compatible "${dtbos[@]}")
+
+    checklist_init
+    local items=()
+    mapfile -t items < <(parse_dtbo --show-overlays "title" "${dtbos[@]}")
+    while (( ${#items[@]} >= 3 ))
+    do
+        checklist_add "${items[0]/$'\n'}" "OFF" "${items[2]/$'\n'}"
+        items=("${items[@]:3}")
+    done
+
+    checklist_emptymsg "Unable to find any compatible overlay under $FDT_OVERLAYS_DIR."
+
+    if ! checklist_show "Select overlays to DELETE (they will be removed permanently):"
+    then
+        return 1
+    fi
+
+    if checklist_is_selection_empty
+    then
+        msgbox "No overlays selected for deletion."
+        return
+    fi
+
+    local del_items=()
+    for i in "${RTUI_CHECKLIST_STATE_NEW[@]}"
+    do
+        del_items+=("$(checklist_getitem "$i")")
+    done
+
+    if ! yesno "You are about to permanently delete ${#del_items[@]} overlay(s).
+This action cannot be undone.
+
+Are you sure you want to continue?"
+    then
+        return
+    fi
+
+    # Disable all overlays first to ensure any selected overlays are disabled
+    disable_overlays
+
+    local item failed=0 deleted=0
+    for item in "${del_items[@]}"
+    do
+        if rm -f "$FDT_OVERLAYS_DIR/$item"* 2>/dev/null
+        then
+            deleted=$((deleted + 1))
+        else
+            failed=$((failed + 1))
+        fi
+    done
+
+    # Update overlay entry to persist the changes
+    update_overlay_entry
+
+    if (( failed == 0 ))
+    then
+        msgbox "Successfully deleted $deleted overlay(s)."
+    else
+        msgbox "Deleted $deleted overlay(s).
+Failed to delete $failed overlay(s)." "$RTUI_PALETTE_ERROR"
+    fi
+}
+
 __overlay_manage() {
     if ! __overlay_show __overlay_validate
     then
@@ -274,6 +343,7 @@ To avoid potential conflicts, overlay feature is temporarily disabled until such
 
     menu_init
     menu_add __overlay_manage "Manage overlays"
+    menu_add __overlay_delete "Delete overlays"
     menu_add __overlay_info "View overlay info"
     menu_add __overlay_install "Install 3rd party overlay"
     menu_add __overlay_rebuild "Rebuild overlays"
