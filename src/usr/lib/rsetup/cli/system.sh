@@ -100,9 +100,12 @@ update_generic_hostname() {
     local current_hostname
     current_hostname="$(hostname)"
 
-    if __in_array "$current_hostname" "$@" >/dev/null
-        then
+    if __in_array "$current_hostname" "$@" >/dev/null; then
+        if [[ ! -f /proc/device-tree/compatible ]]; then
+            update_hostname "$(dmidecode -s system-product-name)"
+        else
             update_hostname "$(get_product_id)"
+        fi
     fi
 }
 
