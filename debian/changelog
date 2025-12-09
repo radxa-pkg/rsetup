@@ -1,3 +1,14 @@
+rsetup (0.4.24) noble; urgency=medium
+
+  [ Feng Zhang ]
+  * feat: Add radxa startup logo image
+
+  [ ZHANG Yuntian ]
+  * fix: update hostname based on SMBIOS
+  * fix: get static hostname with hostnamectl
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Tue, 09 Dec 2025 06:21:04 +0000
+
 rsetup (0.4.23) noble; urgency=medium
 
   [ xzl ]
