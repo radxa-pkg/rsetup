@@ -169,6 +169,31 @@ You still need a valid bootloader on another location for the system to work.
 Are you sure you want to erase the bootloader?"
 }
 
+__system_enable_sleep() {
+    if set_suspend_status "OFF"
+    then
+        msgbox "Sleep and hibernate settings have been restored. Reboot is recommended."
+    else
+        msgbox "Failed to restore sleep and hibernate settings." "$RTUI_PALETTE_ERROR"
+    fi
+}
+
+__system_disable_sleep() {
+    if set_suspend_status "ON"
+    then
+        msgbox "Sleep and hibernate have been disabled. Reboot is recommended."
+    else
+        msgbox "Failed to disable sleep and hibernate." "$RTUI_PALETTE_ERROR"
+    fi
+}
+
+__system_sleep_menu() {
+    menu_init
+    menu_add __system_enable_sleep "Enable Sleep / Hibernate"
+    menu_add __system_disable_sleep "Disable Sleep / Hibernate"
+    menu_show "Sleep / Hibernate Control"
+}
+
 __system_set_target(){
     radiolist_init
 
@@ -227,5 +252,6 @@ __system() {
     menu_add __system_set_target "Change default boot target"
     menu_add_separator
     menu_add __system_bootloader_menu "Bootloader Management"
+    menu_add __system_sleep_menu "Sleep / Hibernate Control"
     menu_show "System"
 }

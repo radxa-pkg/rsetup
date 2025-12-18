@@ -4,6 +4,7 @@
 source "/usr/lib/rsetup/mod/block_helpers.sh"
 source "/usr/lib/rsetup/mod/hwid.sh"
 source "/usr/lib/rsetup/mod/get_setup_script.sh"
+source "/usr/lib/rsetup/mod/suspend.sh"
 
 ALLOWED_RCONFIG_FUNC+=(
     "update_generic_hostname"
@@ -385,4 +386,34 @@ set_autologin_status() {
         return 1
         ;;
     esac
+}
+
+set_suspend_status() {
+    __parameter_count_check 1 "$@"
+
+    local switch="$1" action
+
+    case "$switch" in
+    ON)
+        action="true"
+        ;;
+    OFF)
+        action="false"
+        ;;
+    *)
+        echo "Invalid options: $switch (use ON/OFF)" >&2
+        return 1
+        ;;
+    esac
+
+    require_root
+
+    __systemd_sleep_control "$action"
+    __logind_control "$action"
+    __gnome_schema_patch "$action"
+    __gnome_gsettings "$action"
+    __kde_control "$action"
+
+    echo "Sleep control applied: $action"
+    echo "Reboot is recommended to ensure GNOME schema changes fully take effect."
 }
