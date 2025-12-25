@@ -2,6 +2,7 @@
 
 # shellcheck source=src/usr/lib/rsetup/mod/get_setup_script.sh
 source "/usr/lib/rsetup/mod/get_setup_script.sh"
+source "/usr/lib/rsetup/mod/change_sources.sh"
 
 __system_system_update() {
     if yesno "System will be updated, continue?"
@@ -246,9 +247,79 @@ __system_bootloader_menu() {
     menu_show "System Maintenance"
 }
 
+__system_change_sources() {
+    menu_init
+    menu_add __system_change_sources_radxa_select "Select Radxa mirror"
+    menu_add __system_change_sources_deb_select "Select Debian/Ubuntu mirror"
+    menu_add __system_change_sources_restore "Restore official sources"
+    menu_show "APT Sources"
+}
+
+__system_change_sources_radxa_select() {
+    menu_init
+
+    local mirrors=()
+    mapfile -t mirrors < <(change_sources_list_radxa_urls)
+
+    local m
+    for m in "${mirrors[@]}"; do
+        menu_add __system_apply_radxa_mirror "$m"
+    done
+    menu_emptymsg "No Radxa mirror is available."
+
+    menu_show "Select Radxa mirror:"
+}
+
+__system_apply_radxa_mirror() {
+    local mirror="$RTUI_MENU_SELECTED"
+
+    if change_sources_set_radxa_mirror "$mirror"; then
+        msgbox "Radxa sources updated to:\n$mirror"
+    else
+        msgbox "Failed to update Radxa sources." "$RTUI_PALETTE_ERROR"
+    fi
+}
+
+__system_change_sources_deb_select() {
+    menu_init
+
+    local mirrors=()
+    mapfile -t mirrors < <(change_sources_list_deb_urls)
+    local h
+    for h in "${mirrors[@]}"; do
+        menu_add __system_apply_deb_mirror "$h"
+    done
+    menu_emptymsg "No Debian/Ubuntu mirror is available."
+
+    menu_show "Select Debian/Ubuntu mirror:"
+}
+
+__system_apply_deb_mirror() {
+    local mirror="$RTUI_MENU_SELECTED"
+
+    if change_sources_set_deb_mirror "$mirror"; then
+        msgbox "Debian/Ubuntu sources updated to:\n$mirror"
+    else
+        msgbox "Failed to update Debian/Ubuntu sources." "$RTUI_PALETTE_ERROR"
+    fi
+}
+
+__system_change_sources_restore() {
+    if yesno "Restore official Radxa and Debian/Ubuntu sources?"
+    then
+        if change_sources_restore
+        then
+            msgbox "APT sources have been restored to official hosts."
+        else
+            msgbox "Failed to restore APT sources." "$RTUI_PALETTE_ERROR"
+        fi
+    fi
+}
+
 __system() {
     menu_init
     menu_add __system_system_update "System Update"
+    menu_add __system_change_sources "Change APT Sources"
     menu_add __system_set_target "Change default boot target"
     menu_add_separator
     menu_add __system_bootloader_menu "Bootloader Management"
