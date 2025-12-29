@@ -11,9 +11,7 @@ load_u-boot_setting() {
 
     if [[ -z "${U_BOOT_FDT_OVERLAYS_DIR:-}" ]]; then
         if [[ -f /usr/share/u-boot-menu/read-config ]]; then
-            set +u
-            U_BOOT_FDT_OVERLAYS_DIR="$(. /usr/share/u-boot-menu/read-config && echo "$U_BOOT_FDT_OVERLAYS_DIR")"
-            set -u
+            U_BOOT_FDT_OVERLAYS_DIR="$(set +u; . /usr/share/u-boot-menu/read-config && echo "$U_BOOT_FDT_OVERLAYS_DIR")"
         else
             eval "$(grep "^U_BOOT_FDT_OVERLAYS_DIR" "$(which u-boot-update)")"
         fi
