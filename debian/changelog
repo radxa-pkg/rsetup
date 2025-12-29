@@ -1,3 +1,23 @@
+rsetup (0.4.25) noble; urgency=medium
+
+  [ Jiali Chen ]
+  * fix: prefer using `read-config` to get `U_BOOT_FDT_OVERLAYS_DIR`
+  * fix: add traversal of the ["compatible"] list
+  * fix: relax checks during load_u-boot_setting
+  * fix: in a smaller scope, set +u
+
+  [ xzl ]
+  * feat: add disable sleep item
+  * feat(sources): add APT mirror management with UI integration
+
+  [ CodeChenL ]
+  * feat: add pkg.conf.template
+
+  [ Feng Zhang ]
+  * fix: Compatible hostname retrieval method
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Mon, 29 Dec 2025 09:17:34 +0000
+
 rsetup (0.4.24) noble; urgency=medium
 
   [ Feng Zhang ]
