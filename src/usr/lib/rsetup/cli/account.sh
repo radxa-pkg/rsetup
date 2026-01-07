@@ -14,6 +14,18 @@ add_user() {
     else
         passwd -d "$username"
     fi
+
+    if [[ -e "/home/$username/.face" ]]
+    then
+        cp "/home/$username/.face" "/var/lib/AccountsService/icons/$username"
+        chmod 0644 "/var/lib/AccountsService/icons/$username"
+        cat >/var/lib/AccountsService/users/"$username" <<EOF
+[User]
+Session=
+Icon=/var/lib/AccountsService/icons/$username
+SystemAccount=false
+EOF
+    fi
 }
 
 update_password() {
