@@ -49,6 +49,7 @@ Architecture: all
 Section: admin
 Priority: standard
 Depends: rsetup (= ${binary:Version}),
+         btrfs-progs,
          ${misc:Depends},
 Description: Radxa system config - First boot configuration
  This package contains the default first boot script.
