@@ -18,8 +18,8 @@ compile_dtb() {
 }
 
 is_overlay_unchanged() {
-    [[ "$(__array_to_ordered_text "${RTUI_CHECKLIST_STATE_NEW[@]}")" == \
-       "$(__array_to_ordered_text "${RTUI_CHECKLIST_STATE_OLD[@]}")" ]]
+    [[ "$(__array_to_ordered_text "${RTUI_CHECKLIST_STATE_NEW[@]:-}")" == \
+       "$(__array_to_ordered_text "${RTUI_CHECKLIST_STATE_OLD[@]:-}")" ]]
 }
 
 check_overlay_conflict_init() {
