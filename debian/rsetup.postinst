@@ -36,6 +36,18 @@ then
     then
         cp /usr/share/doc/rsetup/uEnv.txt /boot/uEnv.txt
     fi
+elif [ "$action" = triggered ]
+then
+    for i in $2; do
+        case "$i" in
+            /etc/gdm3/daemon.conf|/etc/gdm3/custom.conf)
+                if [ -f /etc/gdm3/.rsetup-autologin ]
+                then
+                    rsetup set_autologin_status $(cat /etc/gdm3/.rsetup-autologin) gdm.service ON
+                fi
+                ;;
+        esac
+    done
 fi
 
 #DEBHELPER#
