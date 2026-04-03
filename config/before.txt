@@ -9,7 +9,14 @@ log "Running before.txt as first boot configuration"
 # Update generic hostname
 # Command:
 #   update_generic_hostname <generic hostname>
-update_generic_hostname rock-2 rock-5t radxa-rk3528 radxa-rk3576 radxa-a733 radxa-orion-cix-p1 radxa-dragon-qcs9075
+update_generic_hostname radxa-a733
+update_generic_hostname radxa-dragon-midstream
+update_generic_hostname radxa-dragon-qcs9075
+update_generic_hostname radxa-orion-cix-p1
+update_generic_hostname radxa-rk3528
+update_generic_hostname radxa-rk3576
+update_generic_hostname rock-2
+update_generic_hostname rock-5t
 
 # Create default accounts
 # Commands:
