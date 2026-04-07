@@ -1,3 +1,16 @@
+rsetup (0.4.27) noble; urgency=medium
+
+  [ ZHANG Yuntian ]
+  * fix: install btrfs-progs for resize_root
+  * fix: suppress empty array warning
+  * feat: support setting gdm3 autologin without install
+  * feat: add radxa-dragon-midstream
+
+  [ Chongbiao Chen ]
+  * feat: add radxa-dragon-qcs9075 to generic_hostname
+
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Tue, 07 Apr 2026 09:27:48 +0000
+
 rsetup (0.4.26) noble; urgency=medium
 
   [ ZHANG Yuntian ]
