@@ -10,6 +10,7 @@
 change_sources_list_radxa_urls() {
     local urls=(
         "https://mirrors.aghost.cn/radxa-deb"
+        "https://mirrors.cqu.edu.cn/radxa-deb"
         "https://mirrors.lzu.edu.cn/radxa-deb"
         "https://mirrors.hust.edu.cn/radxa-deb"
         "https://mirrors.sdu.edu.cn/radxa-deb"
@@ -25,6 +26,7 @@ change_sources_list_deb_urls() {
     local urls=(
         "https://mirrors.ustc.edu.cn"
         "https://mirrors.tuna.tsinghua.edu.cn"
+        "https://mirrors.cqu.edu.cn"
         "https://mirrors.lzu.edu.cn"
         "https://mirrors.hust.edu.cn"
         "https://mirrors.sdu.edu.cn"
