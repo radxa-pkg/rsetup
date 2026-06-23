@@ -257,9 +257,24 @@ EOF
     fi
 }
 
+__get_plasma_session() {
+    # Detect available Plasma session file: try plasma first, fall back to plasmax11.
+    # Some systems (e.g., Debian 13 on Rockchip) disable the Wayland session
+    # and only ship plasmax11.desktop.
+    if [[ -f /usr/share/xsessions/plasma.desktop ]] || [[ -f /usr/share/wayland-sessions/plasma.desktop ]]; then
+        echo "plasma"
+    elif [[ -f /usr/share/xsessions/plasmax11.desktop ]]; then
+        echo "plasmax11"
+    else
+        echo "plasma"  # best-effort default
+    fi
+}
+
 set_sddm_autologin() {
     local user="$1" switch="$2"
     local config_dir="/etc/sddm.conf.d"
+    local session
+    session="$(__get_plasma_session)"
 
     if [[ "$switch" == "ON" ]]; then
         mkdir -p "$config_dir"
@@ -268,7 +283,7 @@ set_sddm_autologin() {
 # DO NOT MODIFY!
 [Autologin]
 User=$user
-Session=plasma
+Session=$session
 EOF
     else
         rm -f "$config_dir/50-rsetup-autologin.conf"
@@ -355,7 +370,9 @@ get_autologin_status() {
         fi
         ;;
     sddm.service)
-        if grep -q -e "[Autologin]" -e "User=" -e "Session=plasma" <(grep -v '^#' "/etc/sddm.conf.d/50-rsetup-autologin.conf")
+        local session
+        session="$(__get_plasma_session)"
+        if grep -q -e "\[Autologin\]" -e "User=" -e "Session=$session" <(grep -v '^#' "/etc/sddm.conf.d/50-rsetup-autologin.conf")
         then
             echo "ON"
         else
