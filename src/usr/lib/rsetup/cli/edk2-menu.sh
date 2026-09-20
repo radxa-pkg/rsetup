@@ -125,6 +125,6 @@ enable_edk2_overlays() {
     if ! load_edk2_setting; then
         return 1
     fi
-    enable_overlay_general "$@"
+    enable_overlay_general "$@" || return $?
     update_entry_overlays
 }
