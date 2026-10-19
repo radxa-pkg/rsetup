@@ -49,6 +49,6 @@ enable_u-boot_overlays() {
     if ! load_u-boot_setting; then
         return 1
     fi
-    enable_overlay_general "$@"
+    enable_overlay_general "$@" || return $?
     u-boot-update
 }
