@@ -87,6 +87,9 @@ update_locale en_US.UTF-8
 #
 if headless enable_service ssh
 
+# Rebuild overlays not for this device
+rebuild_current_overlays
+
 # Remove first-boot package
 # Command:
 #   remove_packages <package names>

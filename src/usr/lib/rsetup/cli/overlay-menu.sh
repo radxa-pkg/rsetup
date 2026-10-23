@@ -5,6 +5,8 @@ source "/usr/lib/rsetup/cli/edk2-menu.sh"
 # shellcheck source=src/usr/lib/rsetup/cli/u-boot-menu.sh
 source "/usr/lib/rsetup/cli/u-boot-menu.sh"
 
+ALLOWED_RCONFIG_FUNC+=("rebuild_current_overlays")
+
 load_overlay_setting() {
     if is_u-boot_exist; then
         load_u-boot_setting
@@ -46,6 +48,20 @@ rebuild_overlays() {
     if is_edk2_exist "$version"; then
         rebuild_edk2_overlays "$@"
     fi
+}
+
+rebuild_current_overlays() {
+    __parameter_count_check 0 "$@"
+
+    if [[ ! -f /proc/device-tree/compatible ]]; then
+        return 0
+    fi
+    if ! is_u-boot_exist && ! is_edk2_exist; then
+        return 0
+    fi
+
+    rebuild_overlays "$(uname -r)" "$(get_soc_vendor)"
+    update_overlay_entry
 }
 
 enable_overlays() {
