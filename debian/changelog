@@ -1,3 +1,13 @@
+rsetup (0.4.29) noble; urgency=medium
+
+  [ Feng Zhang ]
+  * fix(system): keep installed boot targets in the menu
+
+  [ Xinming Chen ]
+  * fix: rebuild compatible overlays on first boot
+
+ -- "Radxa Computer (Shenzhen) Co., Ltd." <dev@radxa.com>  Tue, 27 Oct 2026 02:48:19 +0000
+
 rsetup (0.4.28) noble; urgency=medium
 
   [ ZHANG Yuntian ]
